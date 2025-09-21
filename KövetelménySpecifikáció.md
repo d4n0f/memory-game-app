@@ -22,3 +22,18 @@
 | JavaScript | K18 | Időzítők                  | 1.0    | setTimeout/setInterval használata a játéklogikához                       |
 | JavaScript | K19 | Fetch API                 | 1.0    | Fetch használata a backend kommunikációhoz                               |
 | JavaScript | K20 | Játékállapot kezelés      | 1.0    | Játékállapot nyomon követése JavaScript                                  |
+| CSS       | K21 | Egységes design         | 1.0    | Következetes színskála és design a teljes alkalmazásban                 |
+| CSS       | K22 | Kártya design           | 1.0    | Esztétikus és felhasználóbarát kártya design                            |
+| CSS       | K23 | Typography              | 1.0    | Olvasható és megfelelő méretű betűtípusok használata                    |
+| CSS       | K24 | Reszponzív design       | 1.0    | Design, amely minden eszközön jól működik                               |
+| CSS       | K25 | Interakció visszajelzés | 1.0    | Vizualizáció a felhasználói interakciókról (hover, click stb.)          |
+| Backend   | K26 | Dokumentáció            | 1.0    | A kód megfelelő kommentelése és dokumentálása                           |
+| Backend   | K27 | Verziókövetés           | 1.0    | Git használata a verziókövetéshez                                       |
+| Backend   | K28 | Hibakezelés             | 1.0    | Alapvető hibakezelés implementálása                                     |
+| Backend   | K29 | Böngésző kompatibilitás | 1.0    | Támogatás a legfrissebb böngészőkben                                    |
+| Backend   | K30 | Teljesítmény            | 1.0    | Optimális teljesítmény és gyors betöltési idők                          |
+| Adatbázis | K31 | Táblatervezés           | 1.0    | Legalább 2 tábla létrehozása (pl. players, scores)                      |
+| Adatbázis | K32 | Adatintegritás          | 1.0    | Megfelelő mezőtípusok és kulcsok használata                             |
+| Adatbázis | K33 | CRUD műveletek          | 1.0    | Create, Read, Update, Delete műveletek implementálása                   |
+| Adatbázis | K34 | Kapcsolatok             | 1.0    | Táblák közötti kapcsolatok kialakítása                                  |
+| Adatbázis | K35 | Adatbiztonság           | 1.0    | Alapvető adatbiztonsági intézkedések (SQL injection védelem)            |
