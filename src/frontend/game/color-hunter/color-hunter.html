@@ -3,9 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Figyeld meg a képet és színeit 5 másodpercig, majd válaszd ki a nyolc kép közül azt, amelyik pontosan megegyezik vele.">
+    <title>Memória Mánia | Színvadászat</title>
+    <link rel="stylesheet" href="styles/color-hunter.css">
 </head>
 <body>
-    
+    <header>
+        <h1>Színvadászat</h1>
+    </header>
+    <main>
+        <section id="game-board">
+            <div id="target-container">
+                <h2>Emlékezz erre a képre!</h2>
+                <img id="target-image" src="" alt="Megjegyzendő kép">
+                <p id="timer">Hátralévő idő: </p>
+            </div>
+
+            <div id="choices-container" class="hidden">
+                <h2>Válaszd ki az előbb megjelenített képet:</h2>
+                <div class="choices-grid" id="choices-grid">
+
+                </div>
+            </div>
+        </section>
+        <section id="result-screen" class="hidden">
+            <h2 id="result-message"></h2>
+            <button id="next-round">Következő kör</button>
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+
+    <script src="scripts/color-hunter.js"></script>
 </body>
 </html>
