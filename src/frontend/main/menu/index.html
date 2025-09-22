@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Egy egyszerű játék amivel fejlesztheted memóriádat!">
+    <title>Memória Mánia</title>
+    <link rel="stylesheet" href="styles/menu.css">
 </head>
+
 <body>
-    
+    <header>
+        <h1>Memóriajáték</h1>
+    </header>
+    <main>
+        <section id="player-setup">
+            <form id="player-form">
+                <label for="player-name">Add meg a neved:</label>
+                <input type="text" id="player-name" name="player-name" required />
+                <button type="submit">Játék inditása</button>
+            </form>
+        </section>
+        <section id="mode-selector" class="hidden">
+            <h2>Válassz játékmódot</h2>
+            <button class="mode-btn" data-mode="color-hunter">Színvadász</button>
+            <button class="mode-btn" data-mode="card-match">Kártyapárosító</button>
+        </section>
+    </main>
+    <footer>
+
+    </footer>
 </body>
+
 </html>
