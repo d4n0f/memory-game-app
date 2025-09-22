@@ -20,9 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", () => {
             const mode = btn.dataset.mode;
             if (mode === "color-hunter") {
-                window.location.href = "color-hunter.html";
+                window.location.href = "../../game/color-hunter/color-hunter.html";
             } else if (mode === "card-match") {
-                window.location.href = "card-match.html";
+                window.location.href = "../../game/card-match/card-match.html";
             }
         });
     });
