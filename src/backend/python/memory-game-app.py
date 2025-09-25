@@ -253,6 +253,15 @@ def get_scores():
         return jsonify({'success':False,
                         'error':f'Szerver hiba:{str(e)}'}),500
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify({'success':False,
+                    'error':'A kért erőforrás nem található'}),404
+@app.errorhandler(500)
+def internal_server_error(e):
+    return jsonify({'success':False,
+                    'error':'Belső szerver hiba'}),500
+
 @app.route('/api/players',methods=['GET'])
 def get_players():
     try:
