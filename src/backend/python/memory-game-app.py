@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import mysql.connector
 from mysql.connector import Error
 
@@ -57,10 +57,23 @@ def init_db():
         connection.commit()
         print("Adatbázis és a táblák sikeresen létrehozva!")
 
-
-
     except mysql.connector.Error as err:
         print("MySQL adatbázis inicializásakor hiba lépet fel: {}".format(err))
+
+#API végpontok
+@app.route("/<path:filename>")
+def server_static(filename):
+    return send_from_directory(os.path.join(app.root_path, 'static'), filename)
+@app.route('/')
+def index():
+    return render_template('color-hunter.html')
+@app.route('/game')
+def game():
+    return render_template('color-hunter.html')
+@app.route('/scores')
+def scores():
+    return render_template('scores.html')
+
 
 if __name__ == '__main__':
     print("Adatbázis inicializálása")
