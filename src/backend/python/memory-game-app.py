@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 import mysql.connector
 from mysql.connector import Error
+from datetime import datetime
+import os
 
 app=Flask(__name__)
 
@@ -74,6 +76,24 @@ def game():
 def scores():
     return render_template('scores.html')
 
+#Adatbázis egeszségügyi ellenőrzés
+@app.route('/api/health',)
+def api_health():
+    try:
+        conn=get_db_connect()
+        if conn is None:
+            return jsonify({'status':'error',
+                            'message': 'Database connection failed'}),500
+
+        cursor=conn.cursor()
+        cursor.execute("SELECT 1")
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+        return jsonify({'status':'ok','database':'connected','time':datetime.now().isoformat()})
+    except Error as e:
+        return jsonify({'status':'error','message':str(e)}), 500
 
 if __name__ == '__main__':
     print("Adatbázis inicializálása")
