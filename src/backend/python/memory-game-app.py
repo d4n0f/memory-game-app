@@ -203,6 +203,56 @@ def save_scores():
         return jsonify({'success':False,
                         'error':f'Adatbázis hiba: {str(e)}'}),500
 
+@app.route('/api/scores',methods=['GET'])
+def get_scores():
+    #Eredmények lekérése
+    try:
+        game_mod = request.args.get('game_mod','all')
+        limit = int(request.args.get('limit',20))
+
+        conn= get_db_connect()
+        if conn is None:
+            return jsonify({'success': False,
+                    'error': 'Adatbázis kapcsolat hiba'}), 500
+        cursor = conn.cursor(dictionary=True)
+        if game_mod =='all':
+            cursor.execute('''
+                SELECT p.name, s.score, s.game_mod , s.game_time, s.rounds_played,s.created_at
+                FROM scores s
+                JOIN players p ON s.player_id=p.id
+                ORDER BY s.score DESC,s.game_time ASC, s.created_at DESC
+                LIMIT %s
+            ''',(limit,))
+        else:
+            cursor.execute('''
+                SELECT p.name,s.score, s.game_mod, s.game_time, s.rounds_played,s.created_at
+                FROM scores s
+                JOIN players p ON s.player_id=p.id
+                WHERE s.game_mod=%s
+                ORDER BY s.score DESC,s.game_time ASC,s.created_at DESC
+                LIMIT %s
+            ''',(game_mod,limit))
+        scores = cursor.fetchall()
+
+        #Datetime objektumok String-é konvertálása
+
+        for score in scores:
+            if isinstance(score['created_at'],datetime):
+                score['created_at'] = score['created_at'].isoformat()
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({'success':True,
+                        'scores':scores,
+                        'count':len(scores)})
+    except Error as e:
+        return jsonify({'success':False,
+                        'error':f'Adatbázis hiba:{str(e)}'}),500
+    except Exception as e:
+        return jsonify({'success':False,
+                        'error':f'Szerver hiba:{str(e)}'}),500
+
 
 
 if __name__ == '__main__':
