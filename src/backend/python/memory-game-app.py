@@ -95,6 +95,60 @@ def api_health():
     except Error as e:
         return jsonify({'status':'error','message':str(e)}), 500
 
+@app.route('/api/game',methods=['POST'])
+def new_game():
+    #Új játék inditás
+    try:
+        data=request.get_json()
+
+        if not data or 'name' not in data:
+            return jsonify({'success':False,
+                            'error':'missing name'}), 400
+        conn= get_db_connect()
+        if conn is None:
+            return jsonify({'success':False,
+                            'error':'database connection failed'}),500
+        cursor=conn.cursor()
+        # Játékos keresése ha létezik
+        cursor.execute("SELECT id FROM players WHERE name=%s", (data['name'],))
+        existing_player = cursor.fetchone()
+
+        #Frissitjük a last_played mezőt
+        if existing_player:
+            player_id = existing_player[0]
+            cursor.execute('UPDATE players SET last_played = CURRENT_TIMESTAMP WHERE id=%s', (player_id,))
+
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return jsonify({'success': True,
+                            'player_id': player_id,
+                            'name': data['name'],
+                            'message': 'Játék folytatódik'}), 200
+        #Létrehozzuk a játékost ha nincs létrehozzva
+        else:
+            cursor.execute('INSERT INTO players(name, last_played) VALUES (%s, CURRENT_TIMESTAMP)',(data['name'],))
+            player_id = cursor.lastrowid
+
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            return jsonify({'success':True,
+                            'player_id':player_id,
+                            'name':data['name'],
+                            'message':'new game created'}), 201
+    except Error as e:
+        if conn and conn.is_connected():
+            conn.rollback()
+            cursor.close()
+            conn.close()
+        return jsonify({'success':False,
+                        'error':f'Adatbázis hiba: {str(e)}'}),500
+    except Exception as e:
+        return jsonify({'success':False,
+                        'error':f'Szerver hiba: {str(e)}'}),500
+
 if __name__ == '__main__':
     print("Adatbázis inicializálása")
     init_db()
