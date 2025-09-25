@@ -253,6 +253,30 @@ def get_scores():
         return jsonify({'success':False,
                         'error':f'Szerver hiba:{str(e)}'}),500
 
+@app.route('/api/players',methods=['GET'])
+def get_players():
+    try:
+        conn= get_db_connect()
+        if conn is None:
+            return jsonify({'success':False,
+                            'error':'Adatbázis kapcsolat hiba'}),500
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute('''
+            SELECT p.id, p.name, p.last_played,COUNT(s.id) as games_played,MAX(s.score) as best_score 
+            FROM players p
+            LEFT JOIN scores s ON s.player_id=p.id
+            GROUP BY p.id
+            ORDER BY p.last_played DESC
+        ''')
+        players = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return jsonify({'success':True,
+                        'players':players})
+    except Error as e:
+        return jsonify({'success':False,
+                    'error':f'Adatbázis hiba:{str(e)}'}),500
 
 
 if __name__ == '__main__':
