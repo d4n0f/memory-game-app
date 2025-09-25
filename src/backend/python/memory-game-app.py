@@ -23,7 +23,47 @@ def get_db_connect():
         print("MySQL kapcsolati hiba: {}".format(err))
         return None
 
+def init_db():
+
+    try:
+        # Kapcsolat kialakítása adatbázis nélkül
+        temp_config = db_config.copy()
+        temp_config.pop('database')
+        connection = mysql.connector.connect(**temp_config)
+        cursor = connection.cursor()
+
+        # Adatbázis létrehozása ha nem létezik
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_config['database']} CHARACTER SET {db_config['charset']} COLLATE {db_config['collation']}")
+        cursor.execute(f"USE {db_config['database']}")
+
+        # players tábla létrehozása az adatbázis diagram szerint
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS players (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL UNIQUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            last_played TIMESTAMP NULL) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ''')
+        # scores tábla létrehozása az adatbázis diagram szerint
+        cursor.execute(f'''
+        CREATE TABLE IF NOT EXISTS scores (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            player_id INT NOT NULL,
+            score INT NOT NULL CHECK (score >= 0),
+            game_mod Enum('easy', 'medium', 'hard') DEFAULT 'easy',
+            game_time INT DEFAULT 0 CHECK (game_time >= 0),
+            rounds_played INT DEFAULT 1 CHECK (rounds_played >= 1),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET={db_config['charset']} COLLATE={db_config['collation']}''')
+        connection.commit()
+        print("Adatbázis és a táblák sikeresen létrehozva!")
+
+
+
+    except mysql.connector.Error as err:
+        print("MySQL adatbázis inicializásakor hiba lépet fel: {}".format(err))
 
 if __name__ == '__main__':
+    print("Adatbázis inicializálása")
+    init_db()
     print("Flask inditása")
     app.run(debug=True, host='0.0.0.0', port=5000)
