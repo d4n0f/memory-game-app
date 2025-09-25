@@ -4,7 +4,8 @@ from mysql.connector import Error
 from datetime import datetime
 import os
 
-app=Flask(__name__)
+app=Flask(__name__ ,static_folder= 'C:/Users/Dell/Desktop/merevlemez/Egyetem/5.félév/módszertan/memory-game-app/src/frontend/game/color-hunter')
+app.template_folder='C://Users/Dell/Desktop/merevlemez/Egyetem/5.félév/módszertan/memory-game-app/src/frontend/game/color-hunter'
 
 #Adatbázis konfiguráció inicializálása
 db_config = {
