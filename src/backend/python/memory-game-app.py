@@ -149,6 +149,62 @@ def new_game():
         return jsonify({'success':False,
                         'error':f'Szerver hiba: {str(e)}'}),500
 
+@app.route('/api/save',methods=['POST'])
+def save_scores():
+    #Eredmények mentése
+    try:
+        data = request.get_json()
+        required_fields = ['player_id','score','game_mod','game_time','rounds_played']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'success':False,
+                                'error':f'missing {field}'}), 400
+            player_id=int(data['player_id'])
+            score=int(data['score'])
+            game_mod=data['game_mod']
+            game_time=int(data.get('game_time',0))
+            rounds_played=int(data.get('rounds_played',1))
+
+            #Validáció
+            if score< 0 or game_time < 0 or rounds_played < 1:
+                return jsonify({'success':False,
+                                'error':f'Érvénytelen érték'}), 400
+            if game_mod not in ['easy','medium','hard']:
+                game_mod='easy'
+            conn= get_db_connect()
+            if conn is None:
+                return jsonify({'success':False,
+                                'error':'Adatbázis kapcsolat hiba'}),500
+            cursor = conn.cursor()
+            #Ellenőrizzük hogy létezik-e a játékos
+            cursor.execute("SELECT id FROM players WHERE id=%s", (player_id,))
+            if not cursor.fetchone():
+                return jsonify({'success':False,
+                                'error':'Játékos nem található'}),404
+            #Eredmények mentése
+            cursor.execute('''
+                INSERT INTO scores (player_id, score, game_mod, game_time, rounds_played)
+                VALUES (%s, %s, %s, %s, %s)
+            ''', (player_id, score, game_mod, game_time, rounds_played))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return jsonify({'success':True,
+                            'message':'Eredmény sikeresen mentve',
+                            'score_id':cursor.lastrowid})
+    except ValueError :
+        return jsonify({'success':False,
+                            'error':f'Érvénytelen adatformátum hiba'}),400
+    except Error as e:
+        if conn and conn.is_connected():
+            conn.rollback()
+            cursor.close()
+            conn.close()
+        return jsonify({'success':False,
+                        'error':f'Adatbázis hiba: {str(e)}'}),500
+
+
+
 if __name__ == '__main__':
     print("Adatbázis inicializálása")
     init_db()
