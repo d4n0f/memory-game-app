@@ -1,19 +1,19 @@
 const images = [
-    "../../assets/images/kep1.jpg",
-    "../../assets/images/kep2.jpg",
-    "../../assets/images/kep3.jpg",
-    "../../assets/images/kep4.jpg",
-    "../../assets/images/kep5.jpg",
-    "../../assets/images/kep6.jpg",
-    "../../assets/images/kep7.jpg",
-    "../../assets/images/kep8.jpg",
-    "../../assets/images/kep9.jpg",
-    "../../assets/images/kep10.jpg",
-    "../../assets/images/kep11.jpg",
-    "../../assets/images/kep12.jpg",
-    "../../assets/images/kep13.jpg",
-    "../../assets/images/kep14.jpg"
-  ];
+        "../../assets/images/color-hunter/kep1.jpg",
+        "../../assets/images/color-hunter/kep2.jpg",
+        "../../assets/images/color-hunter/kep3.jpg",
+        "../../assets/images/color-hunter/kep4.jpg",
+        "../../assets/images/color-hunter/kep5.jpg",
+        "../../assets/images/color-hunter/kep6.jpg",
+        "../../assets/images/color-hunter/kep7.jpg",
+        "../../assets/images/color-hunter/kep8.jpg",
+        "../../assets/images/color-hunter/kep9.jpg",
+        "../../assets/images/color-hunter/kep10.jpg",
+        "../../assets/images/color-hunter/kep11.jpg",
+        "../../assets/images/color-hunter/kep12.jpg",
+        "../../assets/images/color-hunter/kep13.jpg",
+        "../../assets/images/color-hunter/kep14.jpg"
+    ];
 
 const gameBoard = document.getElementById("game-board");
 const targetImage = document.getElementById("target-image");
