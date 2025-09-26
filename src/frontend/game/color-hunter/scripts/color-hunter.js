@@ -1,19 +1,19 @@
 const images = [
-        "../../assets/images/color-hunter/kep1.jpg",
-        "../../assets/images/color-hunter/kep2.jpg",
-        "../../assets/images/color-hunter/kep3.jpg",
-        "../../assets/images/color-hunter/kep4.jpg",
-        "../../assets/images/color-hunter/kep5.jpg",
-        "../../assets/images/color-hunter/kep6.jpg",
-        "../../assets/images/color-hunter/kep7.jpg",
-        "../../assets/images/color-hunter/kep8.jpg",
-        "../../assets/images/color-hunter/kep9.jpg",
-        "../../assets/images/color-hunter/kep10.jpg",
-        "../../assets/images/color-hunter/kep11.jpg",
-        "../../assets/images/color-hunter/kep12.jpg",
-        "../../assets/images/color-hunter/kep13.jpg",
-        "../../assets/images/color-hunter/kep14.jpg"
-    ];
+    "../../assets/images/color-hunter/kep1.jpg",
+    "../../assets/images/color-hunter/kep2.jpg",
+    "../../assets/images/color-hunter/kep3.jpg",
+    "../../assets/images/color-hunter/kep4.jpg",
+    "../../assets/images/color-hunter/kep5.jpg",
+    "../../assets/images/color-hunter/kep6.jpg",
+    "../../assets/images/color-hunter/kep7.jpg",
+    "../../assets/images/color-hunter/kep8.jpg",
+    "../../assets/images/color-hunter/kep9.jpg",
+    "../../assets/images/color-hunter/kep10.jpg",
+    "../../assets/images/color-hunter/kep11.jpg",
+    "../../assets/images/color-hunter/kep12.jpg",
+    "../../assets/images/color-hunter/kep13.jpg",
+    "../../assets/images/color-hunter/kep14.jpg"
+];
 
 const gameBoard = document.getElementById("game-board");
 const targetImage = document.getElementById("target-image");
@@ -23,6 +23,7 @@ const choicesGrid = document.getElementById("choices-grid");
 const resultScreen = document.getElementById("result-screen");
 const resultMessage = document.getElementById("result-message");
 const nextRoundBtn = document.getElementById("next-round");
+const menuBtn = document.getElementById("menu-btn");
 
 let timer;
 let score = 0;
@@ -87,3 +88,9 @@ nextRoundBtn.addEventListener("click", () => {
     document.getElementById("target-container").classList.remove("hidden");
     startRound();
 });
+
+if (menuBtn) {
+    menuBtn.addEventListener("click", () => {
+        window.location.href = "../../main/menu/index.html";
+    });
+}
