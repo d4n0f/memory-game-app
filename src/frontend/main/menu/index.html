@@ -16,16 +16,10 @@
     <main>
         <section id="player-setup">
             <form id="player-form">
-                <label for="player-name">Add meg a neved:</label>
-                <input type="text" id="player-name" name="player-name" required />
-                <button type="submit">Játék inditása</button>
+                <input type="text" id="player-name" name="player-name" required placeholder="Add meg a neved"
+                    class="menu-input" />
+                <button type="submit" class="menu-btn start-btn">START</button>
             </form>
-            <button class="settings-btn" data-mode="settings">Beállítások</button>
-        </section>
-        <section id="mode-selector" class="hidden">
-            <h2>Válassz játékmódot</h2>
-            <button class="mode-btn" data-mode="color-hunter">Színvadászat</button>
-            <button class="mode-btn" data-mode="card-match">Kártyapárosító</button>
         </section>
     </main>
     <footer>
