@@ -1,20 +1,206 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+.title {
+    font-size: 2.1rem;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
+    font-weight: normal;
+    margin: 1.2rem 0 0.7rem 0;
+    letter-spacing: 0.5px;
 }
 
-main {
-    flex: 1;
+.difficulty-row {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+}
+
+.difficulty-btn {
+    background: #e1b6d6;
+    color: #222;
+    border: 2.5px solid #a14b8c;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-family: inherit;
+    font-weight: bold;
+    box-shadow: 2px 2px 0 #a14b8c;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+.difficulty-btn.selected {
+    background: #a14b8c;
+    color: #fff;
+}
+.difficulty-btn:active {
+    box-shadow: 1px 1px 0 #a14b8c;
+}
+
+.mode-row {
+    display: flex;
+    gap: 2.5rem;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.mode-btn {
+    background: #fff;
+    border: 2.5px solid #a14b8c;
+    border-radius: 10px;
+    width: 150px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 0 #a14b8c;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    position: relative;
+    padding: 0.2rem 0.2rem;
+    overflow: hidden;
+}
+.mode-label {
+    display: block;
+    font-size: 1.13rem;
+    font-family: inherit;
+    color: #a14b8c;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    pointer-events: none;
+}
+.mode-btn.selected {
+    background: #e1b6d6;
+}
+.mode-btn:active {
+    box-shadow: 1px 1px 0 #a14b8c;
+}
+
+
+
+.divider {
+    width: 80px;
+    height: 3px;
+    background: #222;
+    margin: 1.2rem auto 1.2rem auto;
+    border-radius: 2px;
+}
+
+.start-game-btn {
+    background: #a14b8c;
+    color: #fff;
+    font-size: 1.3rem;
+    border-radius: 10px;
+    border: 2.5px solid #a14b8c;
+    box-shadow: 2px 2px 0 #a14b8c;
+    padding: 0.5rem 2.5rem;
+    font-family: inherit;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+
+.start-game-btn-container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.hidden {
-    display: none;
+.start-game-btn:active {
+    box-shadow: 1px 1px 0 #a14b8c;
+    background: #e1b6d6;
+    color: #222;
+}
+body {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+header {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#player-setup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+#player-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+.menu-input {
+    font-size: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    border: 2.5px solid #222;
+    border-radius: 12px;
+    outline: none;
+    background: #fff;
+    font-family: inherit;
+    box-shadow: 2px 2px 0 #bbb;
+    margin-bottom: 0.5rem;
+    transition: box-shadow 0.2s;
+}
+.menu-input:focus {
+    box-shadow: 4px 4px 0 #a0a0a0;
+}
+
+.menu-btn {
+    font-size: 1.3rem;
+    padding: 0.4rem 2.2rem;
+    border: 2.5px solid #222;
+    border-radius: 10px;
+    background: #b7c99c;
+    color: #222;
+    font-family: inherit;
+    font-weight: bold;
+    box-shadow: 2px 2px 0 #888;
+    cursor: pointer;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    letter-spacing: 1px;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+.menu-btn:active {
+    box-shadow: 1px 1px 0 #888;
+    background: #a2b883;
+}
+.start-btn {
+    background: #b7c99c;
+    color: #222;
+    font-size: 1.4rem;
+    border-radius: 8px;
+    border-width: 2.5px;
+    box-shadow: 2px 2px 0 #888;
+}
+
+.menu-title {
+    text-align: center;
 }
