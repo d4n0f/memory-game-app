@@ -297,7 +297,7 @@ def get_scores():
 
         if game_mode =='all':
             cursor.execute('''
-                SELECT p.name, s.score, s.game_mod , s.game_time, s.rounds_played,s.created_at
+                SELECT p.name, s.score, s.game_mode , s.game_time, s.rounds_played, s.created_at
                 FROM scores s
                 JOIN players p ON s.player_id=p.id
                 ORDER BY s.score DESC,s.game_time ASC, s.created_at DESC
