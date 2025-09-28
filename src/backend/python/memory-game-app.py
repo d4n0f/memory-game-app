@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask import Flask, render_template, request, send_from_directory, jsonify, redirect, url_for, session
 import mysql.connector
+from dotenv import load_dotenv
 from mysql.connector import Error
 from datetime import datetime
 import os
@@ -75,9 +76,6 @@ def init_db():
             connection.close()
 
 #API végpontok
-@app.route("/<path:filename>")
-def server_static(filename):
-    return send_from_directory(os.path.join(app.root_path, 'static'), filename)
 @app.route('/')
 def index():
     return render_template('main/menu/index.html')
@@ -177,6 +175,7 @@ def select_mode():
     else:
         return redirect(url_for('game2'))
 #Adatbázis egeszségügyi ellenőrzés
+
 @app.route('/api/health',)
 def api_health():
     try:
@@ -191,7 +190,7 @@ def api_health():
 
         cursor.close()
         conn.close()
-        return jsonify({'status':'ok','database':'connected','time':datetime.now().isoformat()})
+        return jsonify({'status':'ok','database':'Csatlakozott','time':datetime.now().isoformat()})
     except Error as e:
         return jsonify({'status':'error','message':str(e)}), 500
 
@@ -224,7 +223,8 @@ def new_game():
                         'message':'Játék sikeresen elindítva'})
     except Exception as e:
         return jsonify({'success':False,
-                        'error':f'Szerver hiba: {str(e)}'}),500
+                        'error': f'Szerver hiba:{str(e)}'}), 500
+
 
 @app.route('/api/save',methods=['POST'])
 def save_scores():
@@ -232,6 +232,7 @@ def save_scores():
     try:
         data = request.get_json()
         required_fields = ['player_id','score','game_mod','game_time','rounds_played']
+
         for field in required_fields:
             if field not in data:
                 return jsonify({'success':False,
@@ -243,7 +244,6 @@ def save_scores():
             game_time=int(data.get('game_time',0))
             rounds_played=int(data.get('rounds_played',1))
 
-            #Validáció
             if score< 0 or game_time < 0 or rounds_played < 1:
                 return jsonify({'success':False,
                                 'error':f'Érvénytelen érték'}), 400
@@ -257,6 +257,7 @@ def save_scores():
             cursor = conn.cursor()
             #Ellenőrizzük hogy létezik-e a játékos
             cursor.execute("SELECT id FROM players WHERE id=%s", (player_id,))
+
             if not cursor.fetchone():
                 return jsonify({'success':False,
                                 'error':'Játékos nem található'}),404
@@ -268,6 +269,7 @@ def save_scores():
             conn.commit()
             cursor.close()
             conn.close()
+
             return jsonify({'success':True,
                             'message':'Eredmény sikeresen mentve',
                             'score_id':cursor.lastrowid})
@@ -293,6 +295,7 @@ def get_scores():
         if conn is None:
             return jsonify({'success': False,
                     'error': 'Adatbázis kapcsolat hiba'}), 500
+
         cursor = conn.cursor(dictionary=True)
 
         if game_mode =='all':
