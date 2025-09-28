@@ -203,7 +203,17 @@ def new_game():
 
         if not data or 'name' not in data:
             return jsonify({'success':False,
-                            'error':'missing name'}), 400
+                            'error':'Hiányzó név'}), 400
+        player_name = data['name'].strip()
+        if not player_name:
+            return jsonify({'success':False,
+                            'error':'Érvénytelen név'}),400
+
+        player_id = create_or_get_player(player_name)
+        if not player_id:
+            return jsonify({'success':False,
+                            'error':'Hiba a játékos létrehozásakar'}),500
+
         conn= get_db_connect()
         if conn is None:
             return jsonify({'success':False,
