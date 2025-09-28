@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
   color: #333;
   display: flex;
   flex-direction: column;
@@ -115,4 +115,25 @@ header {
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
+}
+
+#menu-btn, #next-round {
+    font-size: 1.1rem;
+    padding: 0.2rem 2rem;
+    border: 2.5px solid #222;
+    border-radius: 10px;
+    background: #b7c99c;
+    color: #222;
+    font-family: inherit;
+    font-weight: bold;
+    box-shadow: 2px 2px 0 #888;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 0.2rem;
+    letter-spacing: 1px;
+    transition: box-shadow 0.2s;
+}
+#menu-btn:active, #next-round:active {
+    box-shadow: 1px 1px 0 #888;
+    background: #a2b883;
 }
