@@ -4,8 +4,15 @@ from mysql.connector import Error
 from datetime import datetime
 import os
 
-app=Flask(__name__ ,static_folder= 'C:/Users/Dell/Desktop/merevlemez/Egyetem/5.félév/módszertan/memory-game-app/src/frontend/game/color-hunter')
-app.template_folder='C://Users/Dell/Desktop/merevlemez/Egyetem/5.félév/módszertan/memory-game-app/src/frontend/game/color-hunter'
+
+load_dotenv()  #.env fájl betöltése
+app=Flask(__name__ )
+
+BASE_DIR = os.path.dirname(os.path.abspath('..'))
+FRONTEND_DIR = os.path.join(BASE_DIR, os.getenv('FRONTEND_PATH', 'frontend'))
+
+app.static_folder = FRONTEND_DIR
+app.template_folder = FRONTEND_DIR
 
 #Adatbázis konfiguráció inicializálása
 db_config = {
