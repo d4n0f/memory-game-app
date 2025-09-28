@@ -294,7 +294,8 @@ def get_scores():
             return jsonify({'success': False,
                     'error': 'Adatbázis kapcsolat hiba'}), 500
         cursor = conn.cursor(dictionary=True)
-        if game_mod =='all':
+
+        if game_mode =='all':
             cursor.execute('''
                 SELECT p.name, s.score, s.game_mod , s.game_time, s.rounds_played,s.created_at
                 FROM scores s
