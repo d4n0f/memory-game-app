@@ -80,8 +80,13 @@ def server_static(filename):
     return send_from_directory(os.path.join(app.root_path, 'static'), filename)
 @app.route('/')
 def index():
-    return render_template('color-hunter.html')
-@app.route('/game')
+    return render_template('main/menu/index.html')
+
+@app.route('/menu')
+def game_menu():
+    return render_template('main/menu/gamemode-selector.html')
+
+@app.route('/color-hunter')
 def game():
     return render_template('color-hunter.html')
 @app.route('/scores')
