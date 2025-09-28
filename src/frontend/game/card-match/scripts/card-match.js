@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Menü gomb esemény: vissza a főmenübe
     if (menuBtn) {
         menuBtn.addEventListener("click", () => {
-            window.location.href = "../../main/menu/gamemode-selector.html";
+            window.location.href = "/menu";
         });
     }
 

@@ -105,6 +105,6 @@ nextRoundBtn.addEventListener("click", () => {
 
 if (menuBtn) {
     menuBtn.addEventListener("click", () => {
-        window.location.href = "../../main/menu/gamemode-selector.html";
+        window.location.href = "/menu";
     });
 }
