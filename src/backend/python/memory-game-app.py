@@ -115,6 +115,15 @@ def serve_color_match_images(filename):
         print(f"Color-match kép hiba: {e}")
         return "Képet nem talált", 404
 
+@app.route('/assets/images/<path:filename>')
+def serve_general_images(filename):
+    #Általános képek kiszolgálása
+    try:
+        images_dir = os.path.join(FRONTEND_DIR, 'assets', 'images')
+        return send_from_directory(images_dir, filename)
+    except Exception as e:
+        print(f" Általános kép hiba: {e}")
+        return "Képet nem talált", 404
 
 # ==================== SEGÉDFÜGGVÉNYEK ====================
 
