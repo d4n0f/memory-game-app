@@ -235,7 +235,8 @@ def save_scores():
         for field in required_fields:
             if field not in data:
                 return jsonify({'success':False,
-                                'error':f'missing {field}'}), 400
+                                'error':f'Hiányzó mező: {field}'}), 400
+            #Adatvalidáció
             player_id=int(data['player_id'])
             score=int(data['score'])
             game_mod=data['game_mod']
