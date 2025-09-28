@@ -105,9 +105,15 @@ def serve_css(filename):
 def serve_js(filename):
     return send_from_directory(os.path.join(FRONTEND_DIR, 'scripts'), filename)
 
-@app.route('/assets/<path:filename>')
-def serve_assets(filename):
-    return send_from_directory(os.path.join(FRONTEND_DIR, 'game','color-hunter','assets','images'), filename)
+@app.route('/assets/images/color-match/<path:filename>')
+def serve_color_match_images(filename):
+    #Color-match képek kiszolgálása
+    try:
+        images_dir = os.path.join(FRONTEND_DIR, 'assets', 'images', 'color-match')
+        return send_from_directory(images_dir, filename)
+    except Exception as e:
+        print(f"Color-match kép hiba: {e}")
+        return "Képet nem talált", 404
 
 
 # ==================== SEGÉDFÜGGVÉNYEK ====================
