@@ -239,7 +239,7 @@ def save_scores():
             #Adatvalidáció
             player_id=int(data['player_id'])
             score=int(data['score'])
-            game_mod=data['game_mod']
+            game_mode=data['game_mode']
             game_time=int(data.get('game_time',0))
             rounds_played=int(data.get('rounds_played',1))
 
