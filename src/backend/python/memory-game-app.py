@@ -88,7 +88,11 @@ def game_menu():
 
 @app.route('/color-hunter')
 def game():
-    return render_template('color-hunter.html')
+    return render_template('game/color-hunter/color-hunter.html')
+
+@app.route('/card-match')
+def game2():
+    return render_template('game/card-match/card-match.html')
 @app.route('/scores')
 def scores():
     return render_template('scores.html')
