@@ -95,7 +95,21 @@ def game2():
     return render_template('game/card-match/card-match.html')
 @app.route('/scores')
 def scores():
-    return render_template('scores.html')
+    return render_template('main/scoreboard/scores.html')
+
+# ==================== STATIC FÁJLOK JAVÍTVA ====================
+
+@app.route('/styles/<path:filename>')
+def serve_css(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'styles'), filename)
+
+@app.route('/scripts/<path:filename>')
+def serve_js(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'scripts'), filename)
+
+@app.route('/assets/<path:filename>')
+def serve_assets(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'game','color-hunter','assets','images'), filename)
 
 #Adatbázis egeszségügyi ellenőrzés
 @app.route('/api/health',)
