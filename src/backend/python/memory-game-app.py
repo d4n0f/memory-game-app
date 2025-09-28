@@ -286,7 +286,7 @@ def save_scores():
 def get_scores():
     #Eredmények lekérése
     try:
-        game_mod = request.args.get('game_mod','all')
+        game_mode = request.args.get('game_mode','all')
         limit = int(request.args.get('limit',20))
 
         conn= get_db_connect()
