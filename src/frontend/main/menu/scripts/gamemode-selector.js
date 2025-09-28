@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
         startGameBtn.disabled = true;
         startGameBtn.classList.add("disabled");
         startGameBtn.addEventListener("click", () => {
+            // Save selected difficulty to localStorage
+            if (selectedDifficulty) {
+                localStorage.setItem('difficulty', selectedDifficulty);
+            }
             if (selectedMode === "color-hunter") {
                 window.location.href = `../../game/color-hunter/color-hunter.html?difficulty=${selectedDifficulty}`;
             } else if (selectedMode === "card-match") {

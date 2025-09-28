@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Color-match képek: előlapok és hátlap
-    const cardFrontImages = [
+    const allCardFrontImages = [
         "../../assets/images/color-match/elulso-kep1.jpg",
         "../../assets/images/color-match/elulso-kep2.jpg",
         "../../assets/images/color-match/elulso-kep3.jpg",
         "../../assets/images/color-match/elulso-kep4.jpg",
         "../../assets/images/color-match/elulso-kep5.jpg",
-        "../../assets/images/color-match/elulso-kep6.jpg"
+        "../../assets/images/color-match/elulso-kep6.jpg",
+        "../../assets/images/color-match/elulso-kep7.jpg",
+        "../../assets/images/color-match/elulso-kep8.jpg"
     ];
     const cardBackImage = "../../assets/images/color-match/hatso-kep.jpg";
 
@@ -24,7 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let lockBoard = false;
     let score = 0;
     let moves = 0;
-    const totalPairs = cardFrontImages.length;
+
+    // Get difficulty from localStorage (set in gamemode-selector.js)
+    function getDifficulty() {
+        return localStorage.getItem('difficulty') || 'easy';
+    }
+
+    let totalPairs = 0;
 
     initGame();
 
@@ -39,8 +47,36 @@ document.addEventListener("DOMContentLoaded", () => {
         updateUI();
         resultScreen.classList.add("hidden");
 
+        // Determine board size and images based on difficulty
+        let difficulty = getDifficulty();
+        let pairs = 0;
+        let selectedImages = [];
+        if (difficulty === 'easy') {
+            pairs = 3; // 2x3
+            selectedImages = allCardFrontImages.slice(0, 3);
+            board.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            board.style.gridTemplateRows = 'repeat(2, 1fr)';
+        } else if (difficulty === 'medium') {
+            pairs = 4; // 2x4
+            selectedImages = allCardFrontImages.slice(0, 4);
+            board.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            board.style.gridTemplateRows = 'repeat(2, 1fr)';
+        } else if (difficulty === 'hard') {
+            pairs = 6; // 3x4
+            selectedImages = allCardFrontImages.slice(0, 6);
+            board.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            board.style.gridTemplateRows = 'repeat(3, 1fr)';
+        } else {
+            // fallback
+            pairs = 3;
+            selectedImages = allCardFrontImages.slice(0, 3);
+            board.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            board.style.gridTemplateRows = 'repeat(2, 1fr)';
+        }
+        totalPairs = pairs;
+
         // párok duplikálása, keverés
-        const deck = shuffle([...cardFrontImages, ...cardFrontImages]);
+        const deck = shuffle([...selectedImages, ...selectedImages]);
 
         deck.forEach((src, idx) => {
             const card = createCard(src, idx);
@@ -114,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Menü gomb esemény: vissza a főmenübe
     if (menuBtn) {
         menuBtn.addEventListener("click", () => {
-            window.location.href = "../../main/menu/index.html";
+            window.location.href = "../../main/menu/gamemode-selector.html";
         });
     }
 

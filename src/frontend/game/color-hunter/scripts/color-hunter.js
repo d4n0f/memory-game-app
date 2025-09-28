@@ -29,6 +29,12 @@ let timer;
 let score = 0;
 let currentTarget = "";
 
+// Get difficulty from localStorage (set in gamemode-selector.js)
+function getDifficulty() {
+    // Default to 'easy' if not set
+    return localStorage.getItem('difficulty') || 'easy';
+}
+
 startRound()
 
 function startRound() {
@@ -39,7 +45,15 @@ function startRound() {
     currentTarget = images[Math.floor(Math.random() * images.length)];
     targetImage.src = currentTarget;
 
+    let difficulty = getDifficulty();
     let timeLeft = 5;
+    if (difficulty === 'easy') {
+        timeLeft = 10;
+    } else if (difficulty === 'medium') {
+        timeLeft = 5;
+    } else if (difficulty === 'hard') {
+        timeLeft = 3;
+    }
     timerElement.textContent = `Hátralévő idő: ${timeLeft} mp`;
 
     clearInterval(timer);
@@ -91,6 +105,6 @@ nextRoundBtn.addEventListener("click", () => {
 
 if (menuBtn) {
     menuBtn.addEventListener("click", () => {
-        window.location.href = "../../main/menu/index.html";
+        window.location.href = "../../main/menu/gamemode-selector.html";
     });
 }
