@@ -250,44 +250,35 @@ def save_scores():
         if not is_valid:
             return jsonify({'success': False, 'error': error_message}), 400
 
-        for field in required_fields:
-            if field not in data:
-                return jsonify({'success':False,
-                                'error':f'Hiányzó mező: {field}'}), 400
-            #Adatvalidáció
-            player_id=int(data['player_id'])
-            score=int(data['score'])
-            game_mode=data['game_mode']
-            game_time=int(data.get('game_time',0))
-            rounds_played=int(data.get('rounds_played',1))
+        #Adatvalidáció
+        player_id=int(data['player_id'])
+        score=int(data['score'])
+        game_mode=data['game_mode']
+        game_time=int(data.get('game_time',0))
+        rounds_played=int(data.get('rounds_played',1))
 
-            if score< 0 or game_time < 0 or rounds_played < 1:
-                return jsonify({'success':False,
-                                'error':f'Érvénytelen érték'}), 400
-            if game_mode not in ['easy','medium','hard']:
-                game_mode='easy'
 
-            conn= get_db_connect()
-            if conn is None:
-                return jsonify({'success':False,
+        conn= get_db_connect()
+        if conn is None:
+            return jsonify({'success':False,
                                 'error':'Adatbázis kapcsolat hiba'}),500
-            cursor = conn.cursor()
-            #Ellenőrizzük hogy létezik-e a játékos
-            cursor.execute("SELECT id FROM players WHERE id=%s", (player_id,))
+        cursor = conn.cursor()
+        #Ellenőrizzük hogy létezik-e a játékos
+        cursor.execute("SELECT id FROM players WHERE id=%s", (player_id,))
 
-            if not cursor.fetchone():
-                return jsonify({'success':False,
+        if not cursor.fetchone():
+            return jsonify({'success':False,
                                 'error':'Játékos nem található'}),404
-            #Eredmények mentése
-            cursor.execute('''
-                INSERT INTO scores (player_id, score, game_mode, game_time, rounds_played)
-                VALUES (%s, %s, %s, %s, %s)
-            ''', (player_id, score, game_mode, game_time, rounds_played))
-            conn.commit()
-            cursor.close()
-            conn.close()
+        #Eredmények mentése
+        cursor.execute('''
+            INSERT INTO scores (player_id, score, game_mode, game_time, rounds_played)
+            VALUES (%s, %s, %s, %s, %s)
+        ''', (player_id, score, game_mode, game_time, rounds_played))
+        conn.commit()
+        cursor.close()
+        conn.close()
 
-            return jsonify({'success':True,
+        return jsonify({'success':True,
                             'message':'Eredmény sikeresen mentve',
                             'score_id':cursor.lastrowid})
     except ValueError :
