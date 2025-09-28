@@ -60,7 +60,7 @@ def init_db():
             id INT AUTO_INCREMENT PRIMARY KEY,
             player_id INT NOT NULL,
             score INT NOT NULL CHECK (score >= 0),
-            game_mod Enum('easy', 'medium', 'hard') DEFAULT 'easy',
+            game_mode Enum('easy', 'medium', 'hard') DEFAULT 'easy',
             game_time INT DEFAULT 0 CHECK (game_time >= 0),
             rounds_played INT DEFAULT 1 CHECK (rounds_played >= 1),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET={db_config['charset']} COLLATE={db_config['collation']}''')
