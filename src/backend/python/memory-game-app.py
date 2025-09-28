@@ -247,8 +247,9 @@ def save_scores():
             if score< 0 or game_time < 0 or rounds_played < 1:
                 return jsonify({'success':False,
                                 'error':f'Érvénytelen érték'}), 400
-            if game_mod not in ['easy','medium','hard']:
-                game_mod='easy'
+            if game_mode not in ['easy','medium','hard']:
+                game_mode='easy'
+
             conn= get_db_connect()
             if conn is None:
                 return jsonify({'success':False,
