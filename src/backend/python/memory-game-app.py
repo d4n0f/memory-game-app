@@ -311,7 +311,8 @@ def get_scores():
                 WHERE s.game_mode=%s
                 ORDER BY s.score DESC,s.game_time ASC,s.created_at DESC
                 LIMIT %s
-            ''',(game_mod,limit))
+            ''',(game_mode,limit))
+
         scores = cursor.fetchall()
 
         #Datetime objektumok String-é konvertálása
