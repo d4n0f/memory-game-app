@@ -246,7 +246,9 @@ def save_scores():
     #Eredmények mentése
     try:
         data = request.get_json()
-        required_fields = ['player_id','score','game_mode','game_time','rounds_played']
+        is_valid, error_message = validate_score_data(data)
+        if not is_valid:
+            return jsonify({'success': False, 'error': error_message}), 400
 
         for field in required_fields:
             if field not in data:
