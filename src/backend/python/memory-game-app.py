@@ -111,6 +111,71 @@ def serve_js(filename):
 def serve_assets(filename):
     return send_from_directory(os.path.join(FRONTEND_DIR, 'game','color-hunter','assets','images'), filename)
 
+
+# ==================== SEGÉDFÜGGVÉNYEK ====================
+
+def create_or_get_player(player_name):
+    #Játékos létrehozása vagy lekérése
+    try:
+        conn = get_db_connect()
+        if not conn:
+            return None
+
+        cursor = conn.cursor()
+
+        # Játékos keresése
+        cursor.execute("SELECT id FROM players WHERE name = %s", (player_name,))
+        existing_player = cursor.fetchone()
+
+        if existing_player:
+            player_id = existing_player[0]
+            # Frissítjük az utolsó játék időpontját
+            cursor.execute("UPDATE players SET last_played = CURRENT_TIMESTAMP WHERE id = %s", (player_id,))
+        else:
+            # Új játékos létrehozása
+            cursor.execute("INSERT INTO players (name, last_played) VALUES (%s, CURRENT_TIMESTAMP)", (player_name,))
+            player_id = cursor.lastrowid
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return player_id
+
+    except Error as e:
+        print(f"Játékos kezelési hiba: {e}")
+        return None
+
+# ==================== FORM KEZELÉS + ÁTIRÁNYÍTÁS ====================
+
+@app.route('/start-game', methods=['POST'])
+def start_game():
+    #Játék indítása a főoldalról
+    player_name = request.form.get('player_name', '').strip()
+
+    if not player_name:
+        return redirect(url_for('index', error='Nincs név megadva'))
+
+    # Játékos mentése session-be
+    session['player_name'] = player_name
+    session['player_id'] = create_or_get_player(player_name)
+
+    return redirect(url_for('game_menu'))
+
+
+@app.route('/select-mode', methods=['POST'])
+def select_mode():
+    #Játékmód kiválasztása
+    game_mode = request.form.get('game_mode', 'color-hunter')
+    difficulty = request.form.get('difficulty', 'easy')
+
+    session['game_mode'] = game_mode
+    session['difficulty'] = difficulty
+
+    if game_mode == 'color-hunter':
+        return redirect(url_for('game'))
+    else:
+        return redirect(url_for('game2'))
 #Adatbázis egeszségügyi ellenőrzés
 @app.route('/api/health',)
 def api_health():
