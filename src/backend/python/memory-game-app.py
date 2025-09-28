@@ -305,7 +305,7 @@ def get_scores():
             ''',(limit,))
         else:
             cursor.execute('''
-                SELECT p.name,s.score, s.game_mod, s.game_time, s.rounds_played,s.created_at
+                SELECT p.name, s.score, s.game_mode, s.game_time, s.rounds_played, s.created_at
                 FROM scores s
                 JOIN players p ON s.player_id=p.id
                 WHERE s.game_mode=%s
