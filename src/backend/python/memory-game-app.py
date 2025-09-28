@@ -16,12 +16,12 @@ app.template_folder = FRONTEND_DIR
 
 #Adatbázis konfiguráció inicializálása
 db_config = {
-    'host':'localhost',
-    'user':'root',
-    'password':'admin',
-    'database':'memory_game',
-    'charset':'latin2',
-    'collation':'latin2_hungarian_ci'
+    'host': os.getenv('MYSQL_HOST', 'localhost'),
+    'user':os.getenv('MYSQL_USER', 'root'),
+    'password':os.getenv('MYSQL_PASSWORD', 'admin'),
+    'database':os.getenv('MYSQL_DATABASE', 'memory_game'),
+    'charset': os.getenv('MYSQL_CHARSET','utf8mb4'),  # UTF-8 támogatás módosítva
+    'collation': os.getenv('MYSQL_COLLATION','utf8mb4_hungarian_ci')
 }
 
 # Mysql szerverrel való kapcsolat felépítése
