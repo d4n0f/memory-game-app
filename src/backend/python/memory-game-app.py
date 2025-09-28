@@ -246,7 +246,7 @@ def save_scores():
     #Eredmények mentése
     try:
         data = request.get_json()
-        required_fields = ['player_id','score','game_mod','game_time','rounds_played']
+        required_fields = ['player_id','score','game_mode','game_time','rounds_played']
 
         for field in required_fields:
             if field not in data:
