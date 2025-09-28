@@ -387,6 +387,48 @@ def get_players():
                     'error':f'Adatbázis hiba:{str(e)}'}),500
 
 
+
+def validate_score_data(data):
+    #Score adatok validálása - unit tesztelhető függvény
+    required_fields = ['player_id', 'score', 'game_mode', 'game_time', 'rounds_played']
+
+    for field in required_fields:
+        if field not in data:
+            return False, f'Hiányzó mező: {field}'
+
+    try:
+        player_id = int(data['player_id'])
+        score = int(data['score'])
+        game_time = int(data.get('game_time', 0))
+        rounds_played = int(data.get('rounds_played', 1))
+
+        if score < 0 or game_time < 0 or rounds_played < 1:
+            return False, 'Érvénytelen érték'
+
+        if data['game_mode'] not in ['easy', 'medium', 'hard']:
+            return False, 'Érvénytelen játékmód'
+
+        return True, None
+
+    except (ValueError, TypeError):
+        return False, 'Érvénytelen adatformátum'
+
+#-UNIT TESZTHEZ SZÜKSÉGES FÜGGVÉNYEK
+
+def get_difficulty_settings(difficulty):
+    #Nehézségi beállítások - unit tesztelhető
+    settings = {
+        'easy': {'time': 10, 'pairs': 3},
+        'medium': {'time': 5, 'pairs': 4},
+        'hard': {'time': 3, 'pairs': 6}
+    }
+    return settings.get(difficulty, settings['easy'])
+
+
+def is_valid_game_mode(mode):
+    #Játékmód validáció - unit tesztelhető
+    return mode in ['easy', 'medium', 'hard']
+
 if __name__ == '__main__':
 
     host = os.getenv('FLASK_HOST', '0.0.0.0')
