@@ -264,7 +264,7 @@ def save_scores():
             cursor.execute('''
                 INSERT INTO scores (player_id, score, game_mode, game_time, rounds_played)
                 VALUES (%s, %s, %s, %s, %s)
-            ''', (player_id, score, game_mod, game_time, rounds_played))
+            ''', (player_id, score, game_mode, game_time, rounds_played))
             conn.commit()
             cursor.close()
             conn.close()
