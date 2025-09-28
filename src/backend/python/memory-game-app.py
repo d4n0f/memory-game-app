@@ -308,7 +308,7 @@ def get_scores():
                 SELECT p.name,s.score, s.game_mod, s.game_time, s.rounds_played,s.created_at
                 FROM scores s
                 JOIN players p ON s.player_id=p.id
-                WHERE s.game_mod=%s
+                WHERE s.game_mode=%s
                 ORDER BY s.score DESC,s.game_time ASC,s.created_at DESC
                 LIMIT %s
             ''',(game_mod,limit))
