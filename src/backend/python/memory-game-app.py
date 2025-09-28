@@ -69,6 +69,10 @@ def init_db():
 
     except mysql.connector.Error as err:
         print("MySQL adatbázis inicializásakor hiba lépet fel: {}".format(err))
+    finally:
+        if 'connection' in locals() and connection.is_connected():
+            cursor.close()
+            connection.close()
 
 #API végpontok
 @app.route("/<path:filename>")
