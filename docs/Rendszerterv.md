@@ -82,7 +82,8 @@
    - Játékos
 
      - **Rendszerhasználati esetek és lefutásaik:**
-       Admin:
+
+       - Admin:
 
        - A felhasználói adatokat látják, változtathatják
        - Felhasználó hozzáadására, törlésére van lehetőségük
