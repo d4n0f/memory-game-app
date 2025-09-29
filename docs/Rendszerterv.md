@@ -29,7 +29,8 @@
    Adattárolás | Adatmodel megtervezése | 2 | 1 | 1 | 1 | 0|
    | |Adatbázis megvalósítása a szerveren | 2 | 3 | 3 | 0 | 3|
    Frontend | Frontend megtervezése | 2 | 4 | 4 | 3 | 1|
-   | | Frontend implementálás | 2 | 10 | 10 | 6 | 4|
+   | | Frontend implementálás | 2 | 20 | 20 | 15 | 5|
+| | Frontend implementálás | 2 | 10 | 10 | 6 | 4|
    Design | Design megtervezése | 2 | 5 | 5 | 4 | 1|
    || Design implementálás | 2 | 3 | 3 | 2 | 1|
    || UI megtervezése | 2 | 2 | 2 | 1 | 1|
