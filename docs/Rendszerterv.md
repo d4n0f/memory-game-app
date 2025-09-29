@@ -32,6 +32,7 @@
    | | Frontend implementálás | 2 | 20 | 20 | 15 | 5|
 | | Script fájlok elkészítése | 2 | 10 | 10 | 7 | 3|
 | | HTML fájlok elkészítése | 2 | 2 | 2 | 1.5 | 0.5 |
+| | CSS fájlok elkészítése | 2 | 3 | 3 | 3 | 3 |
    Design | Design megtervezése | 2 | 5 | 5 | 4 | 1|
    || Design implementálás | 2 | 3 | 3 | 2 | 1|
    || UI megtervezése | 2 | 2 | 2 | 1 | 1|
