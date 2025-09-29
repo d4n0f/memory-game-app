@@ -37,7 +37,7 @@
    Design | Design megtervezése | 2 | 5 | 5 | 5 | 0|
    || Design implementálás | 2 | 3 | 3 | 3 | 0|
    || UI megtervezése | 2 | 2 | 2 | 2 | 0|
-   Backend | Backend megtervezése | 2 | 10 | 10 | 3 | 7|
+   Backend | Backend megtervezése | 2 | 10 | 10 | 10 | 0|
    || Backend implementálása | 2 | 20 | 20 | 18 | 2|
 
    **Mérföldkövek:**
