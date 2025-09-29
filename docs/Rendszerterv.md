@@ -83,13 +83,14 @@
 
      - **Rendszerhasználati esetek és lefutásaik:**
 
-       - Admin:
+     - Admin:
 
        - A felhasználói adatokat látják, változtathatják
        - Felhasználó hozzáadására, törlésére van lehetőségük
        - Plusz nehézségi szintek létrehozzása
        - Játékeseteket átlátja
-         Játékos:
+
+     - Játékos:
        - Játékmódok választása
        - Program használata
        - Látja a toplistát de nem tudja módosítani
