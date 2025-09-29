@@ -11,7 +11,7 @@
 
    - Scrum master: Tassi Bence
    - Product owner: Fónád Bálint
-     **Projektmunkások és felelőségek:**
+     - **Projektmunkások és felelőségek:**
    - Backend és Teszt: Tassi Bence, Feladata az adatok tárolásához szükséges adatszerkezetek kialakítása,
      funkciók létrehozása, a különböző platformok kiszolgálása adatokkal, adatbázis és a frontend elemek összekapcsolása. Teszt oldalon minden funkciójának ellenőrzése, hibák felderítése és dokumentálása. Teszteli a kártyafordítás működését, a párosítási logikát, az időzítő pontos működését, az adatbázis-mentést és a különböző böngészőkben való megfelelő működést. Jelenti a talált hibákat és segít a minőségbiztosításban.
 
