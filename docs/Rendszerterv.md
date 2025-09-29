@@ -80,19 +80,21 @@
 
    - Admin
    - Játékos
-     **Rendszerhasználati esetek és lefutásaik:**
-     Admin:
 
-   - A felhasználói adatokat látják, változtathatják
-   - Felhasználó hozzáadására, törlésére van lehetőségük
-   - Plusz nehézségi szintek létrehozzása
-   - Játékeseteket átlátja
-     Játékos:
-   - Játékmódok választása
-   - Program használata
-   - Látja a toplistát de nem tudja módosítani
-   - Ereményért pontokat kapnak egy pontozási rendszer szerint
-     **Menü-hierarchiák:**
+     - **Rendszerhasználati esetek és lefutásaik:**
+       Admin:
+
+       - A felhasználói adatokat látják, változtathatják
+       - Felhasználó hozzáadására, törlésére van lehetőségük
+       - Plusz nehézségi szintek létrehozzása
+       - Játékeseteket átlátja
+         Játékos:
+       - Játékmódok választása
+       - Program használata
+       - Látja a toplistát de nem tudja módosítani
+       - Ereményért pontokat kapnak egy pontozási rendszer szerint
+
+   - **Menü-hierarchiák:**
 
 6. ## Fizikai környezet
    - Az alkalmazás csak webes platformra készül.
