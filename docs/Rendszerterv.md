@@ -2,7 +2,7 @@
 
 1. ## A rendszer célja:
 
-   A webalkalmazás célja hogy a felhasználó egy memóriakátékot játszon és fejlessze a memóriáját. Felhasználó képes 3 nehézségi szint közül választani. Felhasználónak van lehetősége nevet választani és később az elért pontokat is láthatja a játék után. Fontos, hogy a felhasználó könnyen el tudjon igazodni a felületeken ezért minimalista felhasználói felületet kap a program.
+   A webalkalmazás célja hogy a felhasználó egy memóriakátékot játszon és fejlessze a memóriáját. Felhasználó képes 3 nehézségi szint közül választani 2 játékmód közül. Felhasználónak van lehetősége nevet választani és később az elért pontokat is láthatja a játék után. Fontos, hogy a felhasználó könnyen el tudjon igazodni a felületeken ezért minimalista felhasználói felületet kap a program.
    Minden elért eredményt adatbázisban tárol a program így visszatudja keresni az előző eredményeket. A rendszer kizárólag webes környezetben lesz használható. Top listán fog megjeleni a felhasználó eremédnye.
 
 2. ## Projekterv
