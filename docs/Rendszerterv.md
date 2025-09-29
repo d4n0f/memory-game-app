@@ -47,6 +47,11 @@
 
    - Előírt modellek és dokumentumok elkészítése.
    - Adatmodell elkészítése megtörtént bemutatásra vár.
+   - Frontend implementáció nagy részt elkészült átadásra vár
+   - Backend implementáció elkészült átadásra
+   - Program közel teljes designja és UI-ja elkészült bemutatásra vár
+   - Frontendnek még a POST metódusokat el kell készíteni hogy kommunikálni tudjun a adatbázissal
+   - A projekt demója elkészült bemutatásra vár
 
 3. ## Üzleti folyamatok modellje:
 
