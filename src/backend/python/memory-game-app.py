@@ -105,10 +105,25 @@ def serve_css(filename):
 def serve_js(filename):
     return send_from_directory(os.path.join(FRONTEND_DIR, 'scripts'), filename)
 
-@app.route('/assets/<path:filename>')
-def serve_assets(filename):
-    return send_from_directory(os.path.join(FRONTEND_DIR, 'game','color-hunter','assets','images'), filename)
+@app.route('/assets/images/color-match/<path:filename>')
+def serve_color_match_images(filename):
+    #Color-match képek kiszolgálása
+    try:
+        images_dir = os.path.join(FRONTEND_DIR, 'assets', 'images', 'color-match')
+        return send_from_directory(images_dir, filename)
+    except Exception as e:
+        print(f"Color-match kép hiba: {e}")
+        return "Képet nem talált", 404
 
+@app.route('/assets/images/<path:filename>')
+def serve_general_images(filename):
+    #Általános képek kiszolgálása
+    try:
+        images_dir = os.path.join(FRONTEND_DIR, 'assets', 'images')
+        return send_from_directory(images_dir, filename)
+    except Exception as e:
+        print(f" Általános kép hiba: {e}")
+        return "Képet nem talált", 404
 
 # ==================== SEGÉDFÜGGVÉNYEK ====================
 
@@ -231,46 +246,39 @@ def save_scores():
     #Eredmények mentése
     try:
         data = request.get_json()
-        required_fields = ['player_id','score','game_mod','game_time','rounds_played']
+        is_valid, error_message = validate_score_data(data)
+        if not is_valid:
+            return jsonify({'success': False, 'error': error_message}), 400
 
-        for field in required_fields:
-            if field not in data:
-                return jsonify({'success':False,
-                                'error':f'Hiányzó mező: {field}'}), 400
-            #Adatvalidáció
-            player_id=int(data['player_id'])
-            score=int(data['score'])
-            game_mode=data['game_mode']
-            game_time=int(data.get('game_time',0))
-            rounds_played=int(data.get('rounds_played',1))
+        #Adatvalidáció
+        player_id=int(data['player_id'])
+        score=int(data['score'])
+        game_mode=data['game_mode']
+        game_time=int(data.get('game_time',0))
+        rounds_played=int(data.get('rounds_played',1))
 
-            if score< 0 or game_time < 0 or rounds_played < 1:
-                return jsonify({'success':False,
-                                'error':f'Érvénytelen érték'}), 400
-            if game_mode not in ['easy','medium','hard']:
-                game_mode='easy'
 
-            conn= get_db_connect()
-            if conn is None:
-                return jsonify({'success':False,
+        conn= get_db_connect()
+        if conn is None:
+            return jsonify({'success':False,
                                 'error':'Adatbázis kapcsolat hiba'}),500
-            cursor = conn.cursor()
-            #Ellenőrizzük hogy létezik-e a játékos
-            cursor.execute("SELECT id FROM players WHERE id=%s", (player_id,))
+        cursor = conn.cursor()
+        #Ellenőrizzük hogy létezik-e a játékos
+        cursor.execute("SELECT id FROM players WHERE id=%s", (player_id,))
 
-            if not cursor.fetchone():
-                return jsonify({'success':False,
+        if not cursor.fetchone():
+            return jsonify({'success':False,
                                 'error':'Játékos nem található'}),404
-            #Eredmények mentése
-            cursor.execute('''
-                INSERT INTO scores (player_id, score, game_mode, game_time, rounds_played)
-                VALUES (%s, %s, %s, %s, %s)
-            ''', (player_id, score, game_mode, game_time, rounds_played))
-            conn.commit()
-            cursor.close()
-            conn.close()
+        #Eredmények mentése
+        cursor.execute('''
+            INSERT INTO scores (player_id, score, game_mode, game_time, rounds_played)
+            VALUES (%s, %s, %s, %s, %s)
+        ''', (player_id, score, game_mode, game_time, rounds_played))
+        conn.commit()
+        cursor.close()
+        conn.close()
 
-            return jsonify({'success':True,
+        return jsonify({'success':True,
                             'message':'Eredmény sikeresen mentve',
                             'score_id':cursor.lastrowid})
     except ValueError :
@@ -371,6 +379,48 @@ def get_players():
         return jsonify({'success':False,
                     'error':f'Adatbázis hiba:{str(e)}'}),500
 
+
+
+def validate_score_data(data):
+    #Score adatok validálása - unit tesztelhető függvény
+    required_fields = ['player_id', 'score', 'game_mode', 'game_time', 'rounds_played']
+
+    for field in required_fields:
+        if field not in data:
+            return False, f'Hiányzó mező: {field}'
+
+    try:
+        player_id = int(data['player_id'])
+        score = int(data['score'])
+        game_time = int(data.get('game_time', 0))
+        rounds_played = int(data.get('rounds_played', 1))
+
+        if score < 0 or game_time < 0 or rounds_played < 1:
+            return False, 'Érvénytelen érték'
+
+        if data['game_mode'] not in ['easy', 'medium', 'hard']:
+            return False, 'Érvénytelen játékmód'
+
+        return True, None
+
+    except (ValueError, TypeError):
+        return False, 'Érvénytelen adatformátum'
+
+#-UNIT TESZTHEZ SZÜKSÉGES FÜGGVÉNYEK
+
+def get_difficulty_settings(difficulty):
+    #Nehézségi beállítások - unit tesztelhető
+    settings = {
+        'easy': {'time': 10, 'pairs': 3},
+        'medium': {'time': 5, 'pairs': 4},
+        'hard': {'time': 3, 'pairs': 6}
+    }
+    return settings.get(difficulty, settings['easy'])
+
+
+def is_valid_game_mode(mode):
+    #Játékmód validáció - unit tesztelhető
+    return mode in ['easy', 'medium', 'hard']
 
 if __name__ == '__main__':
 
