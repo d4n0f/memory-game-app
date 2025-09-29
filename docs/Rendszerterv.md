@@ -30,7 +30,8 @@
    | |Adatbázis megvalósítása a szerveren | 2 | 3 | 3 | 0 | 3|
    Frontend | Frontend megtervezése | 2 | 4 | 4 | 3 | 1|
    | | Frontend implementálás | 2 | 20 | 20 | 15 | 5|
-| | Script fájlok elkészítése | 2 | 13 | 13 | 10 | 3|
+| | Script fájlok elkészítése | 2 | 10 | 10 | 7 | 3|
+| | HTML fájlok elkészítése | 2 | 2 | 2 | 1.5 | 0.5 |
    Design | Design megtervezése | 2 | 5 | 5 | 4 | 1|
    || Design implementálás | 2 | 3 | 3 | 2 | 1|
    || UI megtervezése | 2 | 2 | 2 | 1 | 1|
