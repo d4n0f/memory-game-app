@@ -77,10 +77,11 @@
 5. ## Funkcionális terv
 
    **Rendszerszereplők:**
-   Admin
-   Játékos
-   **Rendszerhasználati esetek és lefutásaik:**
-   Admin:
+
+   - Admin
+   - Játékos
+     **Rendszerhasználati esetek és lefutásaik:**
+     Admin:
 
    - A felhasználói adatokat látják, változtathatják
    - Felhasználó hozzáadására, törlésére van lehetőségük
