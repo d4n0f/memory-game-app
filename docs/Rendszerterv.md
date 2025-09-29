@@ -40,6 +40,7 @@
    Backend | Backend megtervezése | 2 | 10 | 10 | 10 | 0|
    || Backend implementálása | 2 | 20 | 20 | 18 | 2|
 || Backend unit teszt | 2 | 3 | 3 | 3 | 0|
+|| Backend integration teszt | 2 | 2 | 2 | 2 | 0|
 
    **Mérföldkövek:**
 
