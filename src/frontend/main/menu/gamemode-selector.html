@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Egy egyszerű játék amivel fejlesztheted memóriádat!">
     <title>Memória Mánia</title>
-    <link rel="stylesheet" href="styles/menu.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main/menu/styles/menu.css') }}">
 </head>
 
 <body>
@@ -34,7 +34,7 @@
         </section>
     </main>
 
-    <script src="scripts/gamemode-selector.js"></script>
+    <script src="{{ url_for('static', filename='main/menu/scripts/gamemode-selector.js') }}"></script>
 </body>
 
 </html>

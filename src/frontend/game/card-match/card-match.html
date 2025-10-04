@@ -7,7 +7,7 @@
     <meta name="description"
         content="Fordíts fel két kártyát, ha egy pár akkor van egy pontod, ha nem akkor visszafordítjuk. A cél, hogy találd meg az összes párt.">
     <title>Memória Mánia | Kártyapárosító</title>
-    <link rel="stylesheet" href="styles/card-match.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='game/card-match/styles/card-match.css') }}"/>
 </head>
 
 <body>
@@ -38,7 +38,7 @@
         </section>
     </main>
 
-    <script src="scripts/card-match.js"></script>
+    <script src="{{ url_for('static', filename='game/card-match/scripts/card-match.js') }}"></script>
 </body>
 
 </html>

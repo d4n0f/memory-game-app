@@ -2,7 +2,7 @@
 
 1. ## A rendszer célja:
 
-   A webalkalmazás célja hogy a felhasználó egy memóriakátékot játszon és fejlessze a memóriáját. Felhasználó képes 3 nehézségi szint közül választani. Felhasználónak van lehetősége nevet választani és később az elért pontokat is láthatja a játék után. Fontos, hogy a felhasználó könnyen el tudjon igazodni a felületeken ezért minimalista felhasználói felületet kap a program.
+   A webalkalmazás célja hogy a felhasználó egy memóriakátékot játszon és fejlessze a memóriáját. Felhasználó képes 3 nehézségi szint közül választani 2 játékmód közül. Felhasználónak van lehetősége nevet választani és később az elért pontokat is láthatja a játék után. Fontos, hogy a felhasználó könnyen el tudjon igazodni a felületeken ezért minimalista felhasználói felületet kap a program.
    Minden elért eredményt adatbázisban tárol a program így visszatudja keresni az előző eredményeket. A rendszer kizárólag webes környezetben lesz használható. Top listán fog megjeleni a felhasználó eremédnye.
 
 2. ## Projekterv
@@ -11,13 +11,14 @@
 
    - Scrum master: Tassi Bence
    - Product owner: Fónád Bálint
-     **Projektmunkások és felelőségek:**
-   - Backend és Teszt: Tassi Bence, Feladata az adatok tárolásához szükséges adatszerkezetek kialakítása,
-     funkciók létrehozása, a különböző platformok kiszolgálása adatokkal, adatbázis és a frontend elemek összekapcsolása. Teszt oldalon minden funkciójának ellenőrzése, hibák felderítése és dokumentálása. Teszteli a kártyafordítás működését, a párosítási logikát, az időzítő pontos működését, az adatbázis-mentést és a különböző böngészőkben való megfelelő működést. Jelenti a talált hibákat és segít a minőségbiztosításban.
 
-   - Frontend: Fónad Bálint és Spišáková Antónia, weboldal vagy alkalmazás felhasználói felületének (UI) és felhasználói élményének (UX) kialakításáért és megvalósításáért felelős.Dizájnok kódolása, interaktív elemek létrehozása, valamint annak biztosítása, hogy a felület gyors, stabil és intuitív legyen.
+     - **Projektmunkások és felelőségek:**
 
-   - Design: Spišáková Antónia, esztétikus és felhasználóbarát megjelenésének kialakítása. Ez magában foglalja a színpaletta, tipográfia és vizuális stílus meghatározását, a kártyák és felületi elemek designját, valamint az animációk és átmenetek tervezését. A designer felelős azért, hogy a játék reszponzív legyen minden eszközön, és hogy intuitív felhasználói élményt nyújtson a játékosoknak.
+     - Backend és Teszt: Tassi Bence, Feladata az adatok tárolásához szükséges adatszerkezetek kialakítása,funkciók létrehozása, a különböző platformok kiszolgálása adatokkal, adatbázis és a frontend elemek összekapcsolása. Teszt oldalon minden funkciójának ellenőrzése, hibák felderítése és dokumentálása. Teszteli a kártyafordítás működését, a párosítási logikát, az időzítő pontos működését, az adatbázis-mentést és a különböző böngészőkben való megfelelő működést. Jelenti a talált hibákat és segít a minőségbiztosításban.
+
+     - Frontend: Fónad Bálint és Spišáková Antónia, weboldal vagy alkalmazás felhasználói felületének (UI) és felhasználói élményének (UX) kialakításáért és megvalósításáért felelős.Dizájnok kódolása, interaktív elemek létrehozása, valamint annak biztosítása, hogy a felület gyors, stabil és intuitív legyen.
+
+     - Design: Spišáková Antónia, esztétikus és felhasználóbarát megjelenésének kialakítása. Ez magában foglalja a színpaletta, tipográfia és vizuális stílus meghatározását, a kártyák és felületi elemek designját, valamint az animációk és átmenetek tervezését. A designer felelős azért, hogy a játék reszponzív legyen minden eszközön, és hogy intuitív felhasználói élményt nyújtson a játékosoknak.
 
    **Űtemterv:**
    | Funkció | Feladat | Prioritás | Becslés | Aktuális idő | Eltelt idő| Hátralévő idő |
@@ -29,17 +30,28 @@
    Adattárolás | Adatmodel megtervezése | 2 | 1 | 1 | 1 | 0|
    | |Adatbázis megvalósítása a szerveren | 2 | 3 | 3 | 0 | 3|
    Frontend | Frontend megtervezése | 2 | 4 | 4 | 3 | 1|
-   | | Frontend implementálás | 2 | 10 | 10 | 6 | 4|
-   Design | Design megtervezése | 2 | 5 | 5 | 4 | 1|
-   || Design implementálás | 2 | 3 | 3 | 2 | 1|
-   || UI megtervezése | 2 | 2 | 2 | 1 | 1|
-   Backend | Backend megtervezése | 2 | 10 | 10 | 3 | 7|
-   || Backend implementálása | 2 | 15 | 15 | 2 | 13|
+   || Frontend implementálás | 2 | 20 | 20 | 15 | 5|
+   || Script fájlok elkészítése | 2 | 10 | 10 | 7 | 3|
+   || HTML fájlok elkészítése | 2 | 2 | 2 | 1.5 | 0.5 |
+   || CSS fájlok elkészítése | 2 | 3 | 3 | 3 | 3 |
+   || Frontend teszt elkészítése | 2 | 5 | 5 | 0 | 5 |
+   Design | Design megtervezése | 2 | 5 | 5 | 5 | 0|
+   || Design implementálás | 2 | 3 | 3 | 3 | 0|
+   || UI megtervezése | 2 | 2 | 2 | 2 | 0|
+   Backend | Backend megtervezése | 2 | 10 | 10 | 10 | 0|
+   || Backend implementálása | 2 | 20 | 20 | 18 | 2|
+   || Backend unit teszt | 2 | 3 | 3 | 3 | 0|
+   || Backend integration teszt | 2 | 2 | 2 | 2 | 0|
 
    **Mérföldkövek:**
 
    - Előírt modellek és dokumentumok elkészítése.
    - Adatmodell elkészítése megtörtént bemutatásra vár.
+   - Frontend implementáció nagy részt elkészült átadásra vár
+   - Backend implementáció elkészült átadásra
+   - Program közel teljes designja és UI-ja elkészült bemutatásra vár
+   - Frontendnek még a POST metódusokat el kell készíteni hogy kommunikálni tudjun a adatbázissal
+   - A projekt demója elkészült bemutatásra vár
 
 3. ## Üzleti folyamatok modellje:
 
@@ -65,21 +77,26 @@
 5. ## Funkcionális terv
 
    **Rendszerszereplők:**
-   Admin
-   Játékos
-   **Rendszerhasználati esetek és lefutásaik:**
-   Admin:
 
-   - A felhasználói adatokat látják, változtathatják
-   - Felhasználó hozzáadására, törlésére van lehetőségük
-   - Plusz nehézségi szintek létrehozzása
-   - Játékeseteket átlátja
-     Játékos:
-   - Játékmódok választása
-   - Program használata
-   - Látja a toplistát de nem tudja módosítani
-   - Ereményért pontokat kapnak egy pontozási rendszer szerint
-     **Menü-hierarchiák:**
+   - Admin
+   - Játékos
+
+     - **Rendszerhasználati esetek és lefutásaik:**
+
+     - Admin:
+
+       - A felhasználói adatokat látják, változtathatják
+       - Felhasználó hozzáadására, törlésére van lehetőségük
+       - Plusz nehézségi szintek létrehozzása
+       - Játékeseteket átlátja
+
+     - Játékos:
+       - Játékmódok választása
+       - Program használata
+       - Látja a toplistát de nem tudja módosítani
+       - Ereményért pontokat kapnak egy pontozási rendszer szerint
+
+   - **Menü-hierarchiák:**
 
 6. ## Fizikai környezet
    - Az alkalmazás csak webes platformra készül.

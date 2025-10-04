@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.setItem('difficulty', selectedDifficulty);
             }
             if (selectedMode === "color-hunter") {
-                window.location.href = `../../game/color-hunter/color-hunter.html?difficulty=${selectedDifficulty}`;
+                window.location.href = "/color-hunter";
             } else if (selectedMode === "card-match") {
-                window.location.href = `../../game/card-match/card-match.html?difficulty=${selectedDifficulty}`;
+                window.location.href = "/card-match";
             }
         });
     }
