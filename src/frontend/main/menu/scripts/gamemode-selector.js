@@ -38,15 +38,38 @@ document.addEventListener("DOMContentLoaded", () => {
         startGameBtn.disabled = true;
         startGameBtn.classList.add("disabled");
         startGameBtn.addEventListener("click", () => {
-            // Save selected difficulty to localStorage
             if (selectedDifficulty) {
                 localStorage.setItem('difficulty', selectedDifficulty);
             }
-            if (selectedMode === "color-hunter") {
-                window.location.href = "/color-hunter";
-            } else if (selectedMode === "card-match") {
-                window.location.href = "/card-match";
+            // Játékos név lekérése a localStorage-ből (amit a főmenüben ad meg)
+            const playerName = localStorage.getItem('player_name') || '';
+            if (!playerName) {
+                alert('Név nincs megadva!');
+                return;
             }
+            // Játék indítása a backenddel
+            fetch('/api/game', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: playerName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.player_id) {
+                    localStorage.setItem('player_id', data.player_id);
+                    // Továbbirányítás a választott játékra
+                    if (selectedMode === "color-hunter") {
+                        window.location.href = "/color-hunter";
+                    } else if (selectedMode === "card-match") {
+                        window.location.href = "/card-match";
+                    }
+                } else {
+                    alert('Nem sikerült elindítani a játékot: ' + (data.error || 'Ismeretlen hiba'));
+                }
+            })
+            .catch(() => {
+                alert('Nem sikerült csatlakozni a szerverhez.');
+            });
         });
     }
 });

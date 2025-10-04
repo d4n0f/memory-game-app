@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Color-match képek: előlapok és hátlap
     const allCardFrontImages = [
         "../../assets/images/color-match/elulso-kep1.jpg",
         "../../assets/images/color-match/elulso-kep2.jpg",
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let score = 0;
     let moves = 0;
 
-    // Get difficulty from localStorage (set in gamemode-selector.js)
     function getDifficulty() {
         return localStorage.getItem('difficulty') || 'easy';
     }
@@ -37,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initGame();
 
     function initGame() {
-        // reset state
+        // reset
         board.innerHTML = "";
         firstCard = null;
         secondCard = null;
@@ -47,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateUI();
         resultScreen.classList.add("hidden");
 
-        // Determine board size and images based on difficulty
+        // Nehézség alapján tábla méret és képek meghatározása
         let difficulty = getDifficulty();
         let pairs = 0;
         let selectedImages = [];
@@ -67,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             board.style.gridTemplateColumns = 'repeat(4, 1fr)';
             board.style.gridTemplateRows = 'repeat(3, 1fr)';
         } else {
-            // fallback
+            // alapértelmezett
             pairs = 3;
             selectedImages = allCardFrontImages.slice(0, 3);
             board.style.gridTemplateColumns = 'repeat(3, 1fr)';
@@ -142,6 +140,31 @@ document.addEventListener("DOMContentLoaded", () => {
         finalScoreEl.textContent = score;
         resultMessage.textContent = `Megtaláltad az összes párt ${moves} lépésből!`;
         resultScreen.classList.remove("hidden");
+
+        // Eredmény mentése backendre
+        const playerId = localStorage.getItem('player_id');
+        const difficulty = localStorage.getItem('difficulty') || 'easy';
+        if (playerId) {
+            fetch('/api/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    player_id: playerId,
+                    score: score,
+                    game_mode: 'card-match',
+                    //game_time: 0,
+                    rounds_played: 1,
+                    difficulty: difficulty
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // visszajelzés, hiba, stb.
+                })
+                .catch(() => {
+                    // hibaüzenet
+                });
+        }
     }
 
 
@@ -154,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Fisher–Yates shuffle
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -170,14 +192,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const inner = document.createElement("div");
         inner.classList.add("card-inner");
 
-        // --- Hátlap (mindenkinek ugyanaz, alapból látszik) ---
+        // Hátlap
         const back = document.createElement("div");
         back.classList.add("card-back");
         const backImg = document.createElement("img");
         backImg.src = cardBackImage;
         back.appendChild(backImg);
 
-        // --- Előlap (változó kép, kattintás után látszik) ---
+        // Előlap 
         const front = document.createElement("div");
         front.classList.add("card-front");
         const frontImg = document.createElement("img");

@@ -29,9 +29,8 @@ let timer;
 let score = 0;
 let currentTarget = "";
 
-// Get difficulty from localStorage (set in gamemode-selector.js)
 function getDifficulty() {
-    // Default to 'easy' if not set
+    // Alapértelmezett nehézség: könnyű
     return localStorage.getItem('difficulty') || 'easy';
 }
 
@@ -89,11 +88,39 @@ function checkChoice(choice) {
     choicesContainer.classList.add("hidden");
     resultScreen.classList.remove("hidden");
 
+    let correct = false;
     if (choice === currentTarget) {
         score++;
         resultMessage.textContent = `Helyes! Pontjaid: ${score}`;
+        correct = true;
     } else {
         resultMessage.textContent = `Rossz :( Pontjaid: ${score}`;
+    }
+
+    if (correct) {
+        const playerId = localStorage.getItem('player_id');
+        const difficulty = localStorage.getItem('difficulty') || 'easy';
+        if (playerId) {
+            fetch('/api/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    player_id: playerId,
+                    score: score,
+                    game_mode: 'color-hunter',
+                    //game_time: 0,
+                    rounds_played: 1,
+                    difficulty: difficulty
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // visszajelzés, hiba, stb.
+            })
+            .catch(() => {
+                // hibaüzenet
+            });
+        }
     }
 }
 
