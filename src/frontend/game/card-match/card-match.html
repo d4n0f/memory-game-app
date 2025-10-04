@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Fordíts fel két kártyát, ha egy pár akkor van egy pontod, ha nem akkor visszafordítjuk. A cél, hogy találd meg az összes párt.">
+    <title>Memória Mánia | Kártyapárosító</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='game/card-match/styles/card-match.css') }}"/>
+</head>
+
+<body>
+    <header>
+        <h1>Kártyapárosító</h1>
+    </header>
+
+    <main id="game" class="container">
+        <section id="game-info" class="info-bar" aria-live="polite">
+            <div id="player-info">Játékos: <span id="player-name-display">Vendég</span></div>
+            <div id="score-info">Találatok: <span id="score">0</span></div>
+            <div id="moves-info">Lépések: <span id="moves">0</span></div>
+            <div id="timer-info" class="hidden">Idő: <span id="timer">--</span></div>
+        </section>
+
+        <section id="game-board" class="board" aria-label="Játék tábla">
+
+        </section>
+
+        <section id="result-screen" class="overlay hidden" role="dialog" aria-modal="true"
+            aria-labelledby="result-title">
+            <div class="overlay-content">
+                <h2 id="result-title">Játék vége</h2>
+                <p id="result-message">Pontok: <span id="final-score">0</span></p>
+                <button id="next-round" type="button">Következő kör</button>
+                <button id="menu-btn" type="button">Vissza a menübe</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='game/card-match/scripts/card-match.js') }}"></script>
+</body>
+
+</html>

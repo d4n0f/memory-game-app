@@ -1,0 +1,110 @@
+const images = [
+    "../../assets/images/color-hunter/kep1.jpg",
+    "../../assets/images/color-hunter/kep2.jpg",
+    "../../assets/images/color-hunter/kep3.jpg",
+    "../../assets/images/color-hunter/kep4.jpg",
+    "../../assets/images/color-hunter/kep5.jpg",
+    "../../assets/images/color-hunter/kep6.jpg",
+    "../../assets/images/color-hunter/kep7.jpg",
+    "../../assets/images/color-hunter/kep8.jpg",
+    "../../assets/images/color-hunter/kep9.jpg",
+    "../../assets/images/color-hunter/kep10.jpg",
+    "../../assets/images/color-hunter/kep11.jpg",
+    "../../assets/images/color-hunter/kep12.jpg",
+    "../../assets/images/color-hunter/kep13.jpg",
+    "../../assets/images/color-hunter/kep14.jpg"
+];
+
+const gameBoard = document.getElementById("game-board");
+const targetImage = document.getElementById("target-image");
+const timerElement = document.getElementById("timer");
+const choicesContainer = document.getElementById("choices-container");
+const choicesGrid = document.getElementById("choices-grid");
+const resultScreen = document.getElementById("result-screen");
+const resultMessage = document.getElementById("result-message");
+const nextRoundBtn = document.getElementById("next-round");
+const menuBtn = document.getElementById("menu-btn");
+
+let timer;
+let score = 0;
+let currentTarget = "";
+
+// Get difficulty from localStorage (set in gamemode-selector.js)
+function getDifficulty() {
+    // Default to 'easy' if not set
+    return localStorage.getItem('difficulty') || 'easy';
+}
+
+startRound()
+
+function startRound() {
+    document.getElementById("target-container").classList.remove("hidden");
+    choicesContainer.classList.add("hidden");
+    resultScreen.classList.add("hidden");
+
+    currentTarget = images[Math.floor(Math.random() * images.length)];
+    targetImage.src = currentTarget;
+
+    let difficulty = getDifficulty();
+    let timeLeft = 5;
+    if (difficulty === 'easy') {
+        timeLeft = 10;
+    } else if (difficulty === 'medium') {
+        timeLeft = 5;
+    } else if (difficulty === 'hard') {
+        timeLeft = 3;
+    }
+    timerElement.textContent = `Hátralévő idő: ${timeLeft} mp`;
+
+    clearInterval(timer);
+    timer = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = `Hátralévő idő: ${timeLeft} mp`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            showChoices();
+        }
+    }, 1000);
+}
+
+function showChoices() {
+    document.getElementById("target-container").classList.add("hidden");
+    choicesContainer.classList.remove("hidden");
+
+    const shuffled = [...images].sort(() => 0.5 - Math.random());
+    const options = [currentTarget, ...shuffled.slice(0, 3)];
+    const finalOptions = options.sort(() => 0.5 - Math.random());
+
+    choicesGrid.innerHTML = "";
+    finalOptions.forEach(img => {
+        const el = document.createElement("img");
+        el.src = img;
+        el.addEventListener("click", () => checkChoice(img));
+        choicesGrid.appendChild(el);
+    });
+}
+
+function checkChoice(choice) {
+    choicesContainer.classList.add("hidden");
+    resultScreen.classList.remove("hidden");
+
+    if (choice === currentTarget) {
+        score++;
+        resultMessage.textContent = `Helyes! Pontjaid: ${score}`;
+    } else {
+        resultMessage.textContent = `Rossz :( Pontjaid: ${score}`;
+    }
+}
+
+nextRoundBtn.addEventListener("click", () => {
+    resultScreen.classList.add("hidden");
+    document.getElementById("target-container").classList.remove("hidden");
+    startRound();
+});
+
+if (menuBtn) {
+    menuBtn.addEventListener("click", () => {
+        window.location.href = "/menu";
+    });
+}

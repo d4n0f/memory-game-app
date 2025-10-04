@@ -1,0 +1,69 @@
+body {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
+}
+
+#target-container img{
+    max-width: 300px;
+    border: solid medium #a14b8c;
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.choices-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.choices-grid img {
+    max-width: 100%;
+    cursor: pointer;
+    border: solid thin transparent;
+    border-radius: 6px;
+    transition: 0.3s;
+    padding: 2px
+}
+
+.choices-grid img:hover {
+    border: solid medium #a14b8c;
+    padding: 3px;
+}
+
+#menu-btn, #next-round {
+    font-size: 1.3rem;
+    padding: 0.4rem 2.2rem;
+    border: 2.5px solid #222;
+    border-radius: 10px;
+    background: #b7c99c;
+    color: #222;
+    font-family: inherit;
+    font-weight: bold;
+    box-shadow: 2px 2px 0 #888;
+    cursor: pointer;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    letter-spacing: 1px;
+    transition: box-shadow 0.2s;
+}
+#menu-btn:active, #next-round:active {
+    box-shadow: 1px 1px 0 #888;
+    background: #a2b883;
+}

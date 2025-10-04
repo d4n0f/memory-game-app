@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Egy egyszerű játék amivel fejlesztheted memóriádat!">
+    <title>Memória Mánia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main/menu/styles/menu.css') }}">
 </head>
+
 <body>
-    
+    <header>
+        <h1>Memória Mánia</h1>
+    </header>
+    <main>
+        <section id="player-setup">
+            <form id="player-form">
+                <input type="text" id="player-name" name="player-name" required placeholder="Add meg a neved"
+                    class="menu-input" />
+                <button type="submit" class="menu-btn start-btn">START</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+
+    <script src="{{ url_for('static', filename='main/menu/scripts/menu.js') }}"></script>
 </body>
+
 </html>
