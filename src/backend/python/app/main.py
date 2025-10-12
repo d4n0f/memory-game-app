@@ -60,3 +60,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return jsonify({'success': False, 'error': 'Belső szerver hiba'}), 500
+
+@app.errorhandler(405)
+def method_not_allowed(e):
+    return jsonify({'success': False, 'error': 'Nem engedélyezett HTTP metódus'}), 405
