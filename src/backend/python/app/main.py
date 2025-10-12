@@ -31,6 +31,10 @@ app.route('/select-mode', methods=['POST'])(select_mode)
 # API Route-ok
 app.route('/api/health')(lambda: jsonify({'status': 'ok', 'database': 'Csatlakozott', 'time': datetime.now().isoformat()}))
 app.route('/api/game', methods=['POST'])(new_game)
+app.route('/api/game/session/end', methods=['POST'])(end_game_session) 
+app.route('/api/game/session', methods=['GET'])(get_game_session)
+
+# SCORES API Route-ok
 app.route('/api/save', methods=['POST'])(save_scores)
 app.route('/api/scores', methods=['GET'])(get_scores)
 app.route('/api/players', methods=['GET'])(get_players)
