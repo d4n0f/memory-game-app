@@ -47,12 +47,17 @@ def create_guest_player(display_name):
         conn.close()
         return player_id
 
-def create_or_get_player(player_name):
-        #Játékos létrehozása vagy lekérése
-        try:
-            conn = get_db_connect()
-            if not conn:
-                return None
+    except Error as e:
+        print(f"Vendég játékos létrehozási hiba: {e}")
+        return None
+
+
+def get_or_create_player(display_name, user_id=None):
+    #Játékos lekérése vagy létrehozása
+    try:
+        conn = get_db_connect()
+        if not conn:
+            return None
 
             cursor = conn.cursor()
             cursor.execute("SELECT id FROM players WHERE name = %s", (player_name,))
