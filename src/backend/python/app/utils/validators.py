@@ -186,7 +186,10 @@ def validate_score_data(data):
         if score < 0 or game_time < 0 or rounds_played < 1:
             return False, 'Érvénytelen érték'
 
-        if data['difficulty'] not in ['easy', 'medium', 'hard']:
+        if not is_valid_difficulty(difficulty) :
+            return False, 'Érvénytelen nehézségi szint'
+
+        if not is_valid_game_mode(game_mode) :
             return False, 'Érvénytelen játékmód'
 
         return True, None
