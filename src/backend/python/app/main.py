@@ -28,7 +28,13 @@ app.route('/scores')(scores)
 app.route('/start-game', methods=['POST'])(start_game)
 app.route('/select-mode', methods=['POST'])(select_mode)
 
-# API Route-ok
+# AUTH Route-ok - ÚJ
+app.route('/api/register', methods=['POST'])(register_user)
+app.route('/api/login', methods=['POST'])(login_user)
+app.route('/api/logout', methods=['POST'])(logout_user)
+app.route('/api/current-user', methods=['GET'])(get_current_user)
+
+# GAME API Route-ok - BŐVÍTETT
 app.route('/api/health')(lambda: jsonify({'status': 'ok', 'database': 'Csatlakozott', 'time': datetime.now().isoformat()}))
 app.route('/api/game', methods=['POST'])(new_game)
 app.route('/api/game/session/end', methods=['POST'])(end_game_session) 
