@@ -182,6 +182,8 @@ def validate_score_data(data):
         score = int(data['score'])
         game_time = int(data.get('game_time', 0))
         rounds_played = int(data.get('rounds_played', 1))
+        difficulty = data.get('difficulty', 'easy')
+        game_mode = data.get('game_mode')
 
         if score < 0 or game_time < 0 or rounds_played < 1:
             return False, 'Érvénytelen érték'
@@ -191,7 +193,6 @@ def validate_score_data(data):
 
         if not is_valid_game_mode(game_mode) :
             return False, 'Érvénytelen játékmód'
-
         return True, None
 
     except (ValueError, TypeError):
