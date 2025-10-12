@@ -80,13 +80,11 @@ def get_or_create_player(display_name, user_id=None):
             if user_id:
                 player_id = create_player_for_user(user_id, display_name)
             else:
-                cursor.execute("INSERT INTO players (name, last_played) VALUES (%s, CURRENT_TIMESTAMP)", (player_name,))
-                player_id = cursor.lastrowid
+                player_id = create_guest_player(display_name)
 
-            conn.commit()
-            cursor.close()
-            conn.close()
-            return player_id
+        cursor.close()
+        conn.close()
+        return player_id
 
     except Error as e:
         print(f"Játékos kezelési hiba: {e}")
