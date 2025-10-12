@@ -59,9 +59,11 @@ def get_or_create_player(display_name, user_id=None):
         if not conn:
             return None
 
-            cursor = conn.cursor()
-            cursor.execute("SELECT id FROM players WHERE name = %s", (player_name,))
-            existing_player = cursor.fetchone()
+        cursor = conn.cursor()
+
+        # Először megpróbáljuk megtalálni a display_name alapján
+        cursor.execute("SELECT id FROM players WHERE display_name = %s", (display_name,))
+        existing_player = cursor.fetchone()
 
             if existing_player:
                 player_id = existing_player[0]
