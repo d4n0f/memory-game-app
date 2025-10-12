@@ -1,3 +1,6 @@
+from ..models.database import get_db_connect
+
+
 def get_difficulty_settings(difficulty):
     #Nehézségi beállítások
     settings = {
