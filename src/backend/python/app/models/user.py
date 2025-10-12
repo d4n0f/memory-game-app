@@ -65,9 +65,20 @@ def get_or_create_player(display_name, user_id=None):
         cursor.execute("SELECT id FROM players WHERE display_name = %s", (display_name,))
         existing_player = cursor.fetchone()
 
-            if existing_player:
-                player_id = existing_player[0]
-                cursor.execute("UPDATE players SET last_played = CURRENT_TIMESTAMP WHERE id = %s", (player_id,))
+        if existing_player:
+            player_id = existing_player[0]
+            update_conn = get_db_connect()
+            update_cursor = update_conn.cursor()
+            update_cursor.execute(
+                "UPDATE players SET last_played = CURRENT_TIMESTAMP WHERE id = %s",
+                (player_id,)
+            )
+            update_cursor.close()
+            update_conn.close()
+        else:
+            # 2. CREATE külön kapcsolatban
+            if user_id:
+                player_id = create_player_for_user(user_id, display_name)
             else:
                 cursor.execute("INSERT INTO players (name, last_played) VALUES (%s, CURRENT_TIMESTAMP)", (player_name,))
                 player_id = cursor.lastrowid
