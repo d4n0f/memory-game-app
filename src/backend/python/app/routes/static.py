@@ -1,5 +1,5 @@
 from flask import send_from_directory
-from src.backend.python.app.config import Config
+from ..config import Config
 import os
 
 def serve_css(filename):
