@@ -10,7 +10,7 @@ def get_difficulty_settings(difficulty):
     }
     return settings.get(difficulty, settings['easy'])
 
-def is_valid_game_mode(mode):
+def is_valid_difficulty(difficulty):
     #Játékmód validáció
     return difficulty in ['easy', 'medium', 'hard']
 
