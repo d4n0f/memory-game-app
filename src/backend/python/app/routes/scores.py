@@ -1,11 +1,12 @@
 from flask import request, jsonify
 from ..models.database import get_db_connect
+from ..models.user import update_player_stats
+from ..utils.validators import validate_score_data, validate_player_exists
 from datetime import datetime
-from ..utils.validators import validate_score_data
-
+import mysql.connector
 
 def save_scores():
-    #Eredmények mentése
+    #Eredmények mentése - JAVÍTOTT, GAME SESSION-NEL
     try:
         data = request.get_json()
 
@@ -19,21 +20,37 @@ def save_scores():
         game_mode = data['game_mode']
         game_time = int(data.get('game_time', 0))
         rounds_played = int(data.get('rounds_played', 1))
+        game_session_id = data.get('game_session_id')
+        difficulty = data.get('difficulty','easy')
+        score_id = data.get('score_id')
+        # Player létezés ellenőrzése
+        player_exists, error = validate_player_exists(player_id)
+        if not player_exists:
+            return jsonify({'success': False, 'error': error}), 404
 
         conn = get_db_connect()
         if conn is None:
             return jsonify({'success': False, 'error': 'Adatbázis kapcsolat hiba'}), 500
 
         cursor = conn.cursor()
-        cursor.execute("SELECT id FROM players WHERE id=%s", (player_id,))
 
-        if not cursor.fetchone():
-            return jsonify({'success': False, 'error': 'Játékos nem található'}), 404
+        # Score mentése
+        if game_session_id:
+            # Ha van game_session_id, akkor azt használjuk
+            cursor.execute('''
+                INSERT INTO scores (game_session_id, player_id, score, rounds_played)
+                VALUES (%s, %s, %s, %s)
+            ''', (game_session_id, player_id, score, rounds_played))
+        else:
+            # Ha nincs game_session_id, akkor klasszikus módon
+            cursor.execute('''
+                INSERT INTO game_sessions (player_id, game_mode, difficulty, start_time)
+                VALUES (%s, %s, %s, %s)
+            ''', (player_id, game_mode, difficulty, datetime.now()))
+            game_session_id = cursor.lastrowid
 
-        cursor.execute('''
-            INSERT INTO scores (player_id, score, game_mode, game_time, rounds_played)
-            VALUES (%s, %s, %s, %s, %s)
-        ''', (player_id, score, game_mode, game_time, rounds_played))
+        # Player statisztikák frissítése
+        update_player_stats(player_id, score)
 
         conn.commit()
         cursor.close()
@@ -42,18 +59,21 @@ def save_scores():
         return jsonify({
             'success': True,
             'message': 'Eredmény sikeresen mentve',
-            'score_id': cursor.lastrowid
+            'score_id': score_id
         })
 
-    except ValueError:
-        return jsonify({'success': False, 'error': 'Érvénytelen adatformátum hiba'}), 400
-    except Exception as e:
+    except mysql.connector.Error as e:
         if 'conn' in locals() and conn.is_connected():
             conn.rollback()
             cursor.close()
             conn.close()
         return jsonify({'success': False, 'error': f'Adatbázis hiba: {str(e)}'}), 500
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
 
+    finally:
+        if 'cursor' in locals(): cursor.close()
+        if 'conn' in locals() and conn.is_connected(): conn.close()
 
 def get_scores():
     #Eredmények lekérése
@@ -69,18 +89,20 @@ def get_scores():
 
         if game_mode == 'all':
             cursor.execute('''
-                SELECT p.name, s.score, s.game_mode, s.game_time, s.rounds_played, s.created_at
+                SELECT p.display_name, s.score, gs.game_mode,gs.difficulty, s.game_time, s.rounds_played, s.created_at
                 FROM scores s
-                JOIN players p ON s.player_id=p.id
+                LEFT JOIN players p ON s.player_id=p.id
+                LEFT JOIN game_sessions gs ON s.game_session_id = gs.id
                 ORDER BY s.score DESC, s.game_time ASC, s.created_at DESC
                 LIMIT %s
             ''', (limit,))
         else:
             cursor.execute('''
-                SELECT p.name, s.score, s.game_mode, s.game_time, s.rounds_played, s.created_at
+                SELECT p.display_name, s.score, gs.game_mode,gs.difficulty, s.game_time, s.rounds_played, s.created_at
                 FROM scores s
-                JOIN players p ON s.player_id=p.id
-                WHERE s.game_mode=%s
+                LEFT JOIN players p ON s.player_id=p.id
+                LEFT JOIN game_sessions gs ON s.game_session_id = gs.id
+                WHERE gs.game_mode=%s
                 ORDER BY s.score DESC, s.game_time ASC, s.created_at DESC
                 LIMIT %s
             ''', (game_mode, limit))
@@ -90,6 +112,9 @@ def get_scores():
         for score in scores:
             if isinstance(score['created_at'], datetime):
                 score['created_at'] = score['created_at'].isoformat()
+
+        if not scores:
+            return jsonify({'success': True, 'scores': [], 'count': 0, 'message': 'Nincs elérhető eredmény'})
 
         cursor.close()
         conn.close()
@@ -104,7 +129,7 @@ def get_scores():
 
 
 def get_players():
-    #Játékosok lekérése"""
+    #Játékosok lekérése
     try:
         conn = get_db_connect()
         if conn is None:
@@ -112,14 +137,26 @@ def get_players():
 
         cursor = conn.cursor(dictionary=True)
         cursor.execute('''
-            SELECT p.id, p.name, p.last_played, COUNT(s.id) as games_played, MAX(s.score) as best_score 
-            FROM players p
-            LEFT JOIN scores s ON s.player_id=p.id
-            GROUP BY p.id
-            ORDER BY p.last_played DESC
-        ''')
+                    SELECT 
+                        p.id, 
+                        p.display_name as name, 
+                        p.last_played, 
+                        p.total_games_played as games_played, 
+                        p.best_score as best_score
+                    FROM players p
+                    ORDER BY p.last_played DESC
+                    LIMIT 50
+                ''')
 
         players = cursor.fetchall()
+        if not players:
+            return jsonify({'success': True, 'players': [], 'count': 0, 'message': 'Nincs elérhető játékos'})
+
+        # Dátum formázás
+        for player in players:
+            if isinstance(player['last_played'], datetime):
+                player['last_played'] = player['last_played'].isoformat()
+
         cursor.close()
         conn.close()
 
