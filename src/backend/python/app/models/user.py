@@ -88,6 +88,56 @@ def get_or_create_player(display_name, user_id=None):
             conn.close()
             return player_id
 
-        except Error as e:
-            print(f"Játékos kezelési hiba: {e}")
+    except Error as e:
+        print(f"Játékos kezelési hiba: {e}")
+        return None
+
+def get_player_by_user_id(user_id):
+    # Player lekérése user_id alapján"""
+    try:
+        conn = get_db_connect()
+        if not conn:
             return None
+
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT id, display_name, total_games_played, best_score, last_played FROM players WHERE user_id = %s",
+            (user_id,)
+        )
+
+        player = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        return player
+    except Error as e:
+        print(f"Játékos lekérési hiba: {e}")
+        return None
+
+
+def update_player_stats(player_id, score):
+    # Player statisztikák frissítése"""
+    try:
+        conn = get_db_connect()
+        if not conn:
+            return False
+
+        cursor = conn.cursor()
+
+        # Total games növelése, best_score frissítése ha szükséges, last_played beállítása
+        cursor.execute('''
+            UPDATE players 
+            SET total_games_played = total_games_played + 1,
+                best_score = GREATEST(best_score, %s),
+                last_played = CURRENT_TIMESTAMP
+            WHERE id = %s
+        ''', (score, player_id))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return True
+    except Error as e:
+        print(f"Player stat frissítési hiba: {e}")
+        return False
