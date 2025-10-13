@@ -77,3 +77,7 @@
 | Tech | K63 | Teljesítmény optimalizálás			| 1.1    | 	Adatbázis kapcsolat pooling, query optimalizálás |
 | Tech | K64 | Skálázhatóság			| 1.1    | 	Tervezési minták alkalmazása bővítéshez |
 | Tech | K65 | Kódminőség			| 1.1    | Clean code, következetes naming convention, code documentation |
+
+## 4. Jelenlegi üzleti folyamatok modellje
+ - A mai modern világban kevésbé fontos a kongnitív memória illetve fejlesztő szakemberek nem annyira hásználják ki a technológia adott lehetőségeket. A mai fiatalság és az új generáció egyre fogékonyabb a technológia adott lehetőség kihasználásra és egyre nagyobb webalkalmazás felhasználás jellemezőbb rájuk az elmúlt évtizedben. A szakemberek sok kártya alapú illetve lap alapú kongnitív fejlesztő eszközöket használnak így ez rengeteg nyomdai és egyéb költséget jelent számukra. Ez a memória játékot nem csak számukra ajánljuk de nekik is kiváló lehetőség a memória fejlesztésre bizonyos segítségre szoruló gyerekek számára.
+ Az emberiség egyre kevesebb energiát fordít a nyelvek megtanulására illetve rengeteg tanár még az elavult papír alapú módszert használja amit felválthat egy online szókártya rendszer is.
