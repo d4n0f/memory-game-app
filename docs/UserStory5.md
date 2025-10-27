@@ -1,0 +1,3 @@
+- **Given**: a User who is choosing an avatar
+- **When**: they click on the "Profilkép választása" button and choose an avatar from the choices 
+- **Then**: the avatar appears next to their name
