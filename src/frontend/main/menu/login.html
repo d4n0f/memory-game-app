@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Memória Mánia | Bejelentkezés</title>
-	<link rel="stylesheet" href="styles/login.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='main/menu/styles/login.css') }}">
 	<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
 </head>
 
@@ -18,7 +18,8 @@
 		<input type="text" class="login-input" placeholder="Felhasználónév" data-cy="login-username" autocomplete="username">
 		<input type="password" class="login-input" placeholder="Jelszó" data-cy="login-password" autocomplete="current-password">
 		<button class="login-btn" data-cy="login-submit">Bejelentkezés</button>
-	<div class="register-link" data-cy="register-link" onclick="window.location.href='registration.html'">Új felhasználó</div>
+	<div class="register-link" data-cy="register-link" onclick="window.location.href='/api/register'">Új felhasználó</div>
+	<script src="{{ url_for('static', filename='main/menu/scripts/login.js') }}"></script>
 	</div>
 </body>
 
