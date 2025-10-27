@@ -1,0 +1,1 @@
+Emlék Misi belép a játékba és meglátja a bejelentkezési képernyőt, de mivel még nincs felhasználói profilja, ezért az “új felhasználó“ opciót választja. Itt megadja a felhasználónevét, email címét, és jelszavát. Miután létrehozta az új profilját a bejelentkezési képernyőre visszakerül, itt már be tud lépni a saját fiókjába és elkezdhet játszani.

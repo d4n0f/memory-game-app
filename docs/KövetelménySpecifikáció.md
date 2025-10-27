@@ -37,3 +37,33 @@
 | Adatbázis | K33 | CRUD műveletek          | 1.0    | Create, Read, Update, Delete műveletek implementálása                   |
 | Adatbázis | K34 | Kapcsolatok             | 1.0    | Táblák közötti kapcsolatok kialakítása                                  |
 | Adatbázis | K35 | Adatbiztonság           | 1.0    | Alapvető adatbiztonsági intézkedések (SQL injection védelem)            |
+| Auth | K36 | Felhasználó regisztráció	  | 1.1    | Regisztrációs rendszer email és felhasználónév ellenőrzéssel            |
+| Auth | K37 | Bejelentkezési rendszer		  | 1.1    | Biztonságos bejelentkezés session kezeléssel           |
+| Auth | K38 | Jelszó titkosítás		  | 1.1    | Werkzeug Security használata jelszavak hash-elésére           |
+| Auth | K39 | Session kezelés		  | 1.1    | Flask session management a felhasználói állapot követésére     |
+| Auth | K40 | Kijelentkezés		  | 1.1    | Session törlés és biztonságos kijelentkezés     |
+| Game | K41 | Több játékmód		  | 1.1    | Color Hunter és Card Match játékmódok implementálása    |
+| Game | K42 | Nehézségi szintek		  | 1.1    | Easy, Medium, Hard nehézségi szintek különböző paraméterekkel   |
+| Game | K43 | Game Session kezelés			  | 1.1    | Játék session-ök nyomon követése start/end időpontokkal  |
+| Game | K44 | Valós idejű játékállapot		  | 1.1    | Játékállapot frissítése minden körben  |
+| Game | K45 | Időmérés	  | 1.1    | 	Játékidő mérése és rögzítése  |
+| Scores | K46 | Részletes statisztikák	  | 1.1    | 	Játékidő, körök száma, pontszám részletes rögzítése  |
+| Scores | K47 | Szűrhető ranglista		  | 1.1    | 	Eredmények szűrése játékmód és nehézség szerint |
+| Scores | K48 | Játékos profilok	  | 1.1    | 	Játékos statisztikák (legtöbb játék, legjobb pontszám) |
+| Scores | K49 | Valós idejű eredményfrissítés	  | 1.1    | 	Eredmények azonnali megjelenítése mentés után |
+| Scores | K50 | Toplisták  | 1.1    | 	Legjobb játékosok listázása különböző kategóriákban |
+| Testing | K51 | Unit tesztek  | 1.1    | 	Backend funkciók unit tesztelése Python unittest modullal |
+| Testing | K52 | Integrációs tesztek | 1.1    | 	API végpontok integrációs tesztelése |
+| Testing | K53 | Mock adatbázis kapcsolat	| 1.1    | 	Tesztkörnyezet mock objektumokkal |
+| Testing | K54 | Teszt konfiguráció		| 1.1    | 	Külön teszt konfiguráció és adatbázis |
+| Testing | K55 | Automatikus tesztfuttatás			| 1.1    | 	Tesztcsomagok automatikus futtatása és jelentés generálás |
+| Backend | K56 | RESTful API design			| 1.1    | 	Megfelelő HTTP státuszkódok és REST konvenciók használata |
+| Backend | K57 | Komplex adatvalidáció			| 1.1    | 	Email, jelszó erősség, felhasználónév validáció |
+| Backend | K58 | Környezeti konfiguráció		| 1.1    | 	.env fájl alapú konfiguráció kezelés |
+| Backend | K59 | Adatbázis migráció		| 1.1    | 	Automatikus adatbázis inicializálás és séma frissítés |
+| Backend | K60 | Hibakezelés és logging		| 1.1    | 	Részletes hibanaplózás és felhasználóbarát hibaüzenetek |
+| Tech | K61 | Moduláris kódstruktúra		| 1.1    | 	Szeparált router, model, utility modulok |
+| Tech | K62 | Biztonsági intézkedések			| 1.1    | 	SQL injection védelem, XSS prevention |
+| Tech | K63 | Teljesítmény optimalizálás			| 1.1    | 	Adatbázis kapcsolat pooling, query optimalizálás |
+| Tech | K64 | Skálázhatóság			| 1.1    | 	Tervezési minták alkalmazása bővítéshez |
+| Tech | K65 | Kódminőség			| 1.1    | Clean code, következetes naming convention, code documentation |
