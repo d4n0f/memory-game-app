@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Egy egyszerű játék amivel fejlesztheted memóriádat!">
     <title>Memória Mánia</title>
-    <link rel="stylesheet" href="styles/gamemode-selector.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main/menu/styles/gamemode-selector.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
 </head>
 
@@ -23,25 +23,20 @@
     </div>
     <div class="gamemode-title">Válaszd ki a nehézségi szintet</div>
     <div class="difficulty-row">
-        <button class="difficulty-btn" data-difficulty="easy">Könnyű</button>
-        <button class="difficulty-btn" data-difficulty="medium">Közepes</button>
+        <button class="difficulty-btn" data-difficulty="easy" data-cy="difficulty-easy">Könnyű</button>
+        <button class="difficulty-btn" data-difficulty="medium" data-cy="difficulty-medium">Közepes</button>
         <button class="difficulty-btn" data-difficulty="hard">Nehéz</button>
     </div>
     <div class="gamemode-title2">Válaszd ki a játékmódot</div>
-    <div class="mode-row">
-        <button class="mode-btn mode-btn-select" data-mode="color-hunter">
-            <img src="../../assets/images/nyuszi.png" alt="Színvadász ikon">
-        </button>
-        <button class="mode-btn mode-btn-select" data-mode="card-match">
-            <img src="../../assets/images/kartyak.png" alt="Kártyapárosító ikon">
-        </button>
+    <div class="mode-row" data-cy="mode-row">
+        <!-- script által generált mode elemek legyenek: -->
+        <!-- <div class="mode-item" data-cy="mode-item">...</div> -->
     </div>
-    <div class="mode-desc">Játékmód leírás</div>
     <div class="start-game-btn-container">
-        <button class="start-game-btn">START</button>
+        <button class="start-game-btn" data-cy="start-game-btn">START</button>
     </div>
 
-    <script src="scripts/gamemode-selector.js"></script>
+    <script src="{{ url_for('static', filename='main/menu/scripts/gamemode-selector.js') }}"></script>
 </body>
 
 </html>

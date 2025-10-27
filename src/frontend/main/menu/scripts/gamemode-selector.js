@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedMode = null;
 
     const difficultyButtons = document.querySelectorAll(".difficulty-btn");
-    const modeButtons = document.querySelectorAll(".mode-btn");
+
+    const modeRow = document.querySelector('.mode-row');
+    let modeButtons = document.querySelectorAll(".mode-btn");
     const startGameBtn = document.querySelector(".start-game-btn");
 
     function updateStartButtonState() {
@@ -25,10 +27,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // If mode buttons are not present in the DOM, generate them here.
+    const availableModes = [
+        { id: 'color-hunter', label: 'Színvadász', img: '../../assets/images/nyuszi.png' },
+        { id: 'card-match', label: 'Kártyapárosító', img: '../../assets/images/kartyak.png' }
+    ];
+
+    if (modeRow && modeRow.children.length === 0) {
+        availableModes.forEach(m => {
+            const btn = document.createElement('button');
+            btn.className = 'mode-btn';
+            btn.dataset.mode = m.id;
+            btn.setAttribute('data-cy', 'mode-item');
+            btn.setAttribute('type', 'button');
+
+            const img = document.createElement('img');
+            img.src = m.img;
+            img.alt = m.label;
+            btn.appendChild(img);
+
+            const span = document.createElement('span');
+            span.className = 'mode-label';
+            span.textContent = m.label;
+            btn.appendChild(span);
+
+            modeRow.appendChild(btn);
+        });
+        // refresh modeButtons NodeList after generation
+        modeButtons = document.querySelectorAll('.mode-btn');
+    }
+
     modeButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            modeButtons.forEach(b => b.classList.remove("selected"));
-            btn.classList.add("selected");
+        btn.addEventListener('click', () => {
+            modeButtons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
             selectedMode = btn.dataset.mode;
             updateStartButtonState();
         });
