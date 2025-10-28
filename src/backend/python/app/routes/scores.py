@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from ..models.database import get_db_connect
 from ..models.user import update_player_stats
 from ..utils.validators import validate_score_data, validate_player_exists
@@ -163,3 +163,6 @@ def get_players():
         return jsonify({'success': True, 'players': players})
     except Exception as e:
         return jsonify({'success': False, 'error': f'Adatbázis hiba:{str(e)}'}), 500
+
+def scores():
+    return render_template('main/scoreboard/scores.html')

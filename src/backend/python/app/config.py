@@ -12,7 +12,7 @@ class Config:
     MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'memory_game')
     MYSQL_CHARSET = os.getenv('MYSQL_CHARSET', 'utf8mb4')
     MYSQL_COLLATION = os.getenv('MYSQL_COLLATION', 'utf8mb4_hungarian_ci')
-    MYSQL_AUTOCOMMIT = os.getenv('MYSQL_AUTOCOMMIT', 'True')
+    MYSQL_AUTOCOMMIT = bool(os.getenv('MYSQL_AUTOCOMMIT', 'True'))
     MYSQL_CONNECT_TIMEOUT = int(os.getenv('MYSQL_CONNECT_TIMEOUT','30'))
 
 

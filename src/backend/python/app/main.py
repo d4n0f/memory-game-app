@@ -4,12 +4,12 @@ from datetime import datetime
 
 # Route importok
 from .routes.game import (
-    index, game_menu, game, game2, scores,
+    index, game_menu, game, game2,
     start_game, select_mode, new_game, end_game_session, get_game_session
 )
-from .routes.scores import save_scores, get_scores, get_players
+from .routes.scores import save_scores, get_scores, get_players,scores
 from .routes.static import serve_css, serve_js, serve_color_match_images, serve_general_images
-from .routes.auth import register_user, login_user, logout_user, get_current_user
+from .routes.auth import register_user, login_user, logout_user, get_current_user,login,registration
 
 app = Flask(__name__, static_folder=Config.FRONTEND_DIR,
     template_folder=Config.FRONTEND_DIR)
@@ -23,6 +23,8 @@ app.route('/menu')(game_menu)
 app.route('/color-hunter')(game)
 app.route('/card-match')(game2)
 app.route('/scores')(scores)
+app.route('/login')(login)
+app.route('/registration')(registration)
 
 
 # Form Route-ok

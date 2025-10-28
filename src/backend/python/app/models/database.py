@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import mysql.connector
 from mysql.connector import Error
 from ..config import Config
@@ -23,6 +25,23 @@ def get_db_connect():
         except Error as err:
             print(f"MySQL kapcsolati hiba: {err}")
             return None
+@contextmanager
+def get_db_connection():
+    #Context manager for database connections to ensure proper cleanup
+    connection = None
+    try:
+        connection = get_db_connect()
+        if not connection:
+            raise Exception("Database connection failed")
+        yield connection
+    except Error as err:
+        print(f"Database error: {err}")
+        if connection:
+            connection.rollback()
+        raise
+    finally:
+        if connection and connection.is_connected():
+            connection.close()
 
 def init_db():
         #Adatbázis inicializálása

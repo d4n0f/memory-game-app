@@ -1,4 +1,4 @@
-from flask import request, jsonify, session
+from flask import request, jsonify, session, render_template
 from ..models.database import get_db_connect
 from ..models.user import create_player_for_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -150,3 +150,9 @@ def get_current_user():
             'player_id': session.get('player_id')
         }
     return None
+
+def login():
+    return render_template('main/menu/login.html')
+
+def registration():
+    return render_template('main/menu/registration.html')

@@ -264,7 +264,3 @@ def game():
 
 def game2():
     return render_template('game/card-match/card-match.html')
-
-
-def scores():
-    return render_template('main/scoreboard/scores.html')
