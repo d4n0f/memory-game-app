@@ -1,10 +1,13 @@
-from flask import request, jsonify, session, render_template
+from flask import request, jsonify, session, render_template, Blueprint
 from ..models.database import get_db_connect
 from ..models.user import create_player_for_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.validators import validate_registration_data, validate_login_data
-from app.config import Config
+from ..config import Config
 
+auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/api/register', methods=['POST'])
 def register_user():
      #Felhasználó regisztráció - validátorokkal
     try:
@@ -45,13 +48,12 @@ def register_user():
 
         user_id = cursor.lastrowid
 
-        # Player létrehozása PLAYERS táblában
-        player_id = create_player_for_user(user_id, username)
-        if not player_id:
-            conn.rollback()
-            cursor.close()
-            conn.close()
-            return jsonify({'success': False, 'error': 'Hiba a játékos profil létrehozásakor'}), 500
+        # Player létrehozása PLAYERS táblában - SAME CONNECTION
+        cursor.execute(
+            "INSERT INTO players (user_id, display_name) VALUES (%s, %s)",
+            (user_id, username)
+        )
+        player_id = cursor.lastrowid
 
         conn.commit()
         cursor.close()
@@ -71,10 +73,16 @@ def register_user():
             'username': username,
             'profile_picture': profile_picture
         })
-
     except Exception as e:
+        # Proper cleanup on error
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'conn' in locals() and conn.is_connected():
+            conn.rollback()
+            conn.close()
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
 
+@auth_bp.route('/api/login', methods=['POST'])
 def login_user():
     #Felhasználó bejelentkezés - validátorokkal
     try:
@@ -136,6 +144,7 @@ def login_user():
     except Exception as e:
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
 
+@auth_bp.route('/api/logout', methods=['POST'])
 def logout_user():
     #Felhasználó kijelentkeztetése
     session.clear()
@@ -151,8 +160,17 @@ def get_current_user():
         }
     return None
 
+@auth_bp.route('/api/current-user', methods=['GET'])
+def current_user_endpoint():
+    user = get_current_user()
+    if user:
+        return jsonify({'success': True, 'user': user})
+    return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+
+@auth_bp.route('/login')
 def login():
     return render_template('main/menu/login.html')
 
+@auth_bp.route('/registration')
 def registration():
     return render_template('main/menu/registration.html')

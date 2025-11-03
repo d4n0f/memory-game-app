@@ -19,15 +19,29 @@ def is_valid_game_mode(mode):
     return mode in ['color-hunter', 'card-match']
 
 def validate_entity_exists(table, entity_id, id_field='id'):
+    conn = None
+    cursor = None
     try:
         conn = get_db_connect()
+        if not conn:
+            return False, 'Adatbázis kapcsolat hiba'
         cursor = conn.cursor()
+
+        allowed_tables = ['users', 'players', 'scores', 'game_sessions']
+        allowed_fields = ['id', 'username', 'player_id']
+        if table not in allowed_tables or id_field not in allowed_fields:
+            return False, 'Érvénytelen tábla vagy mezőnév'
+
         cursor.execute(f"SELECT {id_field} FROM {table} WHERE {id_field} = %s", (entity_id,))
         exists = cursor.fetchone()
-        cursor.close()
-        conn.close()
+
         if not exists:
             return False, f'{table} nem található'
         return True, None
     except Exception as e:
         return False, f'Adatbázis hiba: {str(e)}'
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()

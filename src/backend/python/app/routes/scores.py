@@ -1,12 +1,17 @@
-from flask import request, jsonify, render_template
-from ..models.database import get_db_connect
+from flask import request, jsonify, render_template, Blueprint
+from ..models.database import get_db_connect, get_db_connection
 from ..models.user import update_player_stats
 from ..utils.validators import validate_score_data, validate_player_exists
 from datetime import datetime
 import mysql.connector
 
+scores_bp = Blueprint('scores', __name__)
+
+@scores_bp.route('/api/save', methods=['POST'])
 def save_scores():
     #Eredmények mentése - JAVÍTOTT, GAME SESSION-NEL
+    cursor = None
+    conn = None
     try:
         data = request.get_json()
 
@@ -28,33 +33,28 @@ def save_scores():
         if not player_exists:
             return jsonify({'success': False, 'error': error}), 404
 
-        conn = get_db_connect()
-        if conn is None:
-            return jsonify({'success': False, 'error': 'Adatbázis kapcsolat hiba'}), 500
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                # Score mentése
+                if game_session_id:
+                    cursor.execute(
+                        'INSERT INTO scores (game_session_id, player_id, score, rounds_played) VALUES (%s, %s, %s, %s)',
+                        (game_session_id, player_id, score, rounds_played)
+                    )
+                else:
+                    cursor.execute(
+                        'INSERT INTO game_sessions (player_id, game_mode, difficulty, start_time) VALUES (%s, %s, %s, %s)',
+                        (player_id, game_mode, difficulty, datetime.now())
+                    )
+                    game_session_id = cursor.lastrowid
+                    cursor.execute(
+                        'INSERT INTO scores (game_session_id, player_id, score, game_time, rounds_played) VALUES (%s, %s, %s, %s, %s)',
+                        (game_session_id, player_id, score, game_time, rounds_played)
+                    )
 
-        cursor = conn.cursor()
-
-        # Score mentése
-        if game_session_id:
-            # Ha van game_session_id, akkor azt használjuk
-            cursor.execute('''
-                INSERT INTO scores (game_session_id, player_id, score, rounds_played)
-                VALUES (%s, %s, %s, %s)
-            ''', (game_session_id, player_id, score, rounds_played))
-        else:
-            # Ha nincs game_session_id, akkor klasszikus módon
-            cursor.execute('''
-                INSERT INTO game_sessions (player_id, game_mode, difficulty, start_time)
-                VALUES (%s, %s, %s, %s)
-            ''', (player_id, game_mode, difficulty, datetime.now()))
-            game_session_id = cursor.lastrowid
-
-        # Player statisztikák frissítése
-        update_player_stats(player_id, score)
-
-        conn.commit()
-        cursor.close()
-        conn.close()
+                # Player statisztikák frissítése
+                update_player_stats(player_id, score)
+            conn.commit()
 
         return jsonify({
             'success': True,
@@ -65,18 +65,23 @@ def save_scores():
     except mysql.connector.Error as e:
         if 'conn' in locals() and conn.is_connected():
             conn.rollback()
-            cursor.close()
-            conn.close()
         return jsonify({'success': False, 'error': f'Adatbázis hiba: {str(e)}'}), 500
     except Exception as e:
+        if 'conn' in locals() and conn.is_connected():
+            conn.rollback()
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
 
     finally:
-        if 'cursor' in locals(): cursor.close()
-        if 'conn' in locals() and conn.is_connected(): conn.close()
+        if cursor:
+            cursor.close()
+        if 'conn' in locals() and conn.is_connected():
+            conn.close()
 
+@scores_bp.route('/api/scores', methods=['GET'])
 def get_scores():
     #Eredmények lekérése
+    conn = None
+    cursor = None
     try:
         game_mode = request.args.get('game_mode', 'all')
         limit = int(request.args.get('limit', 20))
@@ -116,8 +121,6 @@ def get_scores():
         if not scores:
             return jsonify({'success': True, 'scores': [], 'count': 0, 'message': 'Nincs elérhető eredmény'})
 
-        cursor.close()
-        conn.close()
 
         return jsonify({
             'success': True,
@@ -125,11 +128,20 @@ def get_scores():
             'count': len(scores)
         })
     except Exception as e:
+        if conn and conn.is_connected():
+            conn.rollback()
         return jsonify({'success': False, 'error': f'Szerver hiba:{str(e)}'}), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
-
+@scores_bp.route('/api/players', methods=['GET'])
 def get_players():
     #Játékosok lekérése
+    cursor = None
+    conn = None
     try:
         conn = get_db_connect()
         if conn is None:
@@ -157,12 +169,17 @@ def get_players():
             if isinstance(player['last_played'], datetime):
                 player['last_played'] = player['last_played'].isoformat()
 
-        cursor.close()
-        conn.close()
 
         return jsonify({'success': True, 'players': players})
     except Exception as e:
+        if conn and conn.is_connected():
+            conn.rollback()
         return jsonify({'success': False, 'error': f'Adatbázis hiba:{str(e)}'}), 500
-
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+@scores_bp.route('/scores')
 def scores():
     return render_template('main/scoreboard/scores.html')

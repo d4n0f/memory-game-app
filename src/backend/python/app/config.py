@@ -12,7 +12,7 @@ class Config:
     MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'memory_game')
     MYSQL_CHARSET = os.getenv('MYSQL_CHARSET', 'utf8mb4')
     MYSQL_COLLATION = os.getenv('MYSQL_COLLATION', 'utf8mb4_hungarian_ci')
-    MYSQL_AUTOCOMMIT = bool(os.getenv('MYSQL_AUTOCOMMIT', 'True'))
+    MYSQL_AUTOCOMMIT = os.getenv('MYSQL_AUTOCOMMIT', 'True').lower() == 'true'
     MYSQL_CONNECT_TIMEOUT = int(os.getenv('MYSQL_CONNECT_TIMEOUT','30'))
 
 
@@ -21,6 +21,7 @@ class Config:
     FLASK_HOST = os.getenv('FLASK_HOST', '0.0.0.0')
     FLASK_PORT = int(os.getenv('FLASK_PORT', 5000))
     FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
+    FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY', 'dev-only-change-me')
 
     # File path konfiguráció
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

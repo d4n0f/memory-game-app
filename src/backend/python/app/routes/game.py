@@ -1,11 +1,14 @@
-from flask import request, jsonify, session, redirect, url_for, render_template
+from flask import request, jsonify, session, redirect, url_for, render_template, Blueprint
 from ..models.user import get_or_create_player
 from ..models.database import get_db_connect
 from .auth import get_current_user
 from datetime import datetime
 import mysql.connector
 
+game_bp = Blueprint('game', __name__)
 
+
+@game_bp.route('/start-game', methods=['POST'])
 def start_game():
      #Játék indítása a főoldalról
     try:
@@ -40,6 +43,7 @@ def start_game():
         return redirect(url_for('index', error='Hiba a játék indításakor'))
 
 
+@game_bp.route('/select-mode', methods=['POST'])
 def select_mode():
     #Játékmód kiválasztása
     try:
@@ -69,6 +73,7 @@ def select_mode():
         return redirect(url_for('game_menu', error='Hiba a játékmód választásakor'))
 
 
+@game_bp.route('/api/game', methods=['POST'])
 def new_game():
     #Új játék indítása API végpont
     try:
@@ -109,6 +114,7 @@ def new_game():
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
 
 
+@game_bp.route('/api/game/session/end', methods=['POST'])
 def end_game_session():
     #Játék session befejezése API végpont - CSAK SESSION LEZÁRÁS
     try:
@@ -139,8 +145,11 @@ def end_game_session():
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
 
 
+@game_bp.route('/api/game/session', methods=['GET'])
 def get_game_session():
     #Aktuális játék session lekérése
+    conn = None
+    cursor = None
     try:
         if 'game_session_id' not in session:
             return jsonify({'success': False, 'error': 'Nincs aktív játék session'}), 404
@@ -160,8 +169,6 @@ def get_game_session():
         ''', (game_session_id,))
 
         game_session = cursor.fetchone()
-        cursor.close()
-        conn.close()
 
         if not game_session:
             return jsonify({'success': False, 'error': 'Játék session nem található'}), 404
@@ -173,12 +180,18 @@ def get_game_session():
 
     except Exception as e:
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
-
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 # HELPER FUNCTIONS - CSAK SESSION KEZELÉS
 
 def create_game_session(player_id, game_mode, difficulty):
     #Game session létrehozása
+    conn = None
+    cursor = None
     try:
         conn = get_db_connect()
         if not conn:
@@ -192,18 +205,25 @@ def create_game_session(player_id, game_mode, difficulty):
 
         game_session_id = cursor.lastrowid
         conn.commit()
-        cursor.close()
-        conn.close()
 
         return game_session_id
 
     except mysql.connector.Error as e:
         print(f"Game session létrehozási hiba: {e}")
+        if conn and conn.is_connected():
+            conn.rollback()
         return None
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 
 def update_game_session(game_session_id, game_mode, difficulty):
     #Game session frissítése
+    conn = None
+    cursor = None
     try:
         conn = get_db_connect()
         if not conn:
@@ -217,17 +237,24 @@ def update_game_session(game_session_id, game_mode, difficulty):
         ''', (game_mode, difficulty, game_session_id))
 
         conn.commit()
-        cursor.close()
-        conn.close()
         return True
 
     except mysql.connector.Error as e:
         print(f"Game session frissítési hiba: {e}")
+        if conn and conn.is_connected():
+            conn.rollback()
         return False
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 
 def close_game_session(game_session_id, total_time):
     #Game session lezárása
+    conn = None
+    cursor = None
     try:
         conn = get_db_connect()
         if not conn:
@@ -241,26 +268,40 @@ def close_game_session(game_session_id, total_time):
         ''', (datetime.now(), total_time, game_session_id))
 
         conn.commit()
-        cursor.close()
-        conn.close()
         return True
-
     except mysql.connector.Error as e:
         print(f"Game session lezárási hiba: {e}")
+        if conn and conn.is_connected():
+            conn.rollback()
         return False
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 
+@game_bp.route('/')
 def index():
     return render_template('main/menu/index.html')
 
 
+@game_bp.route('/menu')
 def game_menu():
     return render_template('main/menu/gamemode-selector.html')
 
 
+@game_bp.route('/color-hunter')
 def game():
     return render_template('game/color-hunter/color-hunter.html')
 
 
+@game_bp.route('/card-match')
 def game2():
     return render_template('game/card-match/card-match.html')
+
+@game_bp.route('/api/health')
+def health():
+    from flask import current_app
+    from datetime import datetime as _dt
+    return jsonify({'status': 'ok', 'database': 'Csatlakozott', 'time': _dt.now().isoformat()})
