@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
+            const payload = { username, email, password };
+            console.log('Register payload:', payload);
+
             const resp = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
