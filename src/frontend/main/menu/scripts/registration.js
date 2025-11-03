@@ -37,18 +37,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify(payload)
             });
 
-            const json = await resp.json();
-            if (resp.ok && json.success) {
+            const text = await resp.text(); // read raw body for better debugging
+            let json;
+            try { json = JSON.parse(text); } catch(e) { json = null; }
+
+            console.log('Register response status:', resp.status);
+            console.log('Register response body:', text);
+
+            if (resp.ok && json && json.success) {
                 if (json.player_id) localStorage.setItem('player_id', json.player_id);
                 if (json.username) localStorage.setItem('player_name', json.username);
-
-                // Redirect to main menu or directly log the user in
                 window.location.href = '/menu';
             } else {
-                const message = json && json.error ? json.error : 'Regisztráció sikertelen.';
+                const message = (json && json.error) ? json.error : text || 'Regisztráció sikertelen.';
                 showError(message);
             }
         } catch (err) {
