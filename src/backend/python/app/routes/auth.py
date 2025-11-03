@@ -5,6 +5,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.validators import validate_registration_data, validate_login_data
 from app.config import Config
 
+auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/api/register', methods=['POST'])
 def register_user():
      #Felhasználó regisztráció - validátorokkal
     try:
