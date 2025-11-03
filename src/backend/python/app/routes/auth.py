@@ -157,6 +157,14 @@ def get_current_user():
         }
     return None
 
+@auth_bp.route('/api/current-user', methods=['GET'])
+def current_user_endpoint():
+    user = get_current_user()
+    if user:
+        return jsonify({'success': True, 'user': user})
+    return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+
+@auth_bp.route('/login')
 def login():
     return render_template('main/menu/login.html')
 
