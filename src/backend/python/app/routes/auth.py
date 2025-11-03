@@ -48,13 +48,12 @@ def register_user():
 
         user_id = cursor.lastrowid
 
-        # Player létrehozása PLAYERS táblában
-        player_id = create_player_for_user(user_id, username)
-        if not player_id:
-            conn.rollback()
-            cursor.close()
-            conn.close()
-            return jsonify({'success': False, 'error': 'Hiba a játékos profil létrehozásakor'}), 500
+        # Player létrehozása PLAYERS táblában - SAME CONNECTION
+        cursor.execute(
+            "INSERT INTO players (user_id, display_name) VALUES (%s, %s)",
+            (user_id, username)
+        )
+        player_id = cursor.lastrowid
 
         conn.commit()
         cursor.close()
