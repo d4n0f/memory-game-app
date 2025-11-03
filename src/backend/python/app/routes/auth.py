@@ -73,6 +73,12 @@ def register_user():
         })
 
     except Exception as e:
+        # Proper cleanup on error
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'conn' in locals() and conn.is_connected():
+            conn.rollback()
+            conn.close()
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
 
 def login_user():
