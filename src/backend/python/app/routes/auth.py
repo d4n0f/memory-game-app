@@ -2,8 +2,8 @@ from flask import request, jsonify, session, render_template, Blueprint
 from ..models.database import get_db_connect
 from ..models.user import create_player_for_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from ..utils.validators import validate_registration_data, validate_login_data
 from ..config import Config
+from ..utils.validators import validate_registration_data, validate_login_data, validate_username, validate_password
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -166,6 +166,88 @@ def current_user_endpoint():
     if user:
         return jsonify({'success': True, 'user': user})
     return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+
+@auth_bp.route('/api/user/update', methods=['PATCH'])
+def update_user():
+    if not session.get('is_authenticated') or not session.get('user_id'):
+        return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+
+    user_id = session['user_id']
+    data = request.get_json() or {}
+
+    new_username = (data.get('username') or '').strip()
+    current_password = data.get('current_password')
+    new_password = data.get('new_password')
+
+    if not new_username and not new_password:
+        return jsonify({'success': False, 'error': 'Nincs változtatandó adat'}), 400
+
+    conn = None
+    cursor = None
+    try:
+        conn = get_db_connect()
+        if not conn:
+            return jsonify({'success': False, 'error': 'Adatbázis kapcsolat hiba'}), 500
+        cursor = conn.cursor(dictionary=True)
+
+        # Aktuális user lekérés
+        cursor.execute('SELECT id, username, password_hash FROM users WHERE id = %s', (user_id,))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({'success': False, 'error': 'Felhasználó nem található'}), 404
+
+        updates = []
+        params = []
+
+        # Felhasználónév módosítás validációval + egyediség ellenőrzés, ha tényleg változik
+        if new_username and new_username != user['username']:
+            ok, err = validate_username(new_username, check_unique=True)
+            if not ok:
+                return jsonify({'success': False, 'error': err}), 400
+            updates.append('username = %s')
+            params.append(new_username)
+
+        # Jelszó módosítás validációval
+        if new_password:
+            if not current_password:
+                return jsonify({'success': False, 'error': 'A jelenlegi jelszó megadása kötelező'}), 400
+            # Ellenőrzés: jelenlegi jelszó helyes-e
+            if not check_password_hash(user['password_hash'], current_password):
+                return jsonify({'success': False, 'error': 'A jelenlegi jelszó hibás'}), 401
+            # Új jelszó erősség validáció
+            ok, err = validate_password(new_password)
+            if not ok:
+                return jsonify({'success': False, 'error': err}), 400
+            updates.append('password_hash = %s')
+            params.append(generate_password_hash(new_password))
+
+        if not updates:
+            return jsonify({'success': True, 'message': 'Nincs módosítás'}), 200
+
+        # Frissítés users táblában
+        set_clause = ', '.join(updates)
+        sql = f'UPDATE users SET {set_clause} WHERE id = %s'
+        params.append(user_id)
+        cursor.execute(sql, tuple(params))
+
+        # Ha a username változott: players.display_name szinkron + session update
+        if new_username and new_username != user['username']:
+            cursor.execute('UPDATE players SET display_name = %s WHERE user_id = %s', (new_username, user_id))
+            session['username'] = new_username
+
+        conn.commit()
+
+        return jsonify({'success': True, 'message': 'Felhasználói adatok frissítve',
+                        'user': {'id': user_id, 'username': new_username or user['username']}})
+    except Exception as e:
+        if conn and conn.is_connected():
+            conn.rollback()
+        return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 @auth_bp.route('/login')
 def login():
