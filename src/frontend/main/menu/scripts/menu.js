@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const nameCell = document.createElement('td');
                         const gameCell = document.createElement('td');
                         const scoreCell = document.createElement('td');
-                        nameCell.textContent = score.name || '';
+                        nameCell.textContent = score.display_name || '';
                         gameCell.textContent = score.game_mode === 'card-match' ? 'Kártyapárosító' : 'Színvadász';
                         scoreCell.textContent = score.score;
                         row.appendChild(nameCell);

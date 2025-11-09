@@ -236,6 +236,210 @@ def test_performance():
         return False
 
 
+def test_scores_global_and_me_and_user_update():
+    # Új funkciók integrációs tesztje: register/login -> save score -> /api/scores (global, me) -> update user
+    print("\nÚj funkciók: scores global/me és user update teszt...")
+    try:
+        s = requests.Session()
+
+        # 1) Regisztráció egyedi felhasználóval
+        ts = int(time.time())
+        reg_payload = {
+            "username": f"itest_user_{ts}",
+            "email": f"itest_{ts}@example.com",
+            "password": "It3stStrong!Pass",
+        }
+        r = s.post(f"{BASE_URL}/api/register", json=reg_payload, timeout=TEST_TIMEOUT)
+        print("Register:", r.status_code)
+        reg_json = r.json()
+        if r.status_code not in [200, 201] or not reg_json.get('success'):
+            print("Regisztráció nem sikerült vagy már létező felhasználóval ütközött.")
+            # Ha 400-at kapunk foglalt név/email miatt, próbáljunk bejelentkezni ugyanazzal
+            login_payload = {"username": reg_payload["username"], "password": reg_payload["password"]}
+            r = s.post(f"{BASE_URL}/api/login", json=login_payload, timeout=TEST_TIMEOUT)
+            print("Login after failed register:", r.status_code)
+            if r.status_code != 200:
+                return False
+            login_json = r.json()
+            player_id = login_json.get('player_id')
+        else:
+            player_id = reg_json.get('player_id')
+
+        if not player_id:
+            # Ha nincs player_id a regisztrációs válaszban, próbáljunk current-user endpointot
+            cu = s.get(f"{BASE_URL}/api/current-user", timeout=TEST_TIMEOUT)
+            if cu.status_code == 200 and cu.json().get('success'):
+                player_id = cu.json()['user'].get('player_id')
+
+        if not player_id:
+            print("Nem sikerült player_id-t szerezni")
+            return False
+
+        # 2) Eredmény mentése az új userrel
+        save_payload = {
+            "player_id": int(player_id),
+            "score": 123,
+            "game_mode": "color-hunter",
+            "difficulty": "easy",
+            "game_time": 30,
+            "rounds_played": 3
+        }
+        r = s.post(f"{BASE_URL}/api/save", json=save_payload, timeout=TEST_TIMEOUT)
+        print("Save score:", r.status_code, r.text)
+        if r.status_code not in [200, 201]:
+            return False
+
+        # 3) Globális ranglista lekérés
+        r = s.get(f"{BASE_URL}/api/scores?scope=global&game_mode=color-hunter&limit=10", timeout=TEST_TIMEOUT)
+        print("Scores global:", r.status_code)
+        if r.status_code != 200 or not r.json().get('success'):
+            return False
+
+        # 4) Saját eredmények lekérése (scope=me)
+        r = s.get(f"{BASE_URL}/api/scores?scope=me&limit=10", timeout=TEST_TIMEOUT)
+        print("Scores me:", r.status_code, r.text)
+        if r.status_code != 200:
+            return False
+        data_me = r.json()
+        if not data_me.get('success'):
+            return False
+        # Elvárás: a válasz tartalmaz 'scope'=='me' és a 'scores' lista
+        if data_me.get('scope') != 'me' or 'scores' not in data_me:
+            return False
+
+        # 5) Felhasználónév frissítés
+        new_username = f"itest_user_new_{ts}"
+        r = s.patch(f"{BASE_URL}/api/user/update", json={"username": new_username}, timeout=TEST_TIMEOUT)
+        print("Update username:", r.status_code, r.text)
+        if r.status_code != 200 or not r.json().get('success'):
+            return False
+
+        # 6) Jelszó frissítés
+        r = s.patch(
+            f"{BASE_URL}/api/user/update",
+            json={"current_password": reg_payload["password"], "new_password": "It3stStrong!Pass2"},
+            timeout=TEST_TIMEOUT,
+        )
+        print("Update password:", r.status_code, r.text)
+        if r.status_code != 200 or not r.json().get('success'):
+            return False
+
+        # 7) Új jelszóval bejelentkezés
+        r = s.post(
+            f"{BASE_URL}/api/login",
+            json={"username": new_username, "password": "It3stStrong!Pass2"},
+            timeout=TEST_TIMEOUT,
+        )
+        print("Login with new password:", r.status_code, r.text)
+        if r.status_code != 200 or not r.json().get('success'):
+            return False
+
+        return True
+    except Exception as e:
+        print(f"Új funkciók integrációs teszt hiba: {e}")
+        return False
+
+
+def test_scores_filters_sort_pagination():
+    # /api/scores szűrők, rendezés, lapozás ellenőrzése
+    print("\nScores filters/sort/pagination teszt...")
+    try:
+        # Alap global kérés limit=2, time_asc rendezés
+        r = requests.get(
+            f"{BASE_URL}/api/scores",
+            params={
+                "scope": "global",
+                "game_mode": "color-hunter",
+                "difficulty": "easy",
+                "sort": "time_asc",
+                "limit": 2,
+                "page": 1,
+            },
+            timeout=TEST_TIMEOUT,
+        )
+        print("Scores filters resp:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        data = r.json()
+        if not data.get('success'):
+            return False
+        # lapozás 2. oldal
+        r2 = requests.get(
+            f"{BASE_URL}/api/scores",
+            params={
+                "scope": "global",
+                "game_mode": "color-hunter",
+                "difficulty": "easy",
+                "sort": "time_asc",
+                "limit": 2,
+                "page": 2,
+            },
+            timeout=TEST_TIMEOUT,
+        )
+        print("Scores filters page2 resp:", r2.status_code)
+        if r2.status_code != 200:
+            return False
+        return True
+    except Exception as e:
+        print(f"Scores filters/sort/pagination hiba: {e}")
+        return False
+
+
+def test_scores_me_requires_login():
+    # scope=me esetén bejelentkezés szükséges
+    print("\nscope=me auth requirement teszt...")
+    try:
+        r = requests.get(f"{BASE_URL}/api/scores?scope=me&limit=1", timeout=TEST_TIMEOUT)
+        print("Scores me without login:", r.status_code)
+        return r.status_code == 401
+    except Exception as e:
+        print(f"scope=me auth teszt hiba: {e}")
+        return False
+
+
+def test_update_user_validation_errors():
+    # update_user validációs hibák ellenőrzése (weak password, missing current password)
+    print("\nupdate_user validation teszt...")
+    try:
+        s = requests.Session()
+        ts = int(time.time())
+        # Regisztráció
+        reg_payload = {
+            "username": f"val_user_{ts}",
+            "email": f"val_{ts}@example.com",
+            "password": "Val1dPass!"
+        }
+        r = s.post(f"{BASE_URL}/api/register", json=reg_payload, timeout=TEST_TIMEOUT)
+        print("register for validation:", r.status_code)
+        if r.status_code not in [200, 201]:
+            return False
+
+        # Weak password (validators szerint min. 8 és komplexitás kell)
+        r = s.patch(
+            f"{BASE_URL}/api/user/update",
+            json={"current_password": reg_payload["password"], "new_password": "short"},
+            timeout=TEST_TIMEOUT,
+        )
+        print("weak password resp:", r.status_code, r.text)
+        if r.status_code != 400:
+            return False
+
+        # Hiányzó current_password, ha new_password van
+        r = s.patch(
+            f"{BASE_URL}/api/user/update",
+            json={"new_password": "Strong1!Pass"},
+            timeout=TEST_TIMEOUT,
+        )
+        print("missing current_password resp:", r.status_code, r.text)
+        if r.status_code != 400:
+            return False
+
+        return True
+    except Exception as e:
+        print(f"update_user validation teszt hiba: {e}")
+        return False
+
+
 def run_all_tests():
     #Összes teszt futtatása
     print("Backend integrációs tesztek indítása...")
@@ -251,6 +455,10 @@ def run_all_tests():
         test_user_login,
         test_get_leaderboard,
         test_error_cases,
+        test_scores_global_and_me_and_user_update,
+        test_scores_filters_sort_pagination,
+        test_scores_me_requires_login,
+        test_update_user_validation_errors,
         test_performance
     ]
 
@@ -264,6 +472,10 @@ def run_all_tests():
         "Felhasználó bejelentkezés",
         "Ranglista lekérés",
         "Hibás kérések",
+        "Új funkciók: scores global/me és user update",
+        "Scores szűrők/rendezés/lapozás",
+        "scope=me auth requirement",
+        "update_user validációk",
         "Teljesítmény teszt"
     ]
 

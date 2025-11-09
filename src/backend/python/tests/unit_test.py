@@ -153,6 +153,13 @@ class TestValidatorFunctions(unittest.TestCase):
                 self.assertFalse(is_valid, f"Password should be invalid: {description}")
                 self.assertIsNotNone(error)
 
+    def test_validate_password_strength_helper(self):
+        # Jelszó erősség visszajelzés (gyenge/közepes/erős)
+        from ..app.utils.validators import validate_password_strength
+        self.assertEqual(validate_password_strength('short'), 'gyenge')
+        self.assertIn(validate_password_strength('abcdEF12'), ['közepes','erős'])
+        self.assertEqual(validate_password_strength('Abcdef12!'), 'erős')
+
     @patch('app.utils.validators.validate_username')
     @patch('app.utils.validators.validate_email')
     @patch('app.utils.validators.validate_password')
