@@ -36,26 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const payload = { username, email, password };
             console.log('Register payload:', payload);
 
-            const resp = await fetch('/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'same-origin',
-                body: JSON.stringify(payload)
-            });
+            const result = await api.postJSON('/api/register', payload);
+            console.log('Register response status:', result.status);
+            console.log('Register response body:', result.text);
 
-            const text = await resp.text(); // read raw body for better debugging
-            let json;
-            try { json = JSON.parse(text); } catch(e) { json = null; }
-
-            console.log('Register response status:', resp.status);
-            console.log('Register response body:', text);
-
-            if (resp.ok && json && json.success) {
-                if (json.player_id) localStorage.setItem('player_id', json.player_id);
-                if (json.username) localStorage.setItem('player_name', json.username);
+            if (result.ok && result.json && result.json.success) {
+                if (result.json.player_id) localStorage.setItem('player_id', result.json.player_id);
+                if (result.json.username) localStorage.setItem('player_name', result.json.username);
                 window.location.href = '/menu';
             } else {
-                const message = (json && json.error) ? json.error : text || 'Regisztráció sikertelen.';
+                const message = (result.json && result.json.error) ? result.json.error : result.text || 'Regisztráció sikertelen.';
                 showError(message);
             }
         } catch (err) {

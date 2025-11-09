@@ -80,28 +80,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
             // Játék indítása a backenddel
-            fetch('/api/game', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: playerName })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.player_id) {
-                    localStorage.setItem('player_id', data.player_id);
-                    // Továbbirányítás a választott játékra
-                    if (selectedMode === "color-hunter") {
-                        window.location.href = "/color-hunter";
-                    } else if (selectedMode === "card-match") {
-                        window.location.href = "/card-match";
+            (async () => {
+                try {
+                    const result = await api.postJSON('/api/game', { name: playerName });
+                    if (result.ok && result.json && result.json.player_id) {
+                        localStorage.setItem('player_id', result.json.player_id);
+                        if (selectedMode === "color-hunter") {
+                            window.location.href = "/color-hunter";
+                        } else if (selectedMode === "card-match") {
+                            window.location.href = "/card-match";
+                        }
+                    } else {
+                        const msg = (result.json && result.json.error) ? result.json.error : (result.text || 'Ismeretlen hiba');
+                        alert('Nem sikerült elindítani a játékot: ' + msg);
                     }
-                } else {
-                    alert('Nem sikerült elindítani a játékot: ' + (data.error || 'Ismeretlen hiba'));
+                } catch (err) {
+                    console.error('Start game error', err);
+                    alert('Nem sikerült csatlakozni a szerverhez.');
                 }
-            })
-            .catch(() => {
-                alert('Nem sikerült csatlakozni a szerverhez.');
-            });
+            })();
         });
     }
 });

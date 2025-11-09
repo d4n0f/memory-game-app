@@ -21,23 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const resp = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'same-origin',
-                body: JSON.stringify({ username, password })
-            });
-
-            const json = await resp.json();
-            if (resp.ok && json.success) {
-                // Save useful info locally for frontend usage
-                if (json.player_id) localStorage.setItem('player_id', json.player_id);
-                if (json.username) localStorage.setItem('player_name', json.username);
-
-                // Redirect to menu (or other desired page)
+            const result = await api.postJSON('/api/login', { username, password });
+            if (result.ok && result.json && result.json.success) {
+                if (result.json.player_id) localStorage.setItem('player_id', result.json.player_id);
+                if (result.json.username) localStorage.setItem('player_name', result.json.username);
                 window.location.href = '/menu';
             } else {
-                const message = json && json.error ? json.error : 'Bejelentkezés sikertelen.';
+                const message = (result.json && result.json.error) ? result.json.error : (result.text || 'Bejelentkezés sikertelen.');
                 showError(message);
             }
         } catch (err) {
