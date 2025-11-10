@@ -317,6 +317,12 @@ def get_players():
             cursor.close()
         if conn and conn.is_connected():
             conn.close()
-#@scores_bp.route('/scores')
-#def scores():
+@scores_bp.route('/scores')
+def scores():
+    return render_template('main/scoreboard/scores.html')
+
+
+@scores_bp.route('/scoreboard')
+def scoreboard_page():
+    """Alias route for the scoreboard page so users can open /scoreboard as well as /scores."""
     return render_template('main/scoreboard/scores.html')
