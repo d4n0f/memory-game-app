@@ -141,21 +141,21 @@
 
    - **Menü-hierarchiák:**
     - BEJELENTKEZÉS
-     - Bejelentkezés
-     - REGISZTRÁCIÓ
-      - Regisztráció
+      - Bejelentkezés
+      - REGISZTRÁCIÓ
+        - Regisztráció
     - MAIN MENÜ
-     - PROFIL SZERKESZTÉS
-      - Profil szerkesztés
-     - EREDMÉNY MEGTEKINTÉSE
-      - Saját scoreboard
-      - Globális scoreboard
-     - Nehézség kiválasztása
-     - Játékmód kiválasztása
+      - PROFIL SZERKESZTÉS
+        - Profil szerkesztés
+      - EREDMÉNY MEGTEKINTÉSE
+        - Saját scoreboard
+        - Globális scoreboard
+      - Nehézség kiválasztása
+      - Játékmód kiválasztása
     - SZÍNVADÁSZ 
-     - Játék játszása
+      - Játék játszása
     - KÁRTYAPÁROSÍTÓ
-     - Játék játszása
+      - Játék játszása
 6. ## Fizikai környezet
    - Az alkalmazás csak webes platformra készül.
    - Backend valósítsa meg a frontend és adatbázis kapcsolatot.
