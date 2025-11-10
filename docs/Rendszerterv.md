@@ -181,6 +181,7 @@
 9. ## Implementációs terv:
 
    - Web:
+   
    A webes felület HTML5, CSS3 és JavaScript nyelven készül. A technológiákat külön fájlokba írva készítjük, és úgy csatoljuk össze, hogy jobb legyen az átláthatóság, könnyebb a változtathatóság és a bővítés. A frontend a backend REST API metódusait használja, így képes adatokat felvinni és lekérdezni az adatbázisból.
 
    A backend Flask keretrendszerrel készül, ami megkönnyíti a kommunikációt a MySQL szerver és a kliens között. Moduláris Blueprint architektúrát használ, amely lehetővé teszi a kód logikai csoportosítását. Az alkalmazás Factory Pattern-tel inicializálódik, ahol regisztrálódnak a Blueprint-ek: autentikáció, játékmenet, eredmények és statikus fájlok kezelése. A konfiguráció környezeti változókból töltődik be, amelyek a MySQL kapcsolati adatokat, a Flask beállításokat (host, port, debug mód, secret_key), valamint a fájl útvonalakat tartalmazza. Minden konfigurációs értéknek van alapértelmezett értéke fejlesztési környezethez.
@@ -210,18 +211,76 @@
    A reszponzív design CSS Media queries használatával valósul meg különböző képernyőméretekhez, Flexbox és Grid layout technikákkal, mobil-barát felülettel (touch-friendly gombok, megfelelő méretezés). A statikus fájlok szolgáltatása a Flask template rendszeren keresztül történik, valamint route-okon keresztül. A tesztelési stratégia Cypress end-to-end teszteket tartalmaz, valamint Python unit teszteket és integration teszteket pytest keretrendszerrel. A tesztelendő funkciók közé tartozik a játék logika, scoreboard, kártya fordítás, validáció, autentikáció, és adatbázis műveletek.
 
 10. ## Tesztterv:
-    A tesztelések célja a rendszer és komponensei funkcionalitásának teljes vizsgálata, ellenőrzése, a rendszer által megvalósított üzleti szolgáltatások verifikálása.
+
+   A tesztelések célja a rendszer és komponensei funkcionalitásának teljes vizsgálata, ellenőrzése, a rendszer által megvalósított üzleti szolgáltatások verifikálása. A tesztelés három szinten történik: unit tesztek, integrációs tesztek, és end-to-end tesztek.
 
 - **Unit tesztek:**
-  A fejlesztési folyamat során folyamatosan kell tesztelni a metódusok funkcionalitását. Minden metódushoz Unit teszteket kell írni, amelyekkel elérjük a minél nagyobb kódlefedettséget. Egy metódus akkor tekinthető késznek, ha a hozzá tartozó tesztesetek hiba nélkül lefutnak.
+  A fejlesztési folyamat során folyamatosan teszteljük a metódusok funkcionalitását. Minden metódushoz unit teszteket írunk, amelyekkel minél nagyobb kódlefedettséget érjük el. Egy metódus akkor tekinthető késznek, ha a hozzá tartozó tesztesetek hiba nélkül lefutnak. A unit tesztek Python unittest keretrendszerrel készülnek, mock objektumok használatával az adatbázis függőségek izolálásához.
+  
+- **Integrációs tesztek:**
+  Az integrációs tesztek a backend API endpoint-ok működését tesztelik valós HTTP kérésekkel, adatbázis kapcsolattal és session kezeléssel. A tesztek a teljes request-response ciklust ellenőrzik, és a különböző rendszerkomponensek (API, adatbázis, session) együttműködését verifikálják. Az integrációs tesztek Python requests könyvtárral készülnek, valós környezetben futnak (nem mock-olják az adatbázis vagy HTTP kapcsolatokat), így a teljes működési lánc tesztelésére alkalmasak. A tesztek során ellenőrizzük az API endpoint-ok helyes válaszait, az adatbázis műveletek sikerességét, a session kezelés működését, valamint a hibakezelést és validációt a teljes rendszerben.
+
 - **Tesztelendő funkciók:**
 
-  **Játék logikája:**
-  Szükséges a játék mindkettő funkcióját tesztelni, ugyanis az egyik játékmód az idő alapú nem e fut túl az időn a játékos ha igen akkor át kell lépnie a scoreboardra.Játék módok esetén a pont a játék mód nehézsége is meghatározza. A leggyengébb játékmód az időalapú ott score adattagot nehézség határozza meg és a találat száma. A párosítás alapú játékmódnál a találatok száma és a játékmód nehézsége határozza meg. Ezeket szűkséges tesztelni.
+  **Validátor függvények:**
+  Email cím validáció tesztelése: érvényes email címek ellenőrzése (test@example.com, user.name@domain.co.uk, user+tag@example.org), érvénytelen email címek ellenőrzése (invalid formátum, hiányzó részek, szóközök), valamint email egyediség ellenőrzés adatbázisban. Felhasználónév validáció tesztelése: érvényes felhasználónevek ellenőrzése (3-50 karakter, alfanumerikus karakterek és aláhúzás), érvénytelen felhasználónevek ellenőrzése (túl rövid, túl hosszú, érvénytelen karakterek, szóközök, kötőjelek), valamint felhasználónév egyediség ellenőrzés adatbázisban. Jelszó validáció tesztelése: érvényes jelszavak ellenőrzése (minimum 8 karakter, kis- és nagybetű, szám, speciális karakter), gyenge jelszavak ellenőrzése (túl rövid, nincs nagybetű, nincs kisbetű, nincs szám, nincs speciális karakter), valamint jelszó erősség értékelés (gyenge/közepes/erős kategóriák). Regisztrációs adatok validáció tesztelése: érvényes regisztrációs adatok ellenőrzése (username, email, password mezők jelenléte és validitása), hiányzó mezők ellenőrzése regisztrációnál. Bejelentkezési adatok validáció tesztelése: érvényes bejelentkezési adatok ellenőrzése (username, password mezők jelenléte), hiányzó mezők ellenőrzése bejelentkezésnél. Eredmény adatok validáció tesztelése: érvényes score adatok ellenőrzése (player_id, score, game_mode, rounds_played, game_time, difficulty), hiányzó mezők ellenőrzése score adatoknál, érvénytelen értékek ellenőrzése (negatív score, negatív game_time, rounds_played < 1, érvénytelen game_mode, érvénytelen difficulty), valamint edge case-ek (nulla értékek, nagy értékek, opcionális mezők hiánya).
 
-  **Scoreboard**:
-  Adatbázis oldalról megfelelően jelenti meg a neveket és a scoreokat. Ezt backend oldaról kapcsolatokat teszteljük.
-  Fel kell tudnia tölteni, és le kell tudnia kérdezni az adatbázis adatait amit backend oldalról teszteljük. Frontend oldalról adatokat megfelelően kell tudnia a backend felé amit backend feldolgoz és adatbázis szerveren tárol így jön létre a kommunikáció. Kommunikációt szükséges tesztelnünk hogy megfelelően felépüljön. Adatintegritást, -validációt kell tesztelnünk.
+  **Segédfüggvények:**
+  Nehézségi beállítások tesztelése: különböző nehézségi szintek (easy, medium, hard) beállításainak ellenőrzése (idő: 10, 5, 3 másodperc, párok száma: 3, 4, 6), valamint alapértelmezett érték ellenőrzése érvénytelen nehézségi szint esetén. Nehézségi szint validáció tesztelése: érvényes nehézségi szintek ellenőrzése ('easy', 'medium', 'hard'), érvénytelen nehézségi szintek ellenőrzése. Játékmód validáció tesztelése: érvényes játékmódok ellenőrzése ('color-hunter', 'card-match'), érvénytelen játékmódok ellenőrzése. Entitás létezés validáció tesztelése: entitás létezés ellenőrzése adatbázisban (sikeres eset, nem található eset, érvénytelen tábla név, nincs adatbázis kapcsolat).
 
-  **Kártya fordtása:**
-  Frontend oldalról szükséges tesztelni az animációkat ezt esztétikus implementációt követel meg. Magát a funkciót szükséges implementálás után tesztelni. Ez alapján score változó számolódik így fontos a funkció megfelelő müködése. A kártyának két oldala van így a visszafordulását is figyelni kell hogy jó e az adott kártya párja.
+  **User model függvények:**
+  Játékos létrehozás felhasználóhoz tesztelése: sikeres játékos létrehozás felhasználóhoz (user_id, username megadása, player_id visszaadása), sikertelen játékos létrehozás (nincs kapcsolat, exception kezelés). Vendég játékos létrehozás tesztelése: sikeres vendég játékos létrehozás (user_id nélkül, display_name megadása, player_id visszaadása). Játékos lekérése vagy létrehozása tesztelése: létező játékos lekérése (display_name alapján, last_played frissítése), új vendég játékos létrehozása (user_id nélkül), új játékos létrehozása user_id-vel. Játékos lekérése user_id alapján tesztelése: player lekérése user_id alapján (sikeres eset, nem található eset). Játékos statisztikák frissítése tesztelése: player statisztikák frissítése (total_games_played növelése, best_score frissítése ha szükséges, last_played beállítása), sikertelen frissítés (exception kezelés).
+
+  **Adatbázis függvények:**
+  Adatbázis kapcsolat tesztelése: sikeres adatbázis kapcsolat létrehozása, sikertelen adatbázis kapcsolat (hiba kezelés, None visszaadás).
+
+  **Edge case-ek:**
+  Speciális esetek tesztelése: score adatok edge case tesztjei (nulla értékek, nagy értékek, opcionális mezők hiánya), felhasználónév edge case tesztjei (maximum hossz, aláhúzás kezdés/vég, számmal kezdés, csak nagybetűk), jelszó edge case tesztjei (pontosan 8 karakter, 7 karakter).
+
+- **Integrációs tesztek:**
+  Az integrációs tesztek a backend API endpoint-ok működését tesztelik valós HTTP kérésekkel, adatbázis kapcsolattal, és session kezeléssel. A tesztek Python requests könyvtárral készülnek, és a teljes request-response ciklust ellenőrzik.
+
+  **Health check tesztelése:**
+  Health check endpoint tesztelése: `/api/health` endpoint válaszának ellenőrzése (200 status code, JSON válasz, adatbázis státusz).
+
+  **Játék funkciók tesztelése:**
+  Új játék indítása tesztelése: `/api/game` (POST) endpoint tesztelése (játékos név megadása, player_id visszaadása, game_session_id visszaadása, game_mode és difficulty beállítása). Játék session lekérése tesztelése: `/api/game/session` (GET) endpoint tesztelése (aktív session információk visszaadása). Játék session lezárása tesztelése: `/api/game/session/end` (POST) endpoint tesztelése (session lezárása, total_time beállítása).
+
+  **Eredmények kezelése tesztelése:**
+  Eredmény mentése tesztelése: `/api/save` (POST) endpoint tesztelése (player_id, score, game_mode, difficulty, game_time, rounds_played megadása, game_session_id kapcsolása, adatbázisba mentés, player statisztikák frissítése). Eredmények lekérése tesztelése: `/api/scores` (GET) endpoint tesztelése (globális ranglista lekérése, saját eredmények lekérése scope=me paraméterrel, szűrés game_mode és difficulty szerint, rendezés különböző módon (score_desc, score_asc, time_asc, time_desc, date_desc, date_asc), lapozás (limit, page paraméterek), pagination információ visszaadása). Játékosok lekérése tesztelése: `/api/players` (GET) endpoint tesztelése (játékosok listája, last_played szerint rendezve, limit beállítás).
+
+  **Autentikáció és felhasználókezelés tesztelése:**
+  Felhasználó regisztráció tesztelése: `/api/register` (POST) endpoint tesztelése (username, email, password megadása, validáció, adatbázisba mentés, player létrehozása, session beállítása, már létező felhasználó kezelése). Felhasználó bejelentkezés tesztelése: `/api/login` (POST) endpoint tesztelése (username, password megadása, session beállítása, last_login frissítése, hibás credentials kezelése). Aktuális felhasználó lekérése tesztelése: `/api/current-user` (GET) endpoint tesztelése (session alapú user adatok visszaadása, bejelentkezés nélküli hozzáférés kezelése). Felhasználói adatok frissítése tesztelése: `/api/user/update` (PATCH) endpoint tesztelése (felhasználónév módosítása, jelszó módosítása current_password megadásával, validációs hibák kezelése (gyenge jelszó, hiányzó current_password), players.display_name szinkronizálása username változáskor).
+
+  **Scores funkciók részletes tesztelése:**
+  Scores global és me nézet tesztelése: regisztráció, bejelentkezés, eredmény mentése, globális ranglista lekérése (scope=global), saját eredmények lekérése (scope=me, authentication szükséges), user update funkciók tesztelése (username módosítás, jelszó módosítás, új jelszóval bejelentkezés). Scores szűrők, rendezés, lapozás tesztelése: game_mode és difficulty szerinti szűrés, különböző rendezési módozatok tesztelése (time_asc, score_desc stb.), lapozás tesztelése (limit, page paraméterek), második oldal lekérése. Scope=me authentication requirement tesztelése: bejelentkezés nélküli hozzáférés scope=me paraméterrel (401 status code várható).
+
+  **Hibakezelés tesztelése:**
+  Hibás kérések tesztelése: hiányzó adatok kezelése (400 status code), érvénytelen game_mode kezelése (400 status code), érvénytelen difficulty kezelése (400 status code), érvénytelen player_id kezelése (404 status code). Validációs hibák tesztelése: gyenge jelszó kezelése user update-nél (400 status code), hiányzó current_password kezelése jelszó módosításnál (400 status code), hibás current_password kezelése (401 status code).
+
+  **Teljesítmény tesztelése:**
+  Alapvető teljesítmény tesztelése: több párhuzamos kérés tesztelése, válaszidő mérése, átlagos válaszidő számítása, elfogadható teljesítmény ellenőrzése (3 kérés 8 másodperc alatt).
+
+- **End-to-end tesztek (Cypress):**
+  Az end-to-end tesztek a teljes felhasználói folyamatot tesztelik böngészőben, a frontend és backend együttműködését ellenőrizve. A tesztek Cypress keretrendszerrel készülnek, amely lehetővé teszi a böngésző automatizálását és a felhasználói interakciók szimulálását.
+
+  **Autentikációs oldalak tesztelése:**
+  Bejelentkezési oldal tesztelése: bejelentkezési oldal megjelenítése (`/login`), felhasználónév input mező láthatósága és működése, jelszó input mező láthatósága és működése, regisztrációs oldalra való navigáció (register-link kattintása, URL ellenőrzése registration.html-re). Regisztrációs oldal tesztelése: regisztrációs oldal megjelenítése (`/registration`), felhasználónév input mező láthatósága és működése, email input mező láthatósága és működése, jelszó input mezők láthatósága és működése, submit gomb láthatósága.
+
+  **Főoldal tesztelése:**
+  Főoldal funkciók tesztelése: főoldal megjelenítése (`/`), scoreboard láthatósága és működése (legjobb eredmények táblázat megjelenítése), játékos név input mező láthatósága és működése, START gomb láthatósága és működése, játékos név megadása és játék indítása.
+
+  **Játékmód választó tesztelése:**
+  Játékmód választó funkciók tesztelése: játékmód választó oldal megjelenítése (`/menu`), nehézségi szint választó láthatósága ("Válaszd ki a nehézségi szintet" szöveg, könnyű/közepes/nehéz gombok), nehézségi szint kiválasztása (közepes nehézség kiválasztása), játékmód választó láthatósága (mode-row, mode-item elemek), játékmód kiválasztása (első játékmód kiválasztása), START gomb láthatósága és működése, játék indítása kiválasztott nehézségi szinttel és játékmóddal.
+
+  **Játék logika tesztelése:**
+  A játék logika tesztelése a frontend JavaScript kódon keresztül történik, ahol a játék mechanikákat ellenőrizzük. Színvadász játék tesztelése: időzítő alapú memória játék működésének ellenőrzése (célkép megjelenítése időzítővel, nehézségtől függő időzítő beállítása: easy 10 másodperc, medium 5 másodperc, hard 3 másodperc), választási lehetőségek megjelenítése (4 kép közül választás), pontszámítás ellenőrzése (helyes válasz esetén +1 pont), eredmény mentése backend-re játék végén. Kártyapárosító játék tesztelése: memória játék kártyapárosítással működésének ellenőrzése (kártya fordítás animációval, párosítási logika: 2 kártya egyidejűleg nyitva, lépésszám számolás, pontszámítás a párok száma alapján: easy 3 pár, medium 4 pár, hard 6 pár), kártya visszafordulásának ellenőrzése (rossz párosítás esetén), eredmény mentése backend-re játék végén.
+
+  **Scoreboard tesztelése:**
+  Scoreboard funkciók tesztelése: adatbázisból való adatlekérés ellenőrzése (backend API hívás `/api/scores` endpoint-ra), nevek és score-ok megfelelő megjelenítése frontend-en, adatok formázása és rendezése, üres scoreboard kezelése (nincs elérhető eredmény esetén), hálózati hibák kezelése (nem sikerült betölteni az eredményeket esetén).
+
+  **Adatintegritás és validáció tesztelése:**
+  Adatintegritás tesztelése: frontend-ből backend-re küldött adatok formátumának ellenőrzése (JSON formátum, megfelelő mezők jelenléte), backend-ből frontend-re érkező adatok formátumának ellenőrzése (JSON formátum, megfelelő struktúra), adatbázisban való tárolás ellenőrzése (adatbázis lekérdezés, adatok egyezése). Validáció tesztelése: frontend validáció ellenőrzése (üres mezők, érvénytelen formátumok), backend validáció ellenőrzése (API válaszok, hibaüzenetek), validációs hibák megfelelő kezelése (felhasználóbarát hibaüzenetek megjelenítése).
+
+  **Kommunikáció tesztelése:**
+  API kommunikáció tesztelése: REST API kérések helyes formátuma (POST, GET, PATCH metódusok, Content-Type header, JSON body), API válaszok helyes formátuma (JSON formátum, success flag, error üzenetek), session kezelés ellenőrzése (cookie-k, session adatok), credentials kezelés (same-origin policy).
