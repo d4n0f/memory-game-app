@@ -140,7 +140,22 @@
        - Jogod van a törléshez - bármikor kérheted adataid törlését
 
    - **Menü-hierarchiák:**
-
+    - BEJELENTKEZÉS
+     - Bejelentkezés
+     - REGISZTRÁCIÓ
+      - Regisztráció
+    - MAIN MENÜ
+     - PROFIL SZERKESZTÉS
+      - Profil szerkesztés
+     - EREDMÉNY MEGTEKINTÉSE
+      - Saját scoreboard
+      - Globális scoreboard
+     - Nehézség kiválasztása
+     - Játékmód kiválasztása
+    - SZÍNVADÁSZ 
+     - Játék játszása
+    - KÁRTYAPÁROSÍTÓ
+     - Játék játszása
 6. ## Fizikai környezet
    - Az alkalmazás csak webes platformra készül.
    - Backend valósítsa meg a frontend és adatbázis kapcsolatot.
