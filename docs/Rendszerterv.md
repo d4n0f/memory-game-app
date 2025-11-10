@@ -47,22 +47,24 @@
 
    **Mérföldkövek:**
 
-   - ✅  Előírt modellek és dokumentumok elkészítése.
+   - 🔄  Előírt modellek és dokumentumok elkészítése.
    - ✅  Adatmodell elkészítése megtörtént bemutatásra vár.
    - ✅  Frontend implementáció nagy részt elkészült átadásra vár.
    - ✅  Backend implementáció elkészült átadásra.
    - ✅  Program közel teljes designja és UI-ja elkészült bemutatásra vár.
-   - ✅  Frontendnek még a POST metódusokat el kell készíteni hogy kommunikálni tudjun a adatbázissal.
+   - ✅  Frontend POST metódusok elkészítése (api.js postJSON függvény).
    - ✅  A projekt demója elkészült bemutatásra vár.
-   - 🔄  Login backend elkészítése
-   - 🔄  Tesztek elkészítése
-   - 🔄  Login frontend elkészítése
+   - ✅  Login backend elkészítése
+   - ✅  Login frontend elkészítése
    - ✅  Teljes UI design kialaktása
+   - ✅ Alap két játék mód átadva, müködik.
    - ⏳  Új játékmódok kidolgozása
-   - ⏳  Játék teljes bemutatása
    - ⏳  Kártyák elkészítése új játékmódokhoz
-   - ⏳  Avatárok 
-   - 🔄  Dokumentumok elkészítése
+   - ⏳  Avatar választó felület és funkció teljes megvalósítása (backend támogatás kész, frontend hiányzik).
+   - ⏳  Profil szerkesztés oldal frontend megvalósítása (backend API kész: /api/user/update).
+   - ⏳  Eredmények/scores oldal frontend megvalósítása (backend API kész: /api/scores, route: /scores).
+   - 🔄  Tesztek elkészítése (Cypress E2E tesztek elkészültek, unit/integration tesztek ellenőrzésre várnak).
+   - 🔄  Játék teljes bemutatása (fő funkciók működnek, finomhangolás folyamatban).
 
 3. ## Üzleti folyamatok modellje:
 
