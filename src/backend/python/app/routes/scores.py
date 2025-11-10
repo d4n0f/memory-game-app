@@ -301,6 +301,6 @@ def get_players():
             cursor.close()
         if conn and conn.is_connected():
             conn.close()
-@scores_bp.route('/scores')
-def scores():
+#@scores_bp.route('/scores')
+#def scores():
     return render_template('main/scoreboard/scores.html')

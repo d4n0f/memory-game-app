@@ -281,7 +281,7 @@ def close_game_session(game_session_id, total_time):
             conn.close()
 
 
-@game_bp.route('/')
+@game_bp.route('/scores')
 def index():
     return render_template('main/menu/index.html')
 
