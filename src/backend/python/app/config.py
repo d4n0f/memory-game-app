@@ -26,5 +26,18 @@ class Config:
     # File path konfiguráció
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
+    
+    # Logs könyvtár létrehozása ha nem létezik
+    LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+    os.makedirs(LOGS_DIR, exist_ok=True)
 
     DEFAULT_AVATAR = os.getenv('DEFAULT_AVATAR', 'default_avatar.png')
+
+    # Logolási konfiguráció
+    LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO').upper()  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+    LOG_FILE = os.path.join(LOGS_DIR, 'app.log')
+    LOG_ERROR_FILE = os.path.join(LOGS_DIR, 'error.log')
+    LOG_MAX_BYTES = int(os.getenv('LOG_MAX_BYTES', '10485760'))  # 10MB alapértelmezett
+    LOG_BACKUP_COUNT = int(os.getenv('LOG_BACKUP_COUNT', '5'))  # 5 backup fájl
+    LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    LOG_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'

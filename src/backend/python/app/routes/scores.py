@@ -4,8 +4,10 @@ from ..models.user import update_player_stats
 from ..utils.validators import validate_score_data, validate_player_exists
 from datetime import datetime
 import mysql.connector
+from ..utils.logger import get_logger
 
 scores_bp = Blueprint('scores', __name__)
+logger = get_logger('scores')
 
 @scores_bp.route('/api/save', methods=['POST'])
 def save_scores():
@@ -14,10 +16,12 @@ def save_scores():
     conn = None
     try:
         data = request.get_json()
+        ip_address = request.remote_addr
 
         # Validáció
         is_valid, error_message = validate_score_data(data)
         if not is_valid:
+            logger.warning(f"Score mentési validációs hiba: {error_message} | IP: {ip_address}")
             return jsonify({'success': False, 'error': error_message}), 400
 
         player_id = int(data['player_id'])
@@ -31,6 +35,7 @@ def save_scores():
         # Player létezés ellenőrzése
         player_exists, error = validate_player_exists(player_id)
         if not player_exists:
+            logger.warning(f"Score mentési kísérlet nem létező player-rel | player_id: {player_id} | IP: {ip_address}")
             return jsonify({'success': False, 'error': error}), 404
 
         with get_db_connection() as conn:
@@ -56,6 +61,8 @@ def save_scores():
                 update_player_stats(player_id, score)
             conn.commit()
 
+        logger.info(f"Score mentve | player_id: {player_id} | score: {score} | game_mode: {game_mode} | difficulty: {difficulty} | game_session_id: {game_session_id} | rounds_played: {rounds_played} | game_time: {game_time}s | IP: {ip_address}")
+
         return jsonify({
             'success': True,
             'message': 'Eredmény sikeresen mentve',
@@ -63,10 +70,12 @@ def save_scores():
         })
 
     except mysql.connector.Error as e:
+        logger.error(f"Adatbázis hiba score mentésnél: {e} | player_id: {data.get('player_id')} | IP: {request.remote_addr}", exc_info=True)
         if 'conn' in locals() and conn.is_connected():
             conn.rollback()
         return jsonify({'success': False, 'error': f'Adatbázis hiba: {str(e)}'}), 500
     except Exception as e:
+        logger.error(f"Szerver hiba score mentésnél: {str(e)} | IP: {request.remote_addr}", exc_info=True)
         if 'conn' in locals() and conn.is_connected():
             conn.rollback()
         return jsonify({'success': False, 'error': f'Szerver hiba: {str(e)}'}), 500
@@ -85,6 +94,7 @@ def get_scores():
     try:
         # Nézet kiválasztása: 'global' (alapértelmezett) vagy 'me'
         scope = request.args.get('scope', 'global').lower()
+        ip_address = request.remote_addr
 
         # Szűrők
         game_mode = request.args.get('game_mode')  # None -> mind
@@ -131,6 +141,7 @@ def get_scores():
             # Csak a bejelentkezett játékos eredményei
             player_id = session.get('player_id')
             if not player_id:
+                logger.warning(f"Scores lekérés scope=me bejelentkezés nélkül | IP: {ip_address}")
                 return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
 
             user_where = (' AND ' if where_sql else 'WHERE ') + 's.player_id = %s'
@@ -186,6 +197,8 @@ def get_scores():
             if player and isinstance(player.get('last_played'), datetime):
                 player['last_played'] = player['last_played'].isoformat()
 
+            logger.debug(f"Scores lekérve (scope=me) | player_id: {player_id} | game_mode: {game_mode} | difficulty: {difficulty} | limit: {limit} | page: {page} | IP: {ip_address}")
+
             return jsonify({
                 'success': True,
                 'scope': 'me',
@@ -236,6 +249,8 @@ def get_scores():
                 if isinstance(row.get('date_val'), datetime):
                     row['date_val'] = row['date_val'].isoformat()
 
+            logger.debug(f"Scores lekérve (scope=global) | game_mode: {game_mode} | difficulty: {difficulty} | limit: {limit} | page: {page} | IP: {ip_address}")
+
             return jsonify({
                 'success': True,
                 'scope': 'global',
@@ -249,6 +264,7 @@ def get_scores():
                 }
             })
     except Exception as e:
+        logger.error(f"Szerver hiba scores lekérésnél: {str(e)} | scope: {scope} | IP: {request.remote_addr}", exc_info=True)
         if conn and conn.is_connected():
             conn.rollback()
         return jsonify({'success': False, 'error': f'Szerver hiba:{str(e)}'}), 500

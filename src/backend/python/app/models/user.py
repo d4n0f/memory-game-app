@@ -1,5 +1,8 @@
 from .database import get_db_connect
 from mysql.connector import Error
+from ..utils.logger import get_logger
+
+logger = get_logger('user')
 
 def create_player_for_user(user_id, username):
     #Játékos létrehozása regisztrált felhasználóhoz - username = display_name
@@ -8,6 +11,7 @@ def create_player_for_user(user_id, username):
     try:
         conn = get_db_connect()
         if not conn:
+            logger.error(f"Adatbázis kapcsolat hiba játékos létrehozásnál: user_id={user_id}, username={username}")
             return None
 
         cursor = conn.cursor()
@@ -20,10 +24,11 @@ def create_player_for_user(user_id, username):
         player_id = cursor.lastrowid
 
         conn.commit()
+        logger.info(f"Játékos létrehozva felhasználóhoz: user_id={user_id}, player_id={player_id}, display_name={username}")
         return player_id
 
     except Error as e:
-        print(f"Játékos létrehozási hiba: {e}")
+        logger.error(f"Játékos létrehozási hiba: {e} | user_id={user_id}, username={username}")
         if conn and conn.is_connected():
             conn.rollback()
         return None
@@ -40,6 +45,7 @@ def create_guest_player(display_name):
     try:
         conn = get_db_connect()
         if not conn:
+            logger.error(f"Adatbázis kapcsolat hiba vendég játékos létrehozásnál: display_name={display_name}")
             return None
 
         cursor = conn.cursor()
@@ -52,10 +58,11 @@ def create_guest_player(display_name):
         player_id = cursor.lastrowid
 
         conn.commit()
+        logger.info(f"Vendég játékos létrehozva: player_id={player_id}, display_name={display_name}")
         return player_id
 
     except Error as e:
-        print(f"Vendég játékos létrehozási hiba: {e}")
+        logger.error(f"Vendég játékos létrehozási hiba: {e} | display_name={display_name}")
         if conn and conn.is_connected():
             conn.rollback()
         return None
@@ -72,6 +79,7 @@ def get_or_create_player(display_name, user_id=None):
     try:
         conn = get_db_connect()
         if not conn:
+            logger.error(f"Adatbázis kapcsolat hiba játékos lekérésnél: display_name={display_name}, user_id={user_id}")
             return None
 
         cursor = conn.cursor()
@@ -87,17 +95,19 @@ def get_or_create_player(display_name, user_id=None):
                 (player_id,)
             )
             conn.commit()
+            logger.debug(f"Létező játékos lekérve: player_id={player_id}, display_name={display_name}")
         else:
             # 2. CREATE külön kapcsolatban
             if user_id:
                 player_id = create_player_for_user(user_id, display_name)
             else:
                 player_id = create_guest_player(display_name)
+            logger.info(f"Új játékos létrehozva: player_id={player_id}, display_name={display_name}, user_id={user_id}")
 
         return player_id
 
     except Error as e:
-        print(f"Játékos kezelési hiba: {e}")
+        logger.error(f"Játékos kezelési hiba: {e} | display_name={display_name}, user_id={user_id}")
         if conn and conn.is_connected():
             conn.rollback()
         return None
@@ -114,6 +124,7 @@ def get_player_by_user_id(user_id):
     try:
         conn = get_db_connect()
         if not conn:
+            logger.error(f"Adatbázis kapcsolat hiba player lekérésnél: user_id={user_id}")
             return None
 
         cursor = conn.cursor(dictionary=True)
@@ -123,10 +134,15 @@ def get_player_by_user_id(user_id):
         )
 
         player = cursor.fetchone()
+        
+        if player:
+            logger.debug(f"Player lekérve user_id alapján: user_id={user_id}, player_id={player.get('id')}")
+        else:
+            logger.warning(f"Player nem található user_id alapján: user_id={user_id}")
 
         return player
     except Error as e:
-        print(f"Játékos lekérési hiba: {e}")
+        logger.error(f"Játékos lekérési hiba: {e} | user_id={user_id}")
         if conn and conn.is_connected():
             conn.rollback()
         return None
@@ -144,6 +160,7 @@ def update_player_stats(player_id, score):
     try:
         conn = get_db_connect()
         if not conn:
+            logger.error(f"Adatbázis kapcsolat hiba statisztika frissítésnél: player_id={player_id}, score={score}")
             return False
 
         cursor = conn.cursor()
@@ -158,10 +175,10 @@ def update_player_stats(player_id, score):
         ''', (score, player_id))
 
         conn.commit()
-
+        logger.info(f"Player statisztikák frissítve: player_id={player_id}, score={score}")
         return True
     except Error as e:
-        print(f"Player stat frissítési hiba: {e}")
+        logger.error(f"Player stat frissítési hiba: {e} | player_id={player_id}, score={score}")
         if conn and conn.is_connected():
             conn.rollback()
         return False
