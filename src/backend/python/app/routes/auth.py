@@ -285,3 +285,7 @@ def login():
 @auth_bp.route('/registration')
 def registration():
     return render_template('main/menu/registration.html')
+
+@auth_bp.route('/profile')
+def profile():
+    return render_template('main/menu/profile.html')
