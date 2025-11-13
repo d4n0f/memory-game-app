@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profil szerkesztése</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main/menu/styles/profile.css') }}">
+</head>
+<body>
+    <main class="profile-wrap">
+        
+        <div class="profile-card">
+            <h2 class="profile-title">Profil szerkesztése</h2>
+            <div class="avatar-wrap">
+                <div class="avatar-preview" id="avatar-preview"></div>
+                <div class="avatar-actions">
+                    <input id="avatar-input" type="file" accept="image/*" style="display:none">
+                    <button id="avatar-change" type="button">Profilkép módosítása</button>
+                </div>
+            </div>
+
+            <form id="profile-form">
+                <label class="field">
+                    <span class="label">Felhasználónév</span>
+                    <input id="username" name="username" type="text" placeholder="Felhasználónév" required>
+                </label>
+
+                <label class="field">
+                    <span class="label">Jelenlegi jelszó</span>
+                    <input id="current-password" name="current_password" type="password" placeholder="Jelenlegi jelszó">
+                </label>
+
+                <label class="field">
+                    <span class="label">Új jelszó</span>
+                    <input id="new-password" name="new_password" type="password" placeholder="Új jelszó">
+                </label>
+
+                <div class="form-actions">
+                    <button id="save-btn" type="submit">Mentés</button>
+                    <button id="logout-btn" type="button" class="secondary">Kijelentkezés</button>
+                </div>
+                <div class="actions">
+                    <a href="/menu" class="back-btn">Vissza a menübe</a>
+                </div>
+            </form>
+
+            <p id="message" class="message" aria-live="polite"></p>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='main/menu/scripts/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/menu/scripts/profile.js') }}"></script>
+</body>
+</html>
