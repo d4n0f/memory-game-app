@@ -101,25 +101,20 @@ function checkChoice(choice) {
         const playerId = localStorage.getItem('player_id');
         const difficulty = localStorage.getItem('difficulty') || 'easy';
         if (playerId) {
-            fetch('/api/save', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    player_id: playerId,
-                    score: score,
-                    game_mode: 'color-hunter',
-                    //game_time: 0,
-                    rounds_played: 1,
-                    difficulty: difficulty
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // visszajelzés, hiba, stb.
-            })
-            .catch(() => {
-                // hibaüzenet
-            });
+                (async () => {
+                    try {
+                        const res = await api.postJSON('/api/save', {
+                            player_id: playerId,
+                            score: score,
+                            game_mode: 'color-hunter',
+                            rounds_played: 1,
+                            difficulty: difficulty
+                        });
+                        // optional: check res.ok/res.json for errors
+                    } catch (err) {
+                        console.error('Save score error', err);
+                    }
+                })();
         }
     }
 }

@@ -62,7 +62,7 @@ def validate_username(username, check_unique=False):
     return True, None
 
 
-def validate_password(password, confirm_password=None):
+def validate_password(password):
     #Jelszó validáció - erős jelszókövetelmények
     if not password or not isinstance(password, str):
         return False, 'Érvénytelen jelszó'
@@ -87,9 +87,6 @@ def validate_password(password, confirm_password=None):
     if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
         return False, 'A jelszónak tartalmaznia kell legalább egy speciális karaktert (!@#$%^&* stb.)'
 
-    # Jelszó egyezés ellenőrzése (ha van confirm_password)
-    if confirm_password is not None and password != confirm_password:
-        return False, 'A jelszavak nem egyeznek'
 
     return True, None
 
@@ -125,7 +122,7 @@ def validate_password_strength(password):
 
 def validate_registration_data(data):
     #Regisztrációs adatok validálása adatbázis ellenőrzéssel
-    required_fields = ['username', 'email', 'password', 'confirm_password']
+    required_fields = ['username', 'email', 'password']
 
     for field in required_fields:
         if field not in data or not data[field] or not data[field].strip():
@@ -142,7 +139,7 @@ def validate_registration_data(data):
         return False, error
 
     # Jelszó validáció
-    is_valid, error = validate_password(data['password'], data['confirm_password'])
+    is_valid, error = validate_password(data['password'])
     if not is_valid:
         return False, error
 
@@ -167,18 +164,17 @@ def validate_user_exists(username):
 
 def validate_player_exists(player_id):
     #Ellenőrzi, hogy a játékos létezik-e
-    return validate_entity_exists('players', player_id,'player_id')
+    return validate_entity_exists('players', player_id,'id')
 
 def validate_score_data(data):
     #Score adatok validálása
-    required_fields = ['player_id', 'score', 'game_mode', 'game_time', 'rounds_played']
+    required_fields = ['player_id','score', 'game_mode', 'rounds_played']
 
     for field in required_fields:
         if field not in data:
             return False, f'Hiányzó mező: {field}'
 
     try:
-        player_id = int(data['player_id'])
         score = int(data['score'])
         game_time = int(data.get('game_time', 0))
         rounds_played = int(data.get('rounds_played', 1))

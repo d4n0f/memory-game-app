@@ -12,11 +12,11 @@
 
 <body>
     <div class="gamemode-header">
-        <span class="profile-link" onclick="window.location.href='profile.html'">
+        <span class="profile-link" onclick="window.location.href='/profile'">
             Profil szerkesztése
             <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M12 14c-4.418 0-8 1.79-8 4v2h16v-2c0-2.21-3.582-4-8-4z"/></svg>
         </span>
-        <span class="results-link" onclick="window.location.href='scores.html'">
+        <span class="results-link" onclick="window.location.href='/scoreboard'">
             Eredmények megtekintése
             <svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="2"/><rect x="4" y="11" width="16" height="2"/><rect x="4" y="16" width="16" height="2"/></svg>
         </span>
@@ -36,6 +36,7 @@
         <button class="start-game-btn" data-cy="start-game-btn">START</button>
     </div>
 
+    <script src="{{ url_for('static', filename='main/menu/scripts/api.js') }}"></script>
     <script src="{{ url_for('static', filename='main/menu/scripts/gamemode-selector.js') }}"></script>
 </body>
 

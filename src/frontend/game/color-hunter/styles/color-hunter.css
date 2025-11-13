@@ -1,11 +1,17 @@
 body {
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
+    font-family: 'Josefin Slab', serif;
     margin: 0;
     padding: 0;
     text-align: center;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background: #FFC9E6;
+    color: #A21C64;
+}
+
+.sans-text {
+  font-family: 'Josefin Sans', serif;
 }
 
 main {
@@ -24,6 +30,12 @@ main {
     border: solid medium #a14b8c;
     border-radius: 8px;
     padding: 2px;
+}
+
+#target-container {
+    background: #FBE6F1;
+    border-radius: 15px;
+    padding: 1em 10em;
 }
 
 .choices-grid {
@@ -48,22 +60,21 @@ main {
 }
 
 #menu-btn, #next-round {
-    font-size: 1.3rem;
-    padding: 0.4rem 2.2rem;
-    border: 2.5px solid #222;
-    border-radius: 10px;
-    background: #b7c99c;
-    color: #222;
-    font-family: inherit;
-    font-weight: bold;
-    box-shadow: 2px 2px 0 #888;
+    background: #f96eb867;
+    color: #A21C64;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.6rem;
+    font-family: 'Josefin Sans', serif;
+    font-weight: normal;
+    box-shadow: 2px 2px 6px #e1b6d6;
+    padding: 0.7rem 2.5rem;
     cursor: pointer;
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
-    letter-spacing: 1px;
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.2s, background 0.2s;
 }
 #menu-btn:active, #next-round:active {
-    box-shadow: 1px 1px 0 #888;
-    background: #a2b883;
+    background: #c5488a67;
+    color: #A21C64;
+    box-shadow: 1px 1px 2px #c97bb7;
+    border: solid medium #A21C64;
 }

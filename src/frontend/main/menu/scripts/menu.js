@@ -14,19 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const scoreboardBody = document.querySelector('#scoreboard-table tbody');
     if (scoreboardBody) {
-        fetch('/api/scores?limit=5')
-            .then(response => response.json())
-            .then(data => {
+        (async () => {
+            try {
+                const result = await api.getJSON('/api/scores?limit=5');
                 scoreboardBody.innerHTML = '';
-                if (data.success && Array.isArray(data.scores)) {
+                const data = result.json;
+                if (result.ok && data && Array.isArray(data.scores)) {
                     data.scores.forEach(score => {
                         const row = document.createElement('tr');
                         const nameCell = document.createElement('td');
                         const gameCell = document.createElement('td');
                         const scoreCell = document.createElement('td');
-                        nameCell.textContent = score.name || '';
+                        nameCell.textContent = score.display_name || score.name || '';
                         gameCell.textContent = score.game_mode === 'card-match' ? 'Kártyapárosító' : 'Színvadász';
-                        scoreCell.textContent = score.score;
+                        scoreCell.textContent = score.score_val || score.score || score.scoreVal || '';
                         row.appendChild(nameCell);
                         row.appendChild(gameCell);
                         row.appendChild(scoreCell);
@@ -40,8 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     row.appendChild(cell);
                     scoreboardBody.appendChild(row);
                 }
-            })
-            .catch(() => {
+            } catch (err) {
                 scoreboardBody.innerHTML = '';
                 const row = document.createElement('tr');
                 const cell = document.createElement('td');
@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cell.textContent = 'Nem sikerült betölteni az eredményeket.';
                 row.appendChild(cell);
                 scoreboardBody.appendChild(row);
-            });
+            }
+        })();
     }
 });

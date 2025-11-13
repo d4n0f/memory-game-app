@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    background: #FFC9E6;
+    color: #A21C64;
+}
+
+.profile-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px
+}
+
+.profile-card {
+    width: 420px;
+    background: #FBE6F1;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    padding: 20px;
+    text-align: center
+}
+
+.avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px
+}
+
+.avatar-preview {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: #fff8fc;
+    border: solid thin #a14b8c;
+    background-size: cover;
+    background-position: center
+}
+
+.avatar-actions button {
+    background: transparent;
+    border: solid thin #a14b8c;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: #A21C64;
+    cursor: pointer
+}
+
+.profile-title {
+    font-family: 'Josefin Slab', serif;
+    margin: 6px 0 12px 0
+}
+
+.field {
+    display: block;
+    text-align: left;
+    margin: 8px 0
+}
+
+.field .label {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: #7a2a57
+}
+
+.field input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid rgba(139, 43, 102, 0.06);
+    background: #fdeaf3
+}
+
+input#username, input#current-password, input#new-password {
+    background: #fff;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 2em;
+}
+
+button#avatar-change {
+    background: #fff;
+}
+.form-actions button {
+    background: #f96eb867;
+    color: #A21C64;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.6rem;
+    font-family: 'Josefin Sans', serif;
+    font-weight: normal;
+    box-shadow: 2px 2px 6px #e1b6d6;
+    padding: 0.7rem 2.5rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+
+.form-actions .secondary {
+    background: #fff;
+    border: 1px solid rgba(139, 43, 102, 0.08);
+    color: var(--accent)
+}
+
+.message {
+    min-height: 22px;
+    margin-top: 10px
+}
+
+@media(max-width:480px) {
+    .profile-card {
+        width: 92vw
+    }
+}
+
+.back-btn{
+    display:inline-block;
+    background: #f96eb867;
+    color: #A21C64;
+    padding: 10px 14px;
+    margin: 2em 0 2px 0;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 2px 2px 0 #b56ea5;
+    transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+}
+.back-btn:hover{ 
+    transform: translateY(-2px); 
+    box-shadow: 2px 2px 5px #b56ea5;
+}
+.back-btn:active{ 
+    transform: translateY(0); 
+    box-shadow: 2px 2px 5px #b56ea5;
+}

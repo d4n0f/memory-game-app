@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // If mode buttons are not present in the DOM, generate them here.
     const availableModes = [
         { id: 'color-hunter', label: 'Színvadász', img: '../../assets/images/nyuszi.png' },
-        { id: 'card-match', label: 'Kártyapárosító', img: '../../assets/images/kartyak.png' }
+        { id: 'card-match', label: 'Kártyapárosító', img: '../../assets/images/kartyak.png' },
+        // Új játékmód: Fraktál (egyszerű, plain képek - később generált fraktálok lesznek)
+        { id: 'fractal', label: 'Fraktál', img: '../../assets/images/color-match/elulso-kep1.jpg' }
     ];
 
     if (modeRow && modeRow.children.length === 0) {
@@ -80,28 +82,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
             // Játék indítása a backenddel
-            fetch('/api/game', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: playerName })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.player_id) {
-                    localStorage.setItem('player_id', data.player_id);
-                    // Továbbirányítás a választott játékra
-                    if (selectedMode === "color-hunter") {
-                        window.location.href = "/color-hunter";
-                    } else if (selectedMode === "card-match") {
-                        window.location.href = "/card-match";
+            (async () => {
+                try {
+                    const result = await api.postJSON('/api/game', { name: playerName });
+                    if (result.ok && result.json && result.json.player_id) {
+                        localStorage.setItem('player_id', result.json.player_id);
+                        // Save chosen mode so the game page can adapt behavior
+                        if (selectedMode) {
+                            localStorage.setItem('game_mode', selectedMode);
+                        }
+                        if (selectedMode === "color-hunter") {
+                            window.location.href = "/color-hunter";
+                        } else if (selectedMode === "card-match") {
+                            window.location.href = "/card-match";
+                        } else if (selectedMode === "fractal") {
+                            // Use the card-match page but indicate fractal mode via query or stored mode
+                            window.location.href = "/card-match?mode=fractal";
+                        }
+                    } else {
+                        const msg = (result.json && result.json.error) ? result.json.error : (result.text || 'Ismeretlen hiba');
+                        alert('Nem sikerült elindítani a játékot: ' + msg);
                     }
-                } else {
-                    alert('Nem sikerült elindítani a játékot: ' + (data.error || 'Ismeretlen hiba'));
+                } catch (err) {
+                    console.error('Start game error', err);
+                    alert('Nem sikerült csatlakozni a szerverhez.');
                 }
-            })
-            .catch(() => {
-                alert('Nem sikerült csatlakozni a szerverhez.');
-            });
+            })();
         });
     }
 });
