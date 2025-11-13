@@ -52,3 +52,26 @@ body{margin:0;font-family:'Josefin Sans',sans-serif;background:var(--bg);}
 
 /* small screens */
 @media(max-width:420px){.scoreboard-card{width:92vw}}
+
+.scoreboard-card .actions{ text-align:center; margin:12px 0 6px 0 }
+
+.scoreboard-card .back-btn{
+    display:inline-block;
+    background: linear-gradient(180deg,#f96eb8a0,#f7a0c6a6);
+    color: #7a2a57;
+    padding: 10px 14px;
+    margin: 10px  0 2px 0;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+}
+.scoreboard-card .back-btn:hover{ 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12); 
+}
+.scoreboard-card .back-btn:active{ 
+    transform: translateY(0); 
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08); 
+}
