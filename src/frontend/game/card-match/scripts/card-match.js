@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
         finalScoreEl.textContent = score;
         resultMessage.textContent = `Megtaláltad az összes párt ${moves} lépésből!`;
         resultScreen.classList.remove("hidden");
-
+        const gameMode = isFractalMode() ? 'fractal' : 'card-match';
         // Eredmény mentése backendre
         const playerId = localStorage.getItem('player_id');
         const difficulty = localStorage.getItem('difficulty') || 'easy';
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const res = await api.postJSON('/api/save', {
                         player_id: playerId,
                         score: score,
-                        game_mode: 'card-match',
+                        game_mode: gameMode,
                         //game_time: 0,
                         rounds_played: 1,
                         difficulty: difficulty

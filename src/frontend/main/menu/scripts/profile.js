@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try{
             const r = await fetch('/api/logout', { method: 'POST', credentials: 'include' });
             if(r.ok){
-                window.location.href = '/login';
+                window.location.href = '/';
             } else {
                 showMessage('Kijelentkezés sikertelen', true);
             }
