@@ -303,9 +303,6 @@ def close_game_session(game_session_id, total_time):
             conn.close()
 
 
-@game_bp.route('/')
-def index():
-    return render_template('main/menu/index.html')
 
 
 @game_bp.route('/menu')

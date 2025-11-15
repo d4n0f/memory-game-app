@@ -16,7 +16,7 @@ def is_valid_difficulty(difficulty):
 
 def is_valid_game_mode(mode):
     #Játékmód validáció
-    return mode in ['color-hunter', 'card-match']
+    return mode in ['color-hunter', 'card-match','fractal']
 
 def validate_entity_exists(table, entity_id, id_field='id'):
     conn = None
