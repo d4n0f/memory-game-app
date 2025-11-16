@@ -133,3 +133,5 @@
 | Frontend | K128 | Navigációs linkek            | 1.2    | Profil szerkesztés és eredmények megtekintése linkek                    |
 | Frontend | K129 | Jelszó megerősítés           | 1.2    | Jelszó megerősítő mező regisztrációnál                                  |
 | Frontend | K130 | Autocomplete attribútumok    | 1.2    | Autocomplete támogatás bejelentkezési formoknál                         |
+| Game    | K131 | Fraktál játékmód támogatása   | 1.3    | Új game_mode ('fractal') bevezetése, score mentéssel és játékmód validációval   |
+| Frontend | K132 | Fraktál játékmód UI és logika | 1.3    | Fraktál mód megjelenítése a játékmódválasztóban, fraktál képpárok generálása és score küldése 'fractal' game_mode-dal |
