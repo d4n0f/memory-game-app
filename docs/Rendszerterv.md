@@ -22,28 +22,58 @@
      - Design: Spišáková Antónia, esztétikus és felhasználóbarát megjelenésének kialakítása. Ez magában foglalja a színpaletta, tipográfia és vizuális stílus meghatározását, a kártyák és felületi elemek designját, valamint az animációk és átmenetek tervezését. A designer felelős azért, hogy a játék reszponzív legyen minden eszközön, és hogy intuitív felhasználói élményt nyújtson a játékosoknak.
 
    **Űtemterv:**
-   | Funkció | Feladat | Prioritás | Becslés | Aktuális idő | Eltelt idő| Hátralévő idő |
+  | Funkció | Feladat | Prioritás | Becslés | Aktuális idő | Eltelt idő| Hátralévő idő |
    |-----------|-----------|---|----|----|------|-------|
-   Követelmény specifikáció| | 1 | 4 | 4| 4| 0|
-   Rendszerterv| | 1 | 3 | 3 | 2 | 1|
-   Funkcionális specifikáció| | 1 | 2 | 2 | 2 | 0|
-   Use-case modell | | 1 | 1 | 1 | 1| 0|
-   Adatbázis modell| | 2 | 2 | 2 | 2| 0|
-   Adattárolás | Adatmodel megtervezése | 2 | 1 | 1 | 1 | 0|
-   | |Adatbázis megvalósítása a szerveren | 2 | 3 | 3 | 0 | 3|
-   Frontend | Frontend megtervezése | 2 | 4 | 4 | 3 | 1|
-   || Frontend implementálás | 2 | 20 | 20 | 15 | 5|
-   || Script fájlok elkészítése | 2 | 10 | 10 | 7 | 3|
-   || HTML fájlok elkészítése | 2 | 2 | 2 | 1.5 | 0.5 |
-   || CSS fájlok elkészítése | 2 | 3 | 3 | 3 | 3 |
-   || Frontend teszt elkészítése | 2 | 5 | 5 | 0 | 5 |
-   Design | Design megtervezése | 2 | 5 | 5 | 5 | 0|
-   || Design implementálás | 2 | 3 | 3 | 3 | 0|
-   || UI megtervezése | 2 | 2 | 2 | 2 | 0|
+   Dokumentáció|Követelmény specifikáció| 1 | 4 | 6| 5| 1|
+   ||Rendszerterv| 1 | 3 | 8 | 7 | 1|
+   ||Funkcionális specifikáció| 1 | 2 | 4 | 4 | 0|
+   ||Use-case modell | 1 | 1 | 2 | 2| 0|
+   ||Adatbázis modell | 2 | 2 | 5 | 4| 0|
+   ||User-storyk írása | 2 | 2 | 3 | 2| 0|
+   Adattárolás | Adatmodel megtervezése | 3 | 1 | 4 | 3 | 0|
+   | |Adatbázis megvalósítása a szerveren | 3 | 1 | 4 | 3 | 0|
+   Frontend | Frontend megtervezése | 2 | 4 | 10 | 8 | 2|
+   || Frontend implementálás | 2 | 20 | 40 | 30 | 10|
+   || Fő oldal elkészítése | 3 | 2 | 4 | 4 | 0|
+   || Gombok kiszolgálása script fájlokkal és útvonalválasztás frontend megvalósítása | 3 | 3 | 6 | 6 | 0|
+   ||  Játék választós oldal létrehozása | 3 | 2 | 3 | 3 | 0|
+   ||  Két játék mód megvalósítása struktúrába szervezve | 3 | 5 | 7 | 7 | 0|
+   ||  Login és registration design-ok refaktorálása | 2 | 2 | 3 | 3 | 0|
+   ||  Login képernyő prototípus | 3 | 4 | 6 |6 | 0|
+   ||  Login összekötése a backenddel | 3 | 3 | 5 |5 | 0|
+   ||  Oldalak kiszolgálása CSS fájlokkal | 2 | 8 | 9 |9 | 0|
+   ||  POST metódusokkal való adatok átadása backend, adatbázis felé | 3 | 2 | 3 |3 | 0|
+   ||  Scoreboard a menü oldalon | 3 | 2 | 4 |4 | 0|
+   ||  Scoreboard oldal megvalósítása és scriptel való támogatása | 3 | 4 | 5 |5 | 0|
+   ||  Kód refaktorálás | 2 | 6 | 6 |6 | 0|
+   ||  Fraktál párosító megvalósítása | 3 | 7 | 6 |6 | 1|
+   ||  Játék design megvalósítása figma alapján| 2 | 4 | 3 | 2 | 1|
+   ||  Logout megvalósítása| 3 | 3 | 4 | 4 | 0|
+   ||  Avatar oldal megvalósítása | 2 | 4 | 1 | 1 | 3|
+   Design | Design megtervezése | 2 | 5 | 10 | 9 | 1|
+   || Design implementálás Figmában | 2 | 3 | 15 | 13 | 2|
+   || Login/register UI | 2 | 2 | 3 | 3 | 0|
+   || Hátterek kialakítása | 2 | 2 | 2 | 2 | 0|
+   || Kártyák megvalósítása | 2 | 8 | 8 | 8 | 0|
+   || Profiladat figma módosítása | 1 | 3 | 0 | 0 | 3|
    Backend | Backend megtervezése | 2 | 10 | 10 | 10 | 0|
    || Backend implementálása | 2 | 50 | 50 | 30 | 20 |
-   || Backend unit teszt | 2 | 5 | 5 | 3 | 2|
-   || Backend integration teszt | 2 | 4 | 4 | 2 | 2|
+   ||  .env fájl kialakítása környezeti változókhoz | 3 | 2 | 2 | 2 | 0|
+   ||  Adatbázis megvalósítása | 3 | 3 | 4 | 4 | 0|
+   ||  Adatbázisba való adatok átadása és a frontend back end kapcsolat létrehozása | 3 | 4 | 5 | 5 | 0|
+   ||  API vépontok kialakítása | 3 | 4 | 6 | 6 | 0|
+   ||  Authetikációs és validációs metódusok megvalósítása | 3 | 8 | 10 | 10 | 0|
+   ||   Hibák és adatok logolásának megvalósítása | 3 | 4 | 5 | 5 | 0|
+   ||   Megfelelő kód dokumentáció kialakítása és errorok magyarázatos kialakítása | 2 | 3 | 4 | 4 | 0|
+   ||   Profil adatok módosítására szükséges backend metódusok megvalósítása | 3 | 4 | 5 | 5 | 0|
+   ||   Regisztráció és login endpoint a login funkcióhoz | 3 | 6 | 7 | 7 | 0|
+   ||   Scoreboard kiszolgálása | 3 | 5 | 6 | 6 | 0|
+   ||   Kód refaktorálás | 2 | 10 | 8 | 6 | 2|
+   Teszt | Teszt megtervezése | 2 | 15 | 12 | 12 | 3|
+   ||   Backend unit tesztek | 3 | 10 | 8 | 6 | 2|
+   ||   Backend integration tesztek | 3 | 8 | 6 | 6 | 0|
+   ||   E2E tesztek | 3 | 4 | 3 | 3 | 1|
+   ||   Cypress tesztek | 2 | 3 | 2 | 2 | 1|
 
    **Mérföldkövek:**
 
@@ -158,16 +188,42 @@
       - Játék játszása
     - KÁRTYAPÁROSÍTÓ
       - Játék játszása
+    - FRAKTÁL
+      - Játék játszása
 6. ## Fizikai környezet
-   - Az alkalmazás csak webes platformra készül.
-   - Backend valósítsa meg a frontend és adatbázis kapcsolatot.
-   - Nincsenek megvásárolt komponenseink.
-   - Fejlesztői eszközök:
-     - Visual Studio Code
-     - Pycharm
-     - Flask Framework
-     - Pytest
-     - Mysql Workbench
+  - Az alkalmazás csak webes platformra készül.
+  - Backend valósítja meg a frontend és adatbázis kapcsolatot.
+  - Nincsenek megvásárolt komponenseink.
+  - **Fejlesztői eszközök:** 
+    - Visual Studio Code
+    - PyCharm
+    - Flask Framework (Python web framework)
+    - Python unittest (unit tesztekhez)
+    - Cypress (E2E tesztekhez)
+    - MySQL Workbench (adatbázis tervezés és kezelés)
+    - Figma (design)
+  - **Backend technológiák:**
+    - Python 3.x
+    - Flask keretrendszer
+    - MySQL Connector (Python MySQL library)
+    - Werkzeug Security (jelszó hashing)
+    - python-dotenv (környezeti változók kezelése)
+    - Python logging (hibanaplózás)
+  - **Frontend technológiák:**
+    - HTML5
+    - CSS3
+    - JavaScript (ES6+)
+    - Fetch API (REST API kommunikációhoz)
+  - **Tesztelési eszközök:**
+    - Python unittest (backend unit tesztek)
+    - Python requests library (integrációs tesztek)
+    - Cypress (frontend E2E tesztek)
+  - **Adatbázis:**
+    - MySQL adatbázis
+    - InnoDB storage engine
+    - UTF8MB4 charset, Hungarian collation
+  - **Verziókezelés:**
+    - Git verziókövetés
 7. ## Architekturális terv
 
    - Backend: A backend rendszer egy Python alapú RESTful API, amely a Flask keretrendszerre épül. Az API teljes körű felhasználókezelést, játékmenet-vezérlést és adatkezelést biztosít. A szerver MySQL adatbázissal kommunikál, amely a felhasználói adatokat, játékeredményeket és statisztikákat tárolja.
