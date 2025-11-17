@@ -80,7 +80,6 @@ Telepítés és futtatás (fejlesztői mód)
   SECRET_KEY=<SECRET_KEY>
   ```
 
-  Tipp: soha ne helyezz el valódi jelszavakat vagy titkos kulcsokat nyilvános fájlokban.
 
 5. Inicializáld az adatbázist (a Flask indításakor az `init_db()` függvény megpróbálja létrehozni az adatbázist és a táblákat, ha szükséges). Egyszerűen indítsd el az alkalmazást:
 
