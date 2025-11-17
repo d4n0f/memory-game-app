@@ -278,7 +278,7 @@ def update_user():
         if conn and conn.is_connected():
             conn.close()
 
-@auth_bp.route('/login')
+@auth_bp.route('/')
 def login():
     return render_template('main/menu/login.html')
 
