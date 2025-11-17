@@ -53,6 +53,14 @@ body {
     cursor: pointer
 }
 
+/* Avatar chooser grid */
+.avatar-chooser{display:none;margin-top:12px}
+.avatar-chooser .chooser-title{margin:0 0 8px 0;color:#7a2a57;font-weight:700}
+.avatar-grid{display:grid;grid-template-columns:repeat(3,72px);gap:10px;justify-content:center}
+.avatar-item{width:72px;height:72px;border-radius:50%;background:#fff;background-size:cover;background-position:center;border:3px solid transparent;cursor:pointer}
+.avatar-item.selected{box-shadow:0 6px 14px rgba(0,0,0,0.12);border-color:#8b2b66;transform:translateY(-3px)}
+
+
 .profile-title {
     font-family: 'Josefin Slab', serif;
     margin: 6px 0 12px 0
@@ -91,8 +99,15 @@ input#username, input#current-password, input#new-password {
     margin-top: 2em;
 }
 
-button#avatar-change {
+.avatar-actions {
+    margin: 15px 0;
+}
+#avatar-change {
     background: #fff;
+    padding: 6px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #A21C64;
 }
 .form-actions button {
     background: #f96eb867;

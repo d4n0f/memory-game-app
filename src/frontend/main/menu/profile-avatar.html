@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profilkép választás</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main/menu/styles/profile.css') }}">
+</head>
+<body>
+    <main class="profile-wrap">
+        <div class="profile-card">
+            <h2 class="profile-title">Profilkép választás</h2>
+            <p class="chooser-title">Válassz a feltöltött avatarok közül</p>
+            <div class="avatar-grid" id="avatar-grid">
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar1.jpg" type="button" aria-label="Avatar 1"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar2.jpg" type="button" aria-label="Avatar 2"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar3.jpg" type="button" aria-label="Avatar 3"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar4.jpg" type="button" aria-label="Avatar 4"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar5.jpg" type="button" aria-label="Avatar 5"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar6.jpg" type="button" aria-label="Avatar 6"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar7.jpg" type="button" aria-label="Avatar 7"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar8.jpg" type="button" aria-label="Avatar 8"></button>
+                <button class="avatar-item" data-src="/assets/images/avatars/avatar9.jpg" type="button" aria-label="Avatar 9"></button>
+            </div>
+
+            <div class="form-actions">
+                <a href="/profile" class="back-btn">Vissza</a>
+            </div>
+
+            <p id="message" class="message" aria-live="polite"></p>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='main/menu/scripts/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/menu/scripts/profile-avatar.js') }}"></script>
+</body>
+</html>
