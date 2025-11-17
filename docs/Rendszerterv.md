@@ -22,7 +22,7 @@
      - Design: Spišáková Antónia, esztétikus és felhasználóbarát megjelenésének kialakítása. Ez magában foglalja a színpaletta, tipográfia és vizuális stílus meghatározását, a kártyák és felületi elemek designját, valamint az animációk és átmenetek tervezését. A designer felelős azért, hogy a játék reszponzív legyen minden eszközön, és hogy intuitív felhasználói élményt nyújtson a játékosoknak.
 
    **Űtemterv:**
-  | Funkció | Feladat | Prioritás | Becslés | Aktuális idő | Eltelt idő| Hátralévő idő |
+   | Funkció | Feladat | Prioritás | Becslés | Aktuális idő | Eltelt idő| Hátralévő idő |
    |-----------|-----------|---|----|----|------|-------|
    Dokumentáció|Követelmény specifikáció| 1 | 4 | 6| 5| 1|
    ||Rendszerterv| 1 | 3 | 8 | 7 | 1|
