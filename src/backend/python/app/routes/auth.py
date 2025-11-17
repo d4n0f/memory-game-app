@@ -167,12 +167,28 @@ def logout_user():
     return jsonify({'success': True, 'message': 'Sikeres kijelentkezés'})
 
 def get_current_user():
-    #Aktuális felhasználó adatainak lekérése
+    #Aktuális felhasználó adatainak lekérése (kiterjesztve profile_picture-re)
     if 'user_id' in session and session.get('is_authenticated'):
+        user_id = session['user_id']
+        profile_picture = None
+        try:
+            conn = get_db_connect()
+            if conn:
+                cur = conn.cursor(dictionary=True)
+                cur.execute('SELECT profile_picture FROM users WHERE id = %s', (user_id,))
+                row = cur.fetchone()
+                if row and 'profile_picture' in row:
+                    profile_picture = row['profile_picture']
+                cur.close()
+                conn.close()
+        except Exception:
+            profile_picture = None
+
         return {
-            'user_id': session['user_id'],
-            'username': session['username'],
-            'player_id': session.get('player_id')
+            'user_id': user_id,
+            'username': session.get('username'),
+            'player_id': session.get('player_id'),
+            'profile_picture': profile_picture
         }
     return None
 
@@ -195,8 +211,9 @@ def update_user():
     new_username = (data.get('username') or '').strip()
     current_password = data.get('current_password')
     new_password = data.get('new_password')
+    new_profile_picture = data.get('profile_picture')
 
-    if not new_username and not new_password:
+    if not new_username and not new_password and new_profile_picture is None:
         return jsonify({'success': False, 'error': 'Nincs változtatandó adat'}), 400
 
     conn = None
@@ -208,8 +225,8 @@ def update_user():
             return jsonify({'success': False, 'error': 'Adatbázis kapcsolat hiba'}), 500
         cursor = conn.cursor(dictionary=True)
 
-        # Aktuális user lekérés
-        cursor.execute('SELECT id, username, password_hash FROM users WHERE id = %s', (user_id,))
+        # Aktuális user lekérés (kiterjesztve profile_picture-re)
+        cursor.execute('SELECT id, username, password_hash, profile_picture FROM users WHERE id = %s', (user_id,))
         user = cursor.fetchone()
         if not user:
             logger.warning(f"User nem található update-nél | user_id: {user_id}")
@@ -247,6 +264,12 @@ def update_user():
             params.append(generate_password_hash(new_password))
             update_fields.append("password: changed")
 
+        # Profilkép módosítása (ha megadva)
+        if new_profile_picture is not None and new_profile_picture != user.get('profile_picture'):
+            updates.append('profile_picture = %s')
+            params.append(new_profile_picture)
+            update_fields.append('profile_picture: changed')
+
         if not updates:
             return jsonify({'success': True, 'message': 'Nincs módosítás'}), 200
 
@@ -261,12 +284,16 @@ def update_user():
             cursor.execute('UPDATE players SET display_name = %s WHERE user_id = %s', (new_username, user_id))
             session['username'] = new_username
 
+        # Frissített profilkép session-ben
+        if new_profile_picture is not None:
+            session['profile_picture'] = new_profile_picture
+
         conn.commit()
 
         logger.info(f"User adatok frissítve | user_id: {user_id} | módosítások: {', '.join(update_fields) if update_fields else 'nincs'}")
 
         return jsonify({'success': True, 'message': 'Felhasználói adatok frissítve',
-                        'user': {'id': user_id, 'username': new_username or user['username']}})
+                'user': {'id': user_id, 'username': new_username or user['username'], 'profile_picture': new_profile_picture or user.get('profile_picture')}})
     except Exception as e:
         logger.error(f"User update hiba: {str(e)} | user_id: {user_id}", exc_info=True)
         if conn and conn.is_connected():
@@ -289,3 +316,7 @@ def registration():
 @auth_bp.route('/profile')
 def profile():
     return render_template('main/menu/profile.html')
+
+@auth_bp.route('/profile/avatar')
+def profile_avatar():
+    return render_template('main/menu/profile-avatar.html')
