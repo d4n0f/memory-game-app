@@ -146,6 +146,67 @@ def init_db():
             ''')
         logger.debug("Scores tábla ellenőrizve/létrehozva")
 
+        # multiplayer_rooms tábla
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS multiplayer_rooms (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                room_code VARCHAR(6) UNIQUE NOT NULL,
+                host_player_id INT NOT NULL,
+                game_mode VARCHAR(50) DEFAULT 'color-hunter-multiplayer',
+                status ENUM('waiting', 'playing', 'finished') DEFAULT 'waiting',
+                max_players INT DEFAULT 6,
+                current_round INT DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                started_at TIMESTAMP NULL,
+                finished_at TIMESTAMP NULL,
+                
+                FOREIGN KEY (host_player_id) REFERENCES players(id) ON DELETE CASCADE,
+                INDEX idx_room_code (room_code),
+                INDEX idx_status (status)
+            ) ENGINE = InnoDB DEFAULT CHARSET={Config.MYSQL_CHARSET} COLLATE={Config.MYSQL_COLLATION};
+        ''')
+        logger.debug("Multiplayer_rooms tábla ellenőrizve/létrehozva")
+
+        # room_players tábla
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS room_players (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                room_id INT NOT NULL,
+                player_id INT NOT NULL,
+                joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_active BOOLEAN DEFAULT TRUE,
+                total_score INT DEFAULT 0,
+                position INT NULL,
+                
+                FOREIGN KEY (room_id) REFERENCES multiplayer_rooms(id) ON DELETE CASCADE,
+                FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE,
+                UNIQUE KEY unique_room_player (room_id, player_id),
+                INDEX idx_room_id (room_id),
+                INDEX idx_player_id (player_id)
+            ) ENGINE = InnoDB DEFAULT CHARSET={Config.MYSQL_CHARSET} COLLATE={Config.MYSQL_COLLATION};
+        ''')
+        logger.debug("Room_players tábla ellenőrizve/létrehozva")
+
+        # round_results tábla
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS round_results (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                room_id INT NOT NULL,
+                round_number INT NOT NULL,
+                player_id INT NOT NULL,
+                is_correct BOOLEAN DEFAULT FALSE,
+                response_time_ms INT NULL,
+                points_earned INT DEFAULT 0,
+                position_in_round INT NULL,
+                
+                FOREIGN KEY (room_id) REFERENCES multiplayer_rooms(id) ON DELETE CASCADE,
+                FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE,
+                INDEX idx_room_round (room_id, round_number),
+                INDEX idx_player_id (player_id)
+            ) ENGINE = InnoDB DEFAULT CHARSET={Config.MYSQL_CHARSET} COLLATE={Config.MYSQL_COLLATION};
+        ''')
+        logger.debug("Round_results tábla ellenőrizve/létrehozva")
+
         connection.commit()
         logger.info("Adatbázis és a táblák sikeresen létrehozva/ellenőrizve!")
 

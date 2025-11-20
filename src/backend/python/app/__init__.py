@@ -8,6 +8,7 @@ from .routes.auth import auth_bp
 from .routes.game import game_bp
 from .routes.scores import scores_bp
 from .routes.static import static_bp
+from .routes.multiplayer import multiplayer_bp, init_socketio
 
 # Logger inicializálás
 from .utils.logger import setup_logger
@@ -26,6 +27,10 @@ def create_app(config_object: type = Config) -> Flask:
     app.register_blueprint(game_bp)
     app.register_blueprint(scores_bp)
     app.register_blueprint(static_bp)
+    app.register_blueprint(multiplayer_bp)
+    
+    # SocketIO inicializálása
+    init_socketio(app)
 
     # Middleware: Request logging
     @app.before_request

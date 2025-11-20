@@ -319,6 +319,10 @@ def game():
 def game2():
     return render_template('game/card-match/card-match.html')
 
+@game_bp.route('/color-hunter-multiplayer')
+def color_hunter_multiplayer():
+    return render_template('game/color-hunter-multiplayer/color-hunter-multiplayer.html')
+
 @game_bp.route('/api/health')
 def health():
     from flask import current_app
