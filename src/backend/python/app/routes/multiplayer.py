@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, render_template, request, jsonify, session
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from ..models.database import get_db_connect
 from ..models.user import get_or_create_player
@@ -644,10 +644,21 @@ def end_round(room_code):
     logger.info(f"Kör vége | room_code: {room_code} | round: {room_state.current_round} | aktív játékosok: {active_count} | pontok: {'; '.join(points_summary) if points_summary else 'nincs'}")
     
     # Eredmények küldése
+    # Prepare per-player response summary to send to clients
+    response_summary = {
+        pid: {
+            'choice': resp.get('choice'),
+            'time_ms': resp.get('time_ms'),
+            'correct': resp.get('correct', False)
+        }
+        for pid, resp in room_state.round_responses.items()
+    }
+
     socketio.emit('round_end', {
         'round_number': room_state.current_round,
         'results': round_results,
-        'leaderboard': get_leaderboard(room_state)
+        'leaderboard': get_leaderboard(room_state),
+        'round_responses': response_summary
     }, room=room_code)
     
     if active_count <= 1:
@@ -764,3 +775,11 @@ def end_game(room_code):
     
     threading.Thread(target=cleanup_room_database, daemon=True).start()
 
+
+@multiplayer_bp.route('/color-hunter/wrong-answer')
+def multiplayer_wrong():
+    return render_template('game/color-hunter/color-hunter-result-wrong.html')
+
+@multiplayer_bp.route('/color-hunter/correct-answer')
+def multiplayer_correct():
+    return render_template('game/color-hunter/color-hunter-result-correct.html')
