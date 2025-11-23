@@ -47,7 +47,8 @@ class RoomState:
     #Szoba állapot osztály
     def __init__(self, room_code, host_id, max_players=6):
         self.room_code = room_code
-        self.host_id = host_id
+        # JAVÍTÁS: host_id biztosan integerre konvertálása
+        self.host_id = int(host_id) if host_id is not None else None
         self.max_players = max_players
         self.players = {}  # {player_id: {'name': str, 'socket_id': str, 'score': int, 'active': bool}}
         self.status = 'waiting'  # waiting, playing, finished
@@ -88,12 +89,41 @@ def init_socketio(app_instance):
 def create_room():
     #Szoba létrehozása
     try:
-        current_user = get_current_user()
-        if not current_user:
-            return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+        # JAVÍTÁS: player_id-t a request body-ból olvassuk, nem a session-ből
+        # Ez lehetővé teszi, hogy különböző ablakokban különböző felhasználók legyenek
+        data = request.get_json() or {}
+        player_id_from_request = data.get('player_id')
         
-        player_id = current_user.get('player_id')
-        username = current_user.get('username', 'Guest')
+        # Ha van a request-ben, akkor azt használjuk
+        if player_id_from_request:
+            player_id = int(player_id_from_request)
+            # Username-t lekérjük az adatbázisból
+            username = 'Guest'
+            conn = get_db_connect()
+            if conn:
+                cursor = conn.cursor(dictionary=True)
+                # Először próbáljuk a players táblából a display_name-t
+                cursor.execute('SELECT display_name, user_id FROM players WHERE id = %s', (player_id,))
+                player_row = cursor.fetchone()
+                if player_row:
+                    username = player_row['display_name'] or 'Guest'
+                    # Ha van user_id, akkor próbáljuk a username-t is
+                    if player_row['user_id']:
+                        cursor.execute('SELECT username FROM users WHERE id = %s', (player_row['user_id'],))
+                        user_row = cursor.fetchone()
+                        if user_row and user_row['username']:
+                            username = user_row['username']
+                cursor.close()
+                conn.close()
+        else:
+            # Fallback: ha nincs a request-ben, akkor próbáljuk a session-ből (backward compatibility)
+            current_user = get_current_user()
+            if not current_user:
+                return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+            player_id = current_user.get('player_id')
+            username = current_user.get('username', 'Guest')
+            if player_id:
+                player_id = int(player_id)
         
         if not player_id:
             return jsonify({'success': False, 'error': 'Nincs player_id'}), 400
@@ -135,6 +165,7 @@ def create_room():
         conn.close()
         
         # In-memory state létrehozása
+        # player_id már integer (a fenti kódban konvertálva)
         active_rooms[room_code] = RoomState(room_code, player_id)
         active_rooms[room_code].players[player_id] = {
             'name': username,
@@ -143,12 +174,13 @@ def create_room():
             'active': True
         }
         
-        logger.info(f"Szoba létrehozva | room_code: {room_code} | host_id: {player_id}")
+        logger.info(f"Szoba létrehozva | room_code: {room_code} | host_id: {player_id} | username: {username} | player_id_from_request: {player_id_from_request}")
         
         return jsonify({
             'success': True,
             'room_code': room_code,
-            'room_id': room_id
+            'room_id': room_id,
+            'host_id': player_id  # JAVÍTÁS: host_id visszaadása a frontend-nek
         })
     except Exception as e:
         logger.error(f"Szoba létrehozási hiba: {e}", exc_info=True)
@@ -159,12 +191,44 @@ def create_room():
 def join_room_api(room_code):
     #Szobához csatlakozás API
     try:
-        current_user = get_current_user()
-        if not current_user:
-            return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+        # JAVÍTÁS: player_id-t a request body-ból olvassuk, nem a session-ből
+        # Ez lehetővé teszi, hogy különböző ablakokban különböző felhasználók legyenek
+        data = request.get_json() or {}
+        player_id_from_request = data.get('player_id')
         
-        player_id = current_user.get('player_id')
-        username = current_user.get('username', 'Guest')
+        # Ha van a request-ben, akkor azt használjuk
+        if player_id_from_request:
+            player_id = int(player_id_from_request)
+            # Username-t lekérjük az adatbázisból
+            username = 'Guest'
+            conn = get_db_connect()
+            if conn:
+                cursor = conn.cursor(dictionary=True)
+                # Először próbáljuk a players táblából a display_name-t
+                cursor.execute('SELECT display_name, user_id FROM players WHERE id = %s', (player_id,))
+                player_row = cursor.fetchone()
+                if player_row:
+                    username = player_row['display_name'] or 'Guest'
+                    # Ha van user_id, akkor próbáljuk a username-t is
+                    if player_row['user_id']:
+                        cursor.execute('SELECT username FROM users WHERE id = %s', (player_row['user_id'],))
+                        user_row = cursor.fetchone()
+                        if user_row and user_row['username']:
+                            username = user_row['username']
+                cursor.close()
+                conn.close()
+        else:
+            # Fallback: ha nincs a request-ben, akkor próbáljuk a session-ből (backward compatibility)
+            current_user = get_current_user()
+            if not current_user:
+                return jsonify({'success': False, 'error': 'Nincs bejelentkezve'}), 401
+            player_id = current_user.get('player_id')
+            username = current_user.get('username', 'Guest')
+            if player_id:
+                player_id = int(player_id)
+        
+        if not player_id:
+            return jsonify({'success': False, 'error': 'Nincs player_id'}), 400
         
         # Szoba ellenőrzése
         conn = get_db_connect()
@@ -214,8 +278,10 @@ def join_room_api(room_code):
         
         # In-memory state frissítése
         if room_code not in active_rooms:
-            active_rooms[room_code] = RoomState(room_code, room['host_player_id'])
+            host_player_id = int(room['host_player_id'])
+            active_rooms[room_code] = RoomState(room_code, host_player_id)
         
+        # player_id már integer (a fenti kódban konvertálva)
         active_rooms[room_code].players[player_id] = {
             'name': username,
             'socket_id': None,
@@ -228,7 +294,8 @@ def join_room_api(room_code):
         return jsonify({
             'success': True,
             'room_id': room['id'],
-            'is_host': room['host_player_id'] == player_id
+            'is_host': room['host_player_id'] == player_id,
+            'host_id': room['host_player_id']  # JAVÍTÁS: host_id visszaadása a frontend-nek
         })
     except Exception as e:
         logger.error(f"Szobához csatlakozási hiba: {e}", exc_info=True)
@@ -338,7 +405,8 @@ def handle_join_room(data):
             'room_code': room_code,
             'players': players_list,
             'is_host': player_id == room_state.host_id,
-            'status': room_state.status
+            'status': room_state.status,
+            'host_id': room_state.host_id  # JAVÍTÁS: host_id küldése a frontend-nek
         })
         
         # Mindenki másnak értesítés
@@ -372,8 +440,20 @@ def handle_start_game(data):
         room_state = active_rooms[room_code]
         player_id = int(player_id)
         
+        # JAVÍTÁS: host_id biztosan integerre konvertálása
+        if room_state.host_id is None:
+            logger.error(f"Start game hiba: host_id None | room_code: {room_code}")
+            emit('error', {'message': 'Szoba host_id hiányzik'})
+            return
+        
+        host_id = int(room_state.host_id)
+
+        logger.info(f"Start game ellenőrzés | room_code: {room_code} | player_id: {player_id} (type: {type(player_id).__name__}) | host_id: {host_id} (type: {type(host_id).__name__}) | egyezik: {player_id == host_id}")
+        
         # Csak a host indíthatja
-        if player_id != room_state.host_id:
+        if player_id != host_id:
+            logger.warning(
+                f"Start game elutasítva | room_code: {room_code} | player_id: {player_id} | host_id: {host_id} | player_id type: {type(player_id).__name__} | host_id type: {type(host_id).__name__}")
             emit('error', {'message': 'Csak a host indíthatja a játékot'})
             return
         
@@ -556,8 +636,9 @@ def end_round(room_code):
         key=lambda x: x[1]['time_ms']
     )
     
-    # Ha mindenki helyesen válaszolt és több mint 1 aktív játékos van, a leglassabb kiesik
-    if len(sorted_players) > 1:
+    # JAVÍTÁS: Ha 4 vagy több játékos helyesen válaszolt, akkor a leglassabb kiesik
+    # (Ha 3 vagy kevesebb van, akkor mindenki kap pontot: 1. = 3, 2. = 2, 3. = 1)
+    if len(sorted_players) > 3:
         # A leglassabb játékos kiesik
         slowest_player_id = sorted_players[-1][0]
         room_state.players[slowest_player_id]['active'] = False
@@ -591,27 +672,31 @@ def end_round(room_code):
     
     round_results = []
     conn = get_db_connect()
+    cursor = None
     
     points_summary = []
-    for position, (player_id, response) in enumerate(sorted_players[:3], 1):
-        points = points_map.get(position, 0)
-        room_state.players[player_id]['score'] += points
-        player_name = room_state.players[player_id]['name']
-        
-        points_summary.append(f"{position}. {player_name} (+{points} pont, {response['time_ms']}ms)")
-        
-        round_results.append({
-            'player_id': player_id,
-            'player_name': player_name,
-            'position': position,
-            'points': points,
-            'time_ms': response['time_ms']
-        })
-        
-        # Adatbázisba mentés
-        if conn:
+    
+    # JAVÍTÁS: Egyetlen cursor használata, commit a ciklus után
+    if conn:
+        try:
             cursor = conn.cursor()
-            try:
+            
+            for position, (player_id, response) in enumerate(sorted_players[:3], 1):
+                points = points_map.get(position, 0)
+                room_state.players[player_id]['score'] += points
+                player_name = room_state.players[player_id]['name']
+                
+                points_summary.append(f"{position}. {player_name} (+{points} pont, {response['time_ms']}ms)")
+                
+                round_results.append({
+                    'player_id': player_id,
+                    'player_name': player_name,
+                    'position': position,
+                    'points': points,
+                    'time_ms': response['time_ms']
+                })
+                
+                # Adatbázisba mentés
                 cursor.execute('''
                     INSERT INTO round_results 
                     (room_id, round_number, player_id, is_correct, response_time_ms, points_earned, position_in_round)
@@ -628,14 +713,19 @@ def end_round(room_code):
                     WHERE room_id = (SELECT id FROM multiplayer_rooms WHERE room_code = %s)
                     AND player_id = %s
                 ''', (room_state.players[player_id]['score'], room_code, player_id))
-            except Exception as e:
-                logger.error(f"Round result mentési hiba: {e}", exc_info=True)
-            finally:
+            
+            # Commit csak akkor, ha minden sikeres volt
+            conn.commit()
+            logger.debug(f"Round results mentve | room_code: {room_code} | round: {room_state.current_round} | {len(round_results)} eredmény")
+        except Exception as e:
+            logger.error(f"Round result mentési hiba: {e}", exc_info=True)
+            if conn:
+                conn.rollback()
+        finally:
+            if cursor:
                 cursor.close()
-    
-    if conn:
-        conn.commit()
-        conn.close()
+            if conn:
+                conn.close()
     
     # Aktív játékosok száma
     active_count = sum(1 for p in room_state.players.values() if p['active'])
