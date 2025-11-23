@@ -1,6 +1,6 @@
 describe('Auth pages', () => {
   it('login page: inputs and link to registration', () => {
-    cy.visit('/login')
+    cy.visit('/')
     cy.get('[data-cy="login-username"]').should('be.visible').type('user1')
     cy.get('[data-cy="login-password"]').should('be.visible').type('pass123')
     cy.get('[data-cy="register-link"]').should('be.visible').click()
