@@ -110,7 +110,7 @@ def init_db():
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 player_id INT NOT NULL,
                 game_mode VARCHAR(50) NOT NULL,
-                difficulty ENUM('easy', 'medium', 'hard') DEFAULT 'easy',
+                difficulty ENUM('easy', 'medium', 'hard','multiplayer') DEFAULT 'easy',
                 start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 end_time TIMESTAMP NULL,
                 total_time INT DEFAULT 0,

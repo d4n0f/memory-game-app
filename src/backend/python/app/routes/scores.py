@@ -17,11 +17,14 @@ def save_scores():
     try:
         data = request.get_json()
         ip_address = request.remote_addr
+        
+        # JAVÍTÁS: Részletes logolás a debug-hoz
+        logger.info(f"Score mentési kérés érkezett | data: {data} | IP: {ip_address}")
 
         # Validáció
         is_valid, error_message = validate_score_data(data)
         if not is_valid:
-            logger.warning(f"Score mentési validációs hiba: {error_message} | IP: {ip_address}")
+            logger.warning(f"Score mentési validációs hiba: {error_message} | data: {data} | IP: {ip_address}")
             return jsonify({'success': False, 'error': error_message}), 400
 
         player_id = int(data['player_id'])
