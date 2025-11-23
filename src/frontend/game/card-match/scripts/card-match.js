@@ -279,10 +279,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const ctx = canvas.getContext('2d');
         const img = ctx.createImageData(width, height);
         // bounds in complex plane
-        const xmin = -1.5/zoom;
-        const xmax = 1.5/zoom;
-        const ymin = -1.0/zoom;
-        const ymax = 1.0/zoom;
+        // Interpret `zoom` as an outward expansion factor: zoom>1 shows a wider area (zoom out)
+        // so multiply the base bounds by zoom instead of dividing.
+        const xmin = -1.5 * zoom;
+        const xmax = 1.5 * zoom;
+        const ymin = -1.0 * zoom;
+        const ymax = 1.0 * zoom;
 
         let p = 0;
         for (let y = 0; y < height; y++) {
