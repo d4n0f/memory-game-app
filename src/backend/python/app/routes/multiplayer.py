@@ -347,23 +347,27 @@ def handle_connect():
     logger.info(f"WebSocket kapcsolat: {request.sid}")
 
 
-def handle_disconnect():
+def handle_disconnect(*args):
     #WebSocket kapcsolat megszakadt
-    logger.info(f"WebSocket kapcsolat megszakadt: {request.sid}")
-    # Játékos eltávolítása a szobákból
-    for room_code, room_state in list(active_rooms.items()):
-        for player_id, player_data in list(room_state.players.items()):
-            if player_data.get('socket_id') == request.sid:
-                leave_room(room_code)
-                del room_state.players[player_id]
-                socketio.emit('player_left', {
-                    'player_id': player_id,
-                    'player_name': player_data['name']
-                }, room=room_code)
-                # Ha üres a szoba, töröljük
-                if not room_state.players:
-                    del active_rooms[room_code]
-                break
+    # JAVÍTÁS: SocketIO disconnect esemény argumentumot ad át, de nem használjuk
+    try:
+        logger.info(f"WebSocket kapcsolat megszakadt: {request.sid if hasattr(request, 'sid') else 'unknown'}")
+        # Játékos eltávolítása a szobákból
+        for room_code, room_state in list(active_rooms.items()):
+            for player_id, player_data in list(room_state.players.items()):
+                if player_data.get('socket_id') == (request.sid if hasattr(request, 'sid') else None):
+                    leave_room(room_code)
+                    del room_state.players[player_id]
+                    socketio.emit('player_left', {
+                        'player_id': player_id,
+                        'player_name': player_data['name']
+                    }, room=room_code)
+                    # Ha üres a szoba, töröljük
+                    if not room_state.players:
+                        del active_rooms[room_code]
+                    break
+    except Exception as e:
+        logger.error(f"Disconnect handler hiba: {e}", exc_info=True)
 
 
 def handle_join_room(data):
@@ -763,6 +767,7 @@ def end_round(room_code):
     
     if active_count <= 1:
         # Játék vége
+        logger.info(f"Játék vége feltétel teljesülve | room_code: {room_code} | active_count: {active_count} | current_round: {room_state.current_round}")
         end_game(room_code)
     else:
         # Következő kör késleltetése
@@ -791,7 +796,10 @@ def get_leaderboard(room_state):
 
 def end_game(room_code):
     #Játék vége
+    logger.info(f"end_game meghívva | room_code: {room_code}")
+    
     if room_code not in active_rooms:
+        logger.warning(f"end_game: Szoba nem található | room_code: {room_code}")
         return
     
     room_state = active_rooms[room_code]
@@ -799,6 +807,7 @@ def end_game(room_code):
     
     # Végső ranglista
     final_leaderboard = get_leaderboard(room_state)
+    logger.info(f"end_game: Végső ranglista | room_code: {room_code} | players: {len(final_leaderboard)} | current_round: {room_state.current_round}")
     
     # Adatbázis frissítése
     conn = get_db_connect()
@@ -820,19 +829,58 @@ def end_game(room_code):
                     AND player_id = %s
                 ''', (position, player_data['score'], room_code, player_data['player_id']))
             
+            # JAVÍTÁS: Automatikus eredmény mentése a scores táblába minden játékosnak
+            from ..models.user import update_player_stats
+            
+            for player_data in final_leaderboard:
+                player_id = player_data['player_id']
+                score = player_data['score']
+                # JAVÍTÁS: rounds_played legalább 1 legyen (ha 0, akkor 1)
+                rounds_played = max(room_state.current_round, 1)
+                
+                logger.info(f"Multiplayer score mentés kezdése | player_id: {player_id} | score: {score} | rounds: {rounds_played} | current_round: {room_state.current_round}")
+                
+                # Score mentése közvetlenül az adatbázisba (körülkerülve a Flask request-et)
+                try:
+                    cursor.execute('''
+                        INSERT INTO game_sessions (player_id, game_mode, difficulty, start_time)
+                        VALUES (%s, %s, %s, %s)
+                    ''', (player_id, 'color-hunter-multiplayer', 'multiplayer', datetime.now()))
+                    game_session_id = cursor.lastrowid
+                    logger.debug(f"Game session létrehozva | game_session_id: {game_session_id} | player_id: {player_id}")
+                    
+                    cursor.execute('''
+                        INSERT INTO scores (game_session_id, player_id, score, game_time, rounds_played)
+                        VALUES (%s, %s, %s, %s, %s)
+                    ''', (game_session_id, player_id, score, 0, rounds_played))
+                    score_id = cursor.lastrowid
+                    logger.debug(f"Score rekord létrehozva | score_id: {score_id} | game_session_id: {game_session_id} | player_id: {player_id} | score: {score} | rounds: {rounds_played}")
+                    
+                    # Player statisztikák frissítése
+                    update_player_stats(player_id, score)
+                    logger.debug(f"Player statisztikák frissítve | player_id: {player_id} | score: {score}")
+                    
+                    logger.info(f"Multiplayer score SIKERESEN mentve | player_id: {player_id} | score: {score} | rounds: {rounds_played} | game_session_id: {game_session_id} | score_id: {score_id}")
+                except Exception as e:
+                    logger.error(f"Multiplayer score mentési hiba | player_id: {player_id} | score: {score} | rounds: {rounds_played} | error: {e}", exc_info=True)
+                    # Ne dobjunk tovább hibát, hogy a többi játékos eredménye is mentésre kerüljön
+            
             conn.commit()
         except Exception as e:
             logger.error(f"Game end adatbázis hiba: {e}", exc_info=True)
+            if conn:
+                conn.rollback()
         finally:
             cursor.close()
             conn.close()
     
     # Eredmények küldése
     socketio.emit('game_end', {
-        'leaderboard': final_leaderboard
+        'leaderboard': final_leaderboard,
+        'round_number': room_state.current_round  # JAVÍTÁS: round_number hozzáadása
     }, room=room_code)
     
-    logger.info(f"Játék vége | room_code: {room_code}")
+    logger.info(f"Játék vége | room_code: {room_code} | rounds: {room_state.current_round} | players: {len(final_leaderboard)}")
     
     # Szoba törlése in-memory-ből 30 másodperc után
     def cleanup_room_memory():

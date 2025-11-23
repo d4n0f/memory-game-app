@@ -238,6 +238,10 @@ function connectSocketIfNeeded() {
         multiplayerMode = true;
         currentTarget = data.target_image;
         optionsForRound = data.options || [];
+        // JAVÍTÁS: currentRoundNumber frissítése a szerver által küldött round_number alapján
+        if (data.round_number !== undefined) {
+            currentRoundNumber = data.round_number;
+        }
         // Hide the lobby and ensure the game board is visible so images render
         try { hideLobby(); } catch (e) { /* ignore */ }
         if (gameBoard) gameBoard.classList.remove('hidden');
@@ -283,6 +287,10 @@ function connectSocketIfNeeded() {
 
     socket.on('round_end', (data) => {
         console.log('round_end', data);
+        // JAVÍTÁS: currentRoundNumber frissítése a szerver által küldött round_number alapján
+        if (data.round_number !== undefined) {
+            currentRoundNumber = data.round_number;
+        }
         // If server sent round_responses, redirect current player to correct/wrong page
         const responses = data.round_responses || null;
         const playerId = (sessionStorage && sessionStorage.getItem('player_id')) || localStorage.getItem('player_id');
@@ -326,35 +334,65 @@ function connectSocketIfNeeded() {
     socket.on('game_end', (data) => {
         console.log('game_end', data);
         const lb = data.leaderboard || [];
+        // JAVÍTÁS: currentRoundNumber frissítése a szerver által küldött round_number alapján
+        if (data.round_number !== undefined) {
+            currentRoundNumber = data.round_number;
+        }
         let msg = 'Játék vége\nRanglista:\n' + lb.map((p, i) => `${i+1}. ${p.name} (${p.score})`).join('\n');
         resultMessage.textContent = msg;
         resultScreen.classList.remove('hidden');
         
         // JAVÍTÁS: Végső eredmény mentése a scores táblába
         const playerId = parseInt(localStorage.getItem('player_id'), 10);
+        console.log('game_end - playerId:', playerId, 'leaderboard:', lb, 'currentRoundNumber:', currentRoundNumber, 'data.round_number:', data.round_number);
+        
         if (playerId) {
             // Keresd meg a játékos pozícióját és pontszámát a ranglistán
-            const myPlayer = lb.find(p => (p.player_id || p.playerId) == playerId);
-            if (myPlayer && myPlayer.score > 0) {
+            // JAVÍTÁS: Típus-egyeztetés biztosítása (mindkét oldalt számként kezeljük)
+            const myPlayer = lb.find(p => {
+                const pid = parseInt(p.player_id || p.playerId || 0, 10);
+                return pid === playerId;
+            });
+            
+            console.log('game_end - myPlayer found:', myPlayer);
+            
+            if (myPlayer) {
+                // JAVÍTÁS: Mentsük az eredményt akkor is, ha a score 0 (a játékos részt vett)
+                const scoreToSave = myPlayer.score || 0;
+                const roundsToSave = currentRoundNumber || 1;
+                
+                console.log('game_end - Saving score:', {
+                    player_id: playerId,
+                    score: scoreToSave,
+                    game_mode: 'color-hunter-multiplayer',
+                    rounds_played: roundsToSave,
+                    difficulty: 'multiplayer'
+                });
+                
                 (async () => {
                     try {
                         const res = await api.postJSON('/api/save', {
                             player_id: playerId,
-                            score: myPlayer.score,
+                            score: scoreToSave,
                             game_mode: 'color-hunter-multiplayer',
-                            rounds_played: currentRoundNumber || 1,
+                            rounds_played: roundsToSave,
                             difficulty: 'multiplayer'
                         });
                         if (!res.ok) {
-                            console.warn('Score mentés sikertelen:', res.json?.error);
+                            console.error('Score mentés sikertelen:', res.json?.error || res.text);
+                            console.error('Response status:', res.status);
                         } else {
-                            console.log('Score sikeresen mentve:', myPlayer.score);
+                            console.log('Score sikeresen mentve:', scoreToSave, 'rounds:', roundsToSave);
                         }
                     } catch (err) {
                         console.error('Save score error', err);
                     }
                 })();
+            } else {
+                console.warn('game_end - Játékos nem található a leaderboardban. playerId:', playerId, 'leaderboard player_ids:', lb.map(p => p.player_id || p.playerId));
             }
+        } else {
+            console.warn('game_end - Nincs player_id a localStorage-ban');
         }
     });
 
@@ -553,7 +591,7 @@ function checkChoice(choice) {
                 await api.postJSON('/api/save', {
                     player_id: parseInt(playerId, 10),
                     score: score,
-                    game_mode: 'color-hunter-singleplayer',
+                    game_mode: 'color-hunter',
                     rounds_played: currentRoundNumber,
                     difficulty: difficulty
                 });
