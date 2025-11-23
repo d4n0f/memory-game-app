@@ -270,7 +270,12 @@ function connectSocketIfNeeded() {
         document.getElementById('target-container').classList.add('hidden');
         choicesContainer.classList.remove('hidden');
         choicesGrid.innerHTML = '';
-        optionsForRound.forEach(img => {
+        optionsForRound.forEach((img, idx) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'choice-card';
+            // Every 2nd option (1-based) should be purple
+            if (((idx + 1) % 2) === 0) wrapper.classList.add('purple');
+
             const el = document.createElement('img');
             el.src = img;
             el.addEventListener('click', () => {
@@ -281,7 +286,8 @@ function connectSocketIfNeeded() {
                 // hide choices while waiting
                 choicesContainer.classList.add('hidden');
             });
-            choicesGrid.appendChild(el);
+            wrapper.appendChild(el);
+            choicesGrid.appendChild(wrapper);
         });
     });
 
@@ -549,10 +555,16 @@ function showChoices() {
 
     choicesGrid.innerHTML = "";
     uniqueOptions.forEach(img => {
+        const idx = uniqueOptions.indexOf(img);
+        const wrapper = document.createElement("div");
+        wrapper.className = 'choice-card';
+        if (((idx + 1) % 2) === 0) wrapper.classList.add('purple');
+
         const el = document.createElement("img");
         el.src = img;
         el.addEventListener("click", () => checkChoice(img));
-        choicesGrid.appendChild(el);
+        wrapper.appendChild(el);
+        choicesGrid.appendChild(wrapper);
     });
 }
 
@@ -577,9 +589,9 @@ function checkChoice(choice) {
     // Singleplayer: show in-page result and allow next rounds
     if (correct) {
         score++;
-        resultMessage.textContent = `Helyes! Pontszám: ${score}`;
+        resultMessage.textContent = `Eltaláltad! Pontszám: ${score}`;
     } else {
-        resultMessage.textContent = `Helytelen. Pontszám: ${score}`;
+        resultMessage.textContent = `Ez most nem talált. Pontszám: ${score}`;
     }
 
     // Optionally save score for singleplayer

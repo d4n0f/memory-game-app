@@ -248,3 +248,30 @@ main {
 .hidden {
     display: none;
 }
+
+
+.choices-grid .choice-card {
+    background: #ffe6f3;
+    padding: 8px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.choices-grid .choice-card.purple {
+    background: #c46aa4; 
+}
+.choices-grid .choice-card img {
+    max-width: 80%;
+    cursor: pointer;
+    border: solid thin transparent;
+    border-radius: 6px;
+    transition: 0.3s;
+    padding: 2em 0;
+    display: block;
+}
+
+.choices-grid .choice-card img:hover {
+    border: solid medium #a14b8c;
+    padding: 3px;
+}
