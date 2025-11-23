@@ -80,7 +80,16 @@ if (generateBtn) generateBtn.addEventListener('click', generateCode);
 async function createRoomOnServer() {
     // call backend to create room (requires logged in user/session)
     try {
-        const res = await api.postJSON('/api/multiplayer/create-room', {});
+        const playerId = parseInt(localStorage.getItem('player_id'), 10);
+        if (!playerId) {
+            alert('Be kell jelentkezned a játékhoz');
+            return;
+        }
+        
+        // JAVÍTÁS: player_id küldése a request body-ban
+        const res = await api.postJSON('/api/multiplayer/create-room', {
+            player_id: playerId
+        });
         if (!res.ok) {
             alert(res.json && res.json.error ? res.json.error : 'Szoba létrehozása sikertelen');
             return;
@@ -88,6 +97,10 @@ async function createRoomOnServer() {
         roomCode = res.json.room_code;
         if (codeDisplay) codeDisplay.textContent = roomCode;
         isHost = true;
+        // JAVÍTÁS: host_id tárolása, hogy később ellenőrizni lehessen
+        if (res.json.host_id) {
+            localStorage.setItem(`room_${roomCode}_host_id`, res.json.host_id.toString());
+        }
         // auto-join via websocket
         await joinRoom(roomCode);
     } catch (err) {
@@ -98,12 +111,25 @@ async function createRoomOnServer() {
 
 async function joinRoomAPI(room) {
     try {
-        const res = await api.postJSON(`/api/multiplayer/join-room/${room}`, {});
+        const playerId = parseInt(localStorage.getItem('player_id'), 10);
+        if (!playerId) {
+            alert('Be kell jelentkezned a játékhoz');
+            return false;
+        }
+        
+        // JAVÍTÁS: player_id küldése a request body-ban
+        const res = await api.postJSON(`/api/multiplayer/join-room/${room}`, {
+            player_id: playerId
+        });
         if (!res.ok) {
             alert(res.json && res.json.error ? res.json.error : 'Szobához csatlakozás sikertelen');
             return false;
         }
         isHost = !!res.json.is_host;
+        // JAVÍTÁS: host_id tárolása
+        if (res.json.host_id) {
+            localStorage.setItem(`room_${room}_host_id`, res.json.host_id.toString());
+        }
         return true;
     } catch (err) {
         console.error('joinRoomAPI error', err);
@@ -128,6 +154,11 @@ function connectSocketIfNeeded() {
         console.log('room_joined', data);
         players = data.players || [];
         currentRoundNumber = data.current_round || 0;
+        isHost = !!data.is_host; // FRISSÍTÉS!
+        // JAVÍTÁS: host_id tárolása, ha van
+        if (data.host_id && roomCode) {
+            localStorage.setItem(`room_${roomCode}_host_id`, data.host_id.toString());
+        }
         updatePlayersUI();
         if (playersRow) playersRow.classList.remove('hidden');
         if (isHost && startGameBtn) startGameBtn.classList.remove('hidden');
@@ -244,10 +275,39 @@ function connectSocketIfNeeded() {
         let msg = 'Játék vége\nRanglista:\n' + lb.map((p, i) => `${i+1}. ${p.name} (${p.score})`).join('\n');
         resultMessage.textContent = msg;
         resultScreen.classList.remove('hidden');
+        
+        // JAVÍTÁS: Végső eredmény mentése a scores táblába
+        const playerId = parseInt(localStorage.getItem('player_id'), 10);
+        if (playerId) {
+            // Keresd meg a játékos pozícióját és pontszámát a ranglistán
+            const myPlayer = lb.find(p => (p.player_id || p.playerId) == playerId);
+            if (myPlayer && myPlayer.score > 0) {
+                (async () => {
+                    try {
+                        const res = await api.postJSON('/api/save', {
+                            player_id: playerId,
+                            score: myPlayer.score,
+                            game_mode: 'color-hunter-multiplayer',
+                            rounds_played: currentRoundNumber || 1,
+                            difficulty: 'multiplayer'
+                        });
+                        if (!res.ok) {
+                            console.warn('Score mentés sikertelen:', res.json?.error);
+                        } else {
+                            console.log('Score sikeresen mentve:', myPlayer.score);
+                        }
+                    } catch (err) {
+                        console.error('Save score error', err);
+                    }
+                })();
+            }
+        }
     });
 
     socket.on('error', (err) => {
         console.error('socket error', err);
+        const message = err.message || err.error || 'Ismeretlen hiba történt';
+        alert(message);
     });
 
     return socket;
@@ -301,9 +361,19 @@ if (joinBtn) joinBtn.addEventListener('click', async () => {
 });
 
 if (startGameBtn) startGameBtn.addEventListener('click', () => {
-    const playerId = localStorage.getItem('player_id');
+    const playerId = parseInt(localStorage.getItem('player_id'), 10);
     if (!playerId) { alert('Be kell jelentkezned'); return; }
     if (!socket) { alert('Nincs socket kapcsolat'); return; }
+    if (!roomCode) { alert('Nincs szoba kód'); return; }
+    
+    // JAVÍTÁS: Ellenőrizzük, hogy a jelenlegi player_id megegyezik-e a host_id-val
+    const storedHostId = localStorage.getItem(`room_${roomCode}_host_id`);
+    if (storedHostId && parseInt(storedHostId, 10) !== playerId) {
+        alert('Csak a host indíthatja a játékot!');
+        console.warn(`Player ID mismatch: current=${playerId}, host=${storedHostId}`);
+        return;
+    }
+    
     socket.emit('start_game', { room_code: roomCode, player_id: playerId });
 });
 
