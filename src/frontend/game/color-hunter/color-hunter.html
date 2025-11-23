@@ -11,6 +11,7 @@
 <body>
     <header>
         <h1>Színvadászat</h1>
+        
     </header>
     <main>
         <section id="lobby" class="lobby">
@@ -43,6 +44,8 @@
                 </div>
                 <button id="start-game" class="lobby-btn hidden">Játék indítása</button>
             </div>
+
+            <a id="back-to-menu" class="back-btn" href="/menu">Vissza a menübe</a>
         </section>
         <section id="game-board">
             <div id="target-container">
@@ -63,9 +66,10 @@
             <button id="next-round">Következő kör</button>
             <button id="menu-btn" type="button">Vissza a menübe</button>
         </section>
+        
     </main>
     <footer>
-
+        
     </footer>
 
     <!-- Socket.IO client (CDN fallback because server-served script returned 400) -->
