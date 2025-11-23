@@ -482,13 +482,35 @@ function startRound() {
 function showChoices() {
     document.getElementById("target-container").classList.add("hidden");
     choicesContainer.classList.remove("hidden");
+    // Build choices ensuring uniqueness: include currentTarget plus 3 distinct other images
+    const others = images.filter(img => img !== currentTarget);
+    // Shuffle others
+    for (let i = others.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [others[i], others[j]] = [others[j], others[i]];
+    }
+    const take = Math.min(3, others.length);
+    const options = [currentTarget, ...others.slice(0, take)];
 
-    const shuffled = [...images].sort(() => 0.5 - Math.random());
-    const options = [currentTarget, ...shuffled.slice(0, 3)];
-    const finalOptions = options.sort(() => 0.5 - Math.random());
+    // If not enough distinct images available (edge case), fill with currentTarget only once
+    // and avoid duplicates in options
+    const uniqueOptions = [];
+    const seen = new Set();
+    for (const o of options) {
+        if (!seen.has(o)) {
+            uniqueOptions.push(o);
+            seen.add(o);
+        }
+    }
+
+    // Shuffle final options
+    for (let i = uniqueOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [uniqueOptions[i], uniqueOptions[j]] = [uniqueOptions[j], uniqueOptions[i]];
+    }
 
     choicesGrid.innerHTML = "";
-    finalOptions.forEach(img => {
+    uniqueOptions.forEach(img => {
         const el = document.createElement("img");
         el.src = img;
         el.addEventListener("click", () => checkChoice(img));
