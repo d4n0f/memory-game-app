@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: 'color-hunter', label: 'Színvadász', img: '../../assets/images/nyuszi.png' },
         { id: 'card-match', label: 'Kártyapárosító', img: '../../assets/images/kartyak.png' },
         // Új játékmód: Fraktál (egyszerű, plain képek - később generált fraktálok lesznek)
-        { id: 'fractal', label: 'Fraktál', img: '../../assets/images/color-match/elulso-kep1.jpg' }
+        { id: 'fractal', label: 'Fraktál', img: '../../assets/images/fraktal-kep.png' }
     ];
 
     if (modeRow && modeRow.children.length === 0) {
