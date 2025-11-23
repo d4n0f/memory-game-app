@@ -14,8 +14,14 @@
     </header>
     <main>
         <section id="lobby" class="lobby">
-            <h2>Hozz létre saját játékszobát, vagy add meg a belépési kódot</h2>
+            <h2>Válaszd a játék módot</h2>
+            <div id="mode-select" class="mode-select">
+                <button id="mode-single" class="mode-btn active">Gyakorlás</button>
+                <button id="mode-multi" class="mode-btn">Párbaj</button>
+            </div>
 
+            <h3 id="mode-desc">Gyakorló mód: gyakorolj magadban, játssz több kört egymás után, nincs szobagenerálás.</h3>
+            <h3 id="mode-desc2"></h3>
             <div class="lobby-row">
                 <button id="generate-code" class="lobby-btn">Kód generálása</button>
                 <div id="code-display" class="code-display">XXXXX</div>
@@ -28,6 +34,7 @@
 
             <div class="lobby-row center">
                 <button id="join-btn" class="enter-btn">Belépés</button>
+                <button id="start-single" class="enter-btn hidden">Játék indítása</button>
             </div>
 
             <div class="lobby-row players-row hidden" id="players-row">

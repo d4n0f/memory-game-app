@@ -40,6 +40,10 @@ const generateBtn = document.getElementById('generate-code');
 const codeDisplay = document.getElementById('code-display');
 const joinInput = document.getElementById('join-code');
 const joinBtn = document.getElementById('join-btn');
+const modeSingleBtn = document.getElementById('mode-single');
+const modeMultiBtn = document.getElementById('mode-multi');
+const modeDesc = document.getElementById('mode-desc');
+const startSingleBtn = document.getElementById('start-single');
 
 let roomCode = '';
 let socket = null;
@@ -76,6 +80,56 @@ function generateCode() {
 }
 
 if (generateBtn) generateBtn.addEventListener('click', generateCode);
+
+// Mode selection handlers
+function setModeSingle() {
+    multiplayerMode = false;
+    if (modeSingleBtn) modeSingleBtn.classList.add('active');
+    if (modeMultiBtn) modeMultiBtn.classList.remove('active');
+    if (modeDesc) modeDesc.textContent = 'Gyakorló mód: gyakorolj magadban, játssz több kört egymás után, nincs szobagenerálás.';
+    if (modeDesc2) modeDesc2.textContent = '';
+    // hide multiplayer controls
+    if (generateBtn) generateBtn.classList.add('hidden');
+    if (joinInput) joinInput.classList.add('hidden');
+    if (codeDisplay) codeDisplay.classList.add('hidden');
+    const joinLabel = document.querySelector('label[for="join-code"]');
+    if (joinLabel) joinLabel.classList.add('hidden');
+    if (joinBtn) joinBtn.classList.add('hidden');
+    if (startSingleBtn) startSingleBtn.classList.remove('hidden');
+    if (playersRow) playersRow.classList.add('hidden');
+}
+
+const modeDesc2 = document.getElementById('mode-desc2');
+
+function setModeMulti() {
+    multiplayerMode = true;
+    if (modeMultiBtn) modeMultiBtn.classList.add('active');
+    if (modeSingleBtn) modeSingleBtn.classList.remove('active');
+    if (modeDesc) modeDesc.textContent = 'Párbaj mód: Hozz létre saját játékszobát, vagy add meg a belépési kódot és párbajozz barátaid ellen!';
+    if (modeDesc2) modeDesc2.textContent = 'Fontos: Párbaj módban fix 5 mp-ed lesz a kép megtekintésére. Siess és válaszolj gyorsabban, mint barátaid, hogy TE kapd a legtöbb pontot!';
+    // show multiplayer controls
+    if (generateBtn) generateBtn.classList.remove('hidden');
+    if (joinInput) joinInput.classList.remove('hidden');
+    if (codeDisplay) codeDisplay.classList.remove('hidden');
+    const joinLabel = document.querySelector('label[for="join-code"]');
+    if (joinLabel) joinLabel.classList.remove('hidden');
+    if (joinBtn) joinBtn.classList.remove('hidden');
+    if (startSingleBtn) startSingleBtn.classList.add('hidden');
+    // playersRow will be managed by socket events
+}
+
+if (modeSingleBtn) modeSingleBtn.addEventListener('click', setModeSingle);
+if (modeMultiBtn) modeMultiBtn.addEventListener('click', setModeMulti);
+
+// Initialize mode according to the HTML default (fallback to multiplayer)
+if (modeMultiBtn && modeMultiBtn.classList.contains('active')) {
+    setModeMulti();
+} else if (modeSingleBtn && modeSingleBtn.classList.contains('active')) {
+    setModeSingle();
+} else {
+    // default to multiplayer
+    setModeMulti();
+}
 
 async function createRoomOnServer() {
     // call backend to create room (requires logged in user/session)
@@ -377,6 +431,20 @@ if (startGameBtn) startGameBtn.addEventListener('click', () => {
     socket.emit('start_game', { room_code: roomCode, player_id: playerId });
 });
 
+// Start singleplayer: start local rounds repeatedly
+if (startSingleBtn) startSingleBtn.addEventListener('click', () => {
+    // ensure singleplayer mode
+    setModeSingle();
+    // hide lobby and show game board
+    try { hideLobby(); } catch (e) {}
+    if (gameBoard) gameBoard.classList.remove('hidden');
+    // initialize score and round counter
+    score = 0;
+    currentRoundNumber = 0;
+    // start first round
+    startRound();
+});
+
 showLobby();
 
 function startRound() {
@@ -384,6 +452,7 @@ function startRound() {
     choicesContainer.classList.add("hidden");
     resultScreen.classList.add("hidden");
 
+    currentRoundNumber = (currentRoundNumber || 0) + 1;
     currentTarget = images[Math.floor(Math.random() * images.length)];
     targetImage.src = currentTarget;
 
@@ -431,38 +500,45 @@ function checkChoice(choice) {
     choicesContainer.classList.add("hidden");
     resultScreen.classList.remove("hidden");
 
-    let correct = false;
-    if (choice === currentTarget) {
-        score++;
-        correct = true;
-        // redirect to server route for correct answer
-        window.location.href = '/color-hunter/correct-answer';
-        return;
-    } else {
-        // redirect to server route for wrong answer
-        window.location.href = '/color-hunter/wrong-answer';
-        return;
+    const correct = (choice === currentTarget);
+
+    if (multiplayerMode) {
+        // multiplayer: let server handle results (existing behavior)
+        if (correct) {
+            score++;
+            window.location.href = '/color-hunter/correct-answer';
+            return;
+        } else {
+            window.location.href = '/color-hunter/wrong-answer';
+            return;
+        }
     }
 
+    // Singleplayer: show in-page result and allow next rounds
     if (correct) {
-        const playerId = localStorage.getItem('player_id');
-        const difficulty = localStorage.getItem('difficulty') || 'easy';
-        if (playerId) {
-                (async () => {
-                    try {
-                        const res = await api.postJSON('/api/save', {
-                            player_id: playerId,
-                            score: score,
-                            game_mode: 'color-hunter',
-                            rounds_played: 1,
-                            difficulty: difficulty
-                        });
-                        // optional: check res.ok/res.json for errors
-                    } catch (err) {
-                        console.error('Save score error', err);
-                    }
-                })();
-        }
+        score++;
+        resultMessage.textContent = `Helyes! Pontszám: ${score}`;
+    } else {
+        resultMessage.textContent = `Helytelen. Pontszám: ${score}`;
+    }
+
+    // Optionally save score for singleplayer
+    const playerId = localStorage.getItem('player_id');
+    const difficulty = localStorage.getItem('difficulty') || 'easy';
+    if (playerId) {
+        (async () => {
+            try {
+                await api.postJSON('/api/save', {
+                    player_id: parseInt(playerId, 10),
+                    score: score,
+                    game_mode: 'color-hunter-singleplayer',
+                    rounds_played: currentRoundNumber,
+                    difficulty: difficulty
+                });
+            } catch (err) {
+                console.error('Save score error', err);
+            }
+        })();
     }
 }
 

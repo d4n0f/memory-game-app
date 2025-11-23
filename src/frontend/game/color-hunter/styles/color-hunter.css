@@ -158,6 +158,17 @@ main {
     .label-input, .code-display { width: 100%; text-align: center; }
 }
 
+.mode-btn {
+    background: #fff;
+    color: #8f2b5a;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.12);
+}
+
 /* players list */
 .players-row { margin-top: 1rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between; }
 .players-list { display:flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
