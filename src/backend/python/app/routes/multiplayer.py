@@ -58,6 +58,7 @@ class RoomState:
         self.round_responses = {}  # {player_id: {'choice': str, 'time_ms': int, 'correct': bool}}
         self.round_finished = False
         self.round_timer_thread = None
+        self.expected_respondents = set()  # player_ids expected to answer this round (snapshot at round start)
 
 
 def generate_room_code():
@@ -465,7 +466,6 @@ def handle_start_game(data):
         # Szoba státusz frissítése
         room_state.status = 'playing'
         room_state.current_round = 1
-        
         # Adatbázis frissítése
         conn = get_db_connect()
         if conn:
@@ -504,6 +504,10 @@ def start_round(room_code):
     room_state.current_target_image = target_image
     room_state.round_responses = {}
     room_state.round_finished = False
+    # Snapshot expected respondents at the start of the round
+    room_state.expected_respondents = set(
+        [pid for pid, pdata in room_state.players.items() if pdata.get('active')]
+    )
     room_state.round_start_time = time.time()
     
     # Választási lehetőségek generálása
@@ -601,11 +605,15 @@ def handle_player_answer(data):
                 cursor.close()
                 conn.close()
         
-        # Mindenki válaszolt?
-        active_players = [pid for pid, pdata in room_state.players.items() if pdata['active']]
-        if len(room_state.round_responses) >= len(active_players):
+        # Mindenki válaszolt? -> use snapshot of expected respondents
+        expected = set(pid for pid in room_state.expected_respondents if pid in room_state.players)
+        if not expected:
+            # fallback: current active players
+            expected = set(pid for pid, pdata in room_state.players.items() if pdata.get('active'))
+
+        if len(room_state.round_responses) >= len(expected):
             # Mindenki válaszolt, azonnal vége a körnek
-            logger.debug(f"Minden játékos válaszolt, kör vége | room_code: {room_code} | round: {room_state.current_round} | válaszok: {len(room_state.round_responses)}")
+            logger.debug(f"Minden játékos válaszolt, kör vége | room_code: {room_code} | round: {room_state.current_round} | válaszok: {len(room_state.round_responses)} | expected: {len(expected)}")
             end_round(room_code)
         
     except Exception as e:
@@ -623,6 +631,8 @@ def end_round(room_code):
         return
     
     room_state.round_finished = True
+    # Clear expected respondents snapshot for this round
+    room_state.expected_respondents = set()
     
     # Aktív játékosok (akik helyesen válaszoltak)
     active_responses = {
