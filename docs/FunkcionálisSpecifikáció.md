@@ -137,7 +137,6 @@
 
  - **Testreszabhatóság**: A felhasználók széles körű testreszabási lehetőségeket kapnak (profilkép, felhasználónév módosítása), ami növeli a személyes kapcsolatot a játékkal.
 
- - **Vendég mód támogatás**: A regisztráció nélküli játék lehetősége, amely lehetővé teszi, hogy a felhasználók először kipróbálják a játékot, mielőtt regisztrálnának.
 
  - **Többjátékos korlát**: A multiplayer módban maximum 6 játékos játszhat egyidejűleg egy szobában.
 
