@@ -185,30 +185,30 @@
        - Jelszó védelme csak te férhetsz hozzá a fiókodhoz
        - Jogod van a törléshez - bármikor kérheted adataid törlését
 
-       - **Menü-hierarchiák:**
-        - BEJELENTKEZÉS
-          - Bejelentkezés
-        - REGISZTRÁCIÓ
-          - Regisztráció
-        - MAIN MENÜ
-        - PROFIL SZERKESZTÉS
-          - Profil szerkesztés
-          - Avatar választó
-        - EREDMÉNY MEGTEKINTÉSE
-          - Saját scoreboard
-          - Globális scoreboard
-          - Nehézség kiválasztása
-          - Játékmód kiválasztása
-        - SZÍNVADÁSZ (Color Hunter)
-          - Játék játszása
-        - KÁRTYAPÁROSÍTÓ (Card Match)
-          - Játék játszása
-        - FRAKTÁL
-          - Játék játszása
-        - MULTIPLAYER
-          - Szoba létrehozása
-          - Szobához csatlakozás
-          - Valós idejű játékmenet
+    - **Menü-hierarchiák:**
+      - BEJELENTKEZÉS
+        - Bejelentkezés
+      - REGISZTRÁCIÓ
+        - Regisztráció
+      - MAIN MENÜ
+      - PROFIL SZERKESZTÉS
+        - Profil szerkesztés
+        - Avatar választó
+      - EREDMÉNY MEGTEKINTÉSE
+        - Saját scoreboard
+        - Globális scoreboard
+        - Nehézség kiválasztása
+        - Játékmód kiválasztása
+      - SZÍNVADÁSZ (Color Hunter)
+        - Játék játszása
+      - KÁRTYAPÁROSÍTÓ (Card Match)
+        - Játék játszása
+      - FRAKTÁL
+        - Játék játszása
+      - MULTIPLAYER
+        - Szoba létrehozása
+        - Szobához csatlakozás
+        - Valós idejű játékmenet
 6. ## Fizikai környezet
   - Az alkalmazás csak webes platformra készül.
   - Backend valósítja meg a frontend és adatbázis kapcsolatot.
