@@ -181,7 +181,7 @@
 
 ### Alapvető folyamat:
 
-1. **Regisztráció és bejelentkezés**: A játékos a webalkalmazáson keresztül regisztrálhat vagy bejelentkezhet, illetve vendégként is játszhat. A web service validálja és tárolja a felhasználói adatokat.
+1. **Regisztráció és bejelentkezés**: A játékos a webalkalmazáson keresztül regisztrálhat vagy bejelentkezhet. A web service validálja és tárolja a felhasználói adatokat.
 
 2. **Játékmód választás**: Bejelentkezés után a játékos kiválaszthatja a kívánt játékmódot (Card Match, Color Hunter, Fraktál mód) és nehézségi szintet (Easy, Medium, Hard).
 
