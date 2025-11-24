@@ -292,7 +292,7 @@
 
    A játék logika három játékmódot tartalmaz: a színvadász időzítő alapú memória játék, ahol a célkép megjelenik időzítővel (nehézségtől függően: easy 10 másodperc, medium 5 másodperc, hard 3 másodperc), majd választási lehetőségek jelennek meg (4 kép közül választás), és helyes válasz esetén +1 pont jár. A kártyapárosító memória játék kártyapárosítással, ahol kártyák fordíthatók animációval, párosítási logika működik (2 kártya egyidejűleg nyitva), lépésszám számolás történik, és pontszámítás a párok száma alapján (nehézségtől függően: easy 3 pár, medium 4 pár, hard 6 pár). A fraktál játékmód a kártyapárosító játék egy speciális változata, ahol a kártyák előlapján dinamikusan generált fraktál képek jelennek meg. Minden pár két, egymáshoz nagyon hasonló fraktálvariánsból áll, a kártyák forgathatók animációval, a párosítási logika (egyszerre legfeljebb 2 nyitott kártya) ugyanúgy működik, a rendszer lépésszámot számol, és a pontszámítás a megtalált párok száma alapján történik (nehézségtől függően: easy 3 pár, medium 4 pár, hard 6 pár). Mindhárom játékmódban az eredmény mentése backend-re történik játék végén.
 
-  A multiplayer játékmenet kezelése a következő komponensekből áll:
+   A multiplayer játékmenet kezelése a következő komponensekből áll:
    
    A multiplayer rendszer Flask-SocketIO-t használ a valós idejű kommunikációhoz. A SocketIO inicializálása az alkalmazás Factory Pattern inicializálásakor történik, és event handler-eket regisztrál a következő eseményekhez: connect (kapcsolat létrejött), disconnect (kapcsolat megszakadt), join_room (szobához csatlakozás), start_game (játék indítása, csak host), player_answer (játékos válasza).
    
