@@ -1,0 +1,11 @@
+{
+  "name": "memory-game-app",
+  "version": "1.0.0",
+  "devDependencies": {
+    "cypress": "^15.5.0"
+  },
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  }
+}

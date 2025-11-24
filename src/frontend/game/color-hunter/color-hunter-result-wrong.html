@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Színvadászat — Helytelen</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Josefin+Slab:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Josefin Slab', serif;
+            background: #e7a3a6;
+            color: #7b1f1f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.28);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            width: 640px;
+            max-width: 90%
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0 0 0.5rem
+        }
+
+        h2 {
+            margin: 0 0 1rem;
+            font-weight: 400
+        }
+
+        .list {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem
+        }
+
+        .player {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            margin: 0.4rem 0
+        }
+
+        .player .name {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.6rem 1.6rem;
+            border-radius: 12px;
+            background: #fff;
+            color: #7b1f1f;
+            text-decoration: none;
+            font-family: 'Josefin Sans', sans-serif
+        }
+    </style>
+</head>
+
+<body>
+    <div class="panel">
+        <h1>☹️ Sajnálom! ☹️</h1>
+        <h2>Helytelen válasz</h2>
+
+        <div class="list" id="result-players-list"></div>
+
+        <a class="btn" href="/color-hunter">Vissza a játékhoz</a>
+
+        <script src="{{ url_for('static', filename='game/color-hunter/scripts/color-hunter-result.js') }}"></script>
+    </div>
+</body>
+
+</html>

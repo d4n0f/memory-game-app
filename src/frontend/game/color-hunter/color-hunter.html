@@ -6,21 +6,56 @@
     <meta name="description" content="Figyeld meg a képet és színeit 5 másodpercig, majd válaszd ki a nyolc kép közül azt, amelyik pontosan megegyezik vele.">
     <title>Memória Mánia | Színvadászat</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='game/color-hunter/styles/color-hunter.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
         <h1>Színvadászat</h1>
+        
     </header>
     <main>
+        <section id="lobby" class="lobby">
+            <h2>Válaszd a játék módot</h2>
+            <div id="mode-select" class="mode-select">
+                <button id="mode-single" class="mode-btn active">Gyakorlás</button>
+                <button id="mode-multi" class="mode-btn">Párbaj</button>
+            </div>
+
+            <h3 id="mode-desc">Gyakorló mód: gyakorolj magadban, játssz több kört egymás után, nincs szobagenerálás.</h3>
+            <h3 id="mode-desc2"></h3>
+            <div class="lobby-row">
+                <button id="generate-code" class="lobby-btn">Kód generálása</button>
+                <div id="code-display" class="code-display">XXXXX</div>
+            </div>
+
+            <div class="lobby-row">
+                <label for="join-code" class="label-input">Belépési kód megadása</label>
+                <input id="join-code" class="lobby-input" type="text" placeholder="">
+            </div>
+
+            <div class="lobby-row center">
+                <button id="join-btn" class="enter-btn">Belépés</button>
+                <button id="start-single" class="enter-btn hidden">Játék indítása</button>
+            </div>
+
+            <div class="lobby-row players-row hidden" id="players-row">
+                <div class="players-list" id="players-list">
+                    <!-- player items will be injected here -->
+                </div>
+                <button id="start-game" class="lobby-btn hidden">Játék indítása</button>
+            </div>
+
+            <a id="back-to-menu" class="back-btn" href="/menu">Vissza a menübe</a>
+        </section>
         <section id="game-board">
             <div id="target-container">
                 <h2>Emlékezz erre a képre!</h2>
                 <img id="target-image" src="" alt="Megjegyzendő kép">
-                <p id="timer">Hátralévő idő: </p>
+                <span class="sans-text"><p id="timer">Hátralévő idő: </p></span>
             </div>
 
             <div id="choices-container" class="hidden">
-                <h2>Válaszd ki az előbb megjelenített képet:</h2>
+                <h2>Melyik képet láttad?</h2>
                 <div class="choices-grid" id="choices-grid">
 
                 </div>
@@ -31,11 +66,15 @@
             <button id="next-round">Következő kör</button>
             <button id="menu-btn" type="button">Vissza a menübe</button>
         </section>
+        
     </main>
     <footer>
-
+        
     </footer>
 
+    <!-- Socket.IO client (CDN fallback because server-served script returned 400) -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='main/menu/scripts/api.js') }}"></script>
     <script src="{{ url_for('static', filename='game/color-hunter/scripts/color-hunter.js') }}"></script>
 </body>
 </html>

@@ -1,6 +1,21 @@
-.env
+**/.env
 .DS_Store
 Thumbs.db
 *.log
 .vscode/
 .idea/
+
+# Node / Cypress
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# Env / secrets
+.env
+.env.* 
+cypress.env.json
+
+# Cypress outputs
+cypress/videos/
+cypress/screenshots/
+cypress/results/

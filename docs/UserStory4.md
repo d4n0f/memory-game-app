@@ -1,0 +1,1 @@
+Emlék Misi miután rákattintott a bejelentkezés gombra a felhasználói felület küldött egy kérést a backendnek, ahol megtörtént az ellenőrzés az adatok helyességéről és válaszként beengedte Misit a játékba.

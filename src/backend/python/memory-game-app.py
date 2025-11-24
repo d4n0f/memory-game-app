@@ -7,14 +7,12 @@ import os
 
 
 load_dotenv()  #.env fájl betöltése
-app=Flask(__name__ )
+app = Flask(__name__,
+    static_folder=os.path.join(os.path.dirname(__file__), '../../frontend'),
+    template_folder=os.path.join(os.path.dirname(__file__), '../../frontend')
+)
 
-BASE_DIR = os.path.dirname(os.path.abspath('..'))
-FRONTEND_DIR = os.path.join(BASE_DIR, os.getenv('FRONTEND_PATH', 'frontend'))
-
-app.static_folder = FRONTEND_DIR
-app.template_folder = FRONTEND_DIR
-
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '../../frontend')
 #Adatbázis konfiguráció inicializálása
 db_config = {
     'host': os.getenv('MYSQL_HOST', 'localhost'),

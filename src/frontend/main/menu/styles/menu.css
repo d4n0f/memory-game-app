@@ -204,3 +204,52 @@ main {
 .menu-title {
     text-align: center;
 }
+
+#scoreboard-container {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    z-index: 10;
+}
+.scoreboard {
+    background: #f5e1c3;
+    border: 2.5px solid #222;
+    border-radius: 12px;
+    box-shadow: 2px 2px 0 #888;
+    padding: 1rem 1.2rem;
+    min-width: 260px;
+    max-width: 320px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
+}
+.scoreboard h2 {
+    font-size: 1.3rem;
+    font-family: inherit;
+    font-weight: bold;
+    margin: 0 0 0.7rem 0;
+    text-align: left;
+    color: #222;
+    letter-spacing: 1px;
+}
+#scoreboard-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+#scoreboard-table th, #scoreboard-table td {
+    border-bottom: 2px solid #d2b48c;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    font-size: 1.05rem;
+}
+#scoreboard-table th {
+    background: #f5e1c3;
+    color: #222;
+    font-weight: bold;
+    border-bottom: 2.5px solid #222;
+}
+#scoreboard-table tr:last-child td {
+    border-bottom: none;
+}
+#scoreboard-table tbody tr {
+    background: #f5e1c3;
+}

@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #FFC9E6;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.login-title {
+    font-size: 4rem;
+    color: #A21C64;
+    font-family: 'Josefin Slab', serif;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    letter-spacing: 2px;
+}
+.login-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 4px 4px 12px #e1b6d6;
+    padding: 2.5rem 2.2rem 1.2rem 2.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 300px;
+    position: relative;
+}
+.login-avatar {
+    width: 80px;
+    height: 80px;
+    background: #f9cbe7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+}
+.login-avatar svg {
+    width: 48px;
+    height: 48px;
+    fill: #c97bb7;
+}
+.login-input {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: #f9cbe7;
+    margin-bottom: 1.1rem;
+    box-shadow: 2px 2px 0 #e1b6d6;
+    font-family: 'Josefin Sans', sans-serif;
+    text-align: center;
+}
+
+.login-btn {
+    width: 80%;
+    font-size: 1.3rem;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: #f96eb881;
+    color: #A21C64;
+    font-weight: bold;
+    box-shadow: 2px 2px 0 #b56ea5;
+    margin-bottom: 0.7rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Josefin Sans', sans-serif;
+}
+.login-btn:hover {
+    background: #c97bb7;
+    color: #fff;
+}
+.register-link {
+    color: #A21C64;
+    font-size: 1rem;
+    text-align: right;
+    text-decoration: underline;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    font-family: 'Josefin Slab', serif;
+}
+
+.register-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 4px 4px 12px #e1b6d6;
+    padding: 2.5rem 2.2rem 1.2rem 2.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 370px;
+    position: relative;
+}
+.register-title {
+    font-size: 2.2rem;
+    color: #A21C64;
+    font-family: 'Josefin Slab', serif;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.register-divider {
+    width: 90%;
+    height: 2px;
+    background: #A21C64;
+    margin: 0.2rem auto 1.2rem auto;
+    border-radius: 2px;
+}
+.register-label {
+    font-family: 'Josefin Sans', serif;
+    color: #A21C64;
+    font-size: 1.15rem;
+    margin-bottom: 0.2rem;
+    margin-top: 0.7rem;
+    text-align: left;
+    width: 100%;
+}
+.register-input {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: #f9cbe7;
+    margin-bottom: 0.7rem;
+    box-shadow: 2px 2px 0 #e1b6d6;
+    font-family: 'Josefin Sans', sans-serif;
+    text-align: center;
+}
+.register-btn {
+    width: 75%;
+    font-size: 1.3rem;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: #f96eb881;
+    color: #A21C64;
+    font-weight: bold;
+    box-shadow: 2px 2px 0 #b56ea5;
+    margin-top: 1.2rem;
+    margin-bottom: 0.7rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Josefin Sans', sans-serif;
+}
+.register-btn:hover {
+    background: #c97bb7;
+    color: #fff;
+}
+.register-link {
+    color: #A21C64;
+    font-size: 1rem;
+    text-align: right;
+    text-decoration: underline;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    font-family: 'Josefin Slab', serif;
+}

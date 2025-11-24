@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Color-match képek: előlapok és hátlap
     const allCardFrontImages = [
         "../../assets/images/color-match/elulso-kep1.jpg",
         "../../assets/images/color-match/elulso-kep2.jpg",
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let score = 0;
     let moves = 0;
 
-    // Get difficulty from localStorage (set in gamemode-selector.js)
     function getDifficulty() {
         return localStorage.getItem('difficulty') || 'easy';
     }
@@ -37,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initGame();
 
     function initGame() {
-        // reset state
+        // reset
         board.innerHTML = "";
         firstCard = null;
         secondCard = null;
@@ -47,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateUI();
         resultScreen.classList.add("hidden");
 
-        // Determine board size and images based on difficulty
+        // Nehézség alapján tábla méret és képek meghatározása
         let difficulty = getDifficulty();
         let pairs = 0;
         let selectedImages = [];
@@ -67,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             board.style.gridTemplateColumns = 'repeat(4, 1fr)';
             board.style.gridTemplateRows = 'repeat(3, 1fr)';
         } else {
-            // fallback
+            // alapértelmezett
             pairs = 3;
             selectedImages = allCardFrontImages.slice(0, 3);
             board.style.gridTemplateColumns = 'repeat(3, 1fr)';
@@ -75,13 +73,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         totalPairs = pairs;
 
-        // párok duplikálása, keverés
-        const deck = shuffle([...selectedImages, ...selectedImages]);
+        // párok előállítása: vagy statikus képekből, vagy fraktál-módban generált képek
+        if (isFractalMode()) {
+            // generate fractal pairs (each pair has same id but slightly different visualizations)
+            const size = getCardImageSize();
+            // generatePairs returns an array of {src, id} entries (2 per pair)
+            const fractalEntries = generateFractalPairs(pairs, size.width, size.height);
+            const deck = shuffle(fractalEntries);
+            deck.forEach((entry, idx) => {
+                const card = createCard(entry.src, entry.id);
+                board.appendChild(card);
+            });
+        } else {
+            // párok duplikálása, keverés
+            const deck = shuffle([...selectedImages, ...selectedImages]);
 
-        deck.forEach((src, idx) => {
-            const card = createCard(src, idx);
-            board.appendChild(card);
-        });
+            deck.forEach((src, idx) => {
+                const card = createCard(src, idx);
+                board.appendChild(card);
+            });
+        }
     }
 
 
@@ -142,6 +153,27 @@ document.addEventListener("DOMContentLoaded", () => {
         finalScoreEl.textContent = score;
         resultMessage.textContent = `Megtaláltad az összes párt ${moves} lépésből!`;
         resultScreen.classList.remove("hidden");
+        const gameMode = isFractalMode() ? 'fractal' : 'card-match';
+        // Eredmény mentése backendre
+        const playerId = localStorage.getItem('player_id');
+        const difficulty = localStorage.getItem('difficulty') || 'easy';
+        if (playerId) {
+            (async () => {
+                try {
+                    const res = await api.postJSON('/api/save', {
+                        player_id: playerId,
+                        score: score,
+                        game_mode: gameMode,
+                        //game_time: 0,
+                        rounds_played: 1,
+                        difficulty: difficulty
+                    });
+                    // optional: check res.ok/res.json for errors
+                } catch (err) {
+                    console.error('Save score error', err);
+                }
+            })();
+        }
     }
 
 
@@ -154,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Fisher–Yates shuffle
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -163,37 +194,147 @@ document.addEventListener("DOMContentLoaded", () => {
         return array;
     }
 
-    function createCard(imageSrc, idx) {
+    function createCard(imageSrc, idxOrId) {
         const card = document.createElement("div");
         card.classList.add("card");
 
         const inner = document.createElement("div");
         inner.classList.add("card-inner");
 
-        // --- Hátlap (mindenkinek ugyanaz, alapból látszik) ---
+        // Hátlap
         const back = document.createElement("div");
         back.classList.add("card-back");
         const backImg = document.createElement("img");
         backImg.src = cardBackImage;
         back.appendChild(backImg);
 
-        // --- Előlap (változó kép, kattintás után látszik) ---
+        // Előlap 
         const front = document.createElement("div");
         front.classList.add("card-front");
-        const frontImg = document.createElement("img");
-        frontImg.src = imageSrc;
-        front.appendChild(frontImg);
+    const frontImg = document.createElement("img");
+    frontImg.src = imageSrc;
+    front.appendChild(frontImg);
 
         // sorrend: először hátlap, aztán előlap
         inner.appendChild(back);
         inner.appendChild(front);
         card.appendChild(inner);
 
-        card.dataset.image = imageSrc;
+    // For matching, store an id for the pair. If idxOrId is a number (old behavior), use the imageSrc
+    // Otherwise use the provided id (string) so pairs can be similar but still match by id.
+    card.dataset.image = (typeof idxOrId === 'number') ? imageSrc : String(idxOrId);
 
         card.addEventListener("click", () => flipCard(card));
 
         return card;
+    }
+
+    function getCardImageSize() {
+        // choose a reasonable canvas size based on difficulty/grid
+        // small canvases are fine for mobile and speed
+        const diff = getDifficulty();
+        if (diff === 'hard') return { width: 220, height: 160 };
+        if (diff === 'medium') return { width: 200, height: 140 };
+        return { width: 180, height: 120 };
+    }
+
+    function isFractalMode() {
+        // check URL query or localStorage for selected game_mode
+        try {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('mode') === 'fractal') return true;
+        } catch (e) {}
+        return localStorage.getItem('game_mode') === 'fractal';
+    }
+
+    // Generate N pairs of visually similar fractal images.
+    // Returns array of length 2*pairs: [{src, id}, ...]
+    function generateFractalPairs(pairsCount, width, height) {
+        const entries = [];
+        // we'll use a simple Julia set renderer with different parameters per pair
+        for (let i = 0; i < pairsCount; i++) {
+            const pairId = `fractal-${Date.now()}-${i}-${Math.floor(Math.random()*10000)}`;
+            // base complex parameter for this pair
+            const cre = (Math.random() * 2 - 1) * 0.8; // -0.8..0.8
+            const cim = (Math.random() * 2 - 1) * 0.8;
+            const base = { cre, cim };
+            // create two similar but not identical variants by varying color offset / zoom
+            const variantA = generateJuliaDataURL(base.cre, base.cim, width, height, { colorOffset: Math.random()*360, zoom: 1 + Math.random()*0.6 });
+            const variantB = generateJuliaDataURL(base.cre + (Math.random()-0.5)*0.02, base.cim + (Math.random()-0.5)*0.02, width, height, { colorOffset: Math.random()*360, zoom: 1 + Math.random()*0.6 });
+            entries.push({ src: variantA, id: pairId });
+            entries.push({ src: variantB, id: pairId });
+        }
+        return entries;
+    }
+
+    // Simple Julia set renderer to a data URL. Fast and small resolution.
+    function generateJuliaDataURL(cre, cim, width, height, opts = {}) {
+        const maxIter = opts.maxIter || 80;
+        const zoom = opts.zoom || 1.0;
+        const colorOffset = opts.colorOffset || 0;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        const img = ctx.createImageData(width, height);
+        // bounds in complex plane
+        // Interpret `zoom` as an outward expansion factor: zoom>1 shows a wider area (zoom out)
+        // so multiply the base bounds by zoom instead of dividing.
+        const xmin = -1.5 * zoom;
+        const xmax = 1.5 * zoom;
+        const ymin = -1.0 * zoom;
+        const ymax = 1.0 * zoom;
+
+        let p = 0;
+        for (let y = 0; y < height; y++) {
+            const zy0 = ymin + (y / (height - 1)) * (ymax - ymin);
+            for (let x = 0; x < width; x++) {
+                const zx0 = xmin + (x / (width - 1)) * (xmax - xmin);
+                let zx = zx0;
+                let zy = zy0;
+                let iter = 0;
+                while (zx*zx + zy*zy < 4 && iter < maxIter) {
+                    const xt = zx*zx - zy*zy + cre;
+                    zy = 2*zx*zy + cim;
+                    zx = xt;
+                    iter++;
+                }
+                // color mapping
+                const t = iter / maxIter;
+                const hue = (colorOffset + t * 360) % 360;
+                const [r,g,b] = hslToRgb(hue/360, 0.6, 0.5 + 0.2 * (1 - t));
+                img.data[p++] = Math.floor(r*255);
+                img.data[p++] = Math.floor(g*255);
+                img.data[p++] = Math.floor(b*255);
+                img.data[p++] = 255;
+            }
+        }
+        ctx.putImageData(img, 0, 0);
+        return canvas.toDataURL('image/png');
+    }
+
+    // HSL to RGB helper (h in [0,1], s,l in [0,1]) -> [r,g,b] 0..1
+    function hslToRgb(h, s, l){
+        let r, g, b;
+        if (s === 0) {
+            r = g = b = l; // achromatic
+        } else {
+            const hue2rgb = function(p, q, t){
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            };
+            const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            const p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+        return [r,g,b];
     }
 
 

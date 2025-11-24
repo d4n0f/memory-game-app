@@ -1,5 +1,60 @@
-A történet középpontjában Emlék Misi áll, a kicsit szétszórt, de rendkívül lelkes játékos, aki szeretne egy alkalmazást, amivel fejlesztheti a memóriáját. Amikor megtalálja a számára megfelelő játékot, belép, és azonnal belemerül a színes nyuszik és tojások világába. Minden fordulóban kap egy képet 10 másodpercre, amiben a színek teljesen véletlenszerűen helyezkednek el. Ekkor Misi gondosan próbálja megjegyezni a színeket (vagy legalábbis valami hasonlót).
+## Funkció: Nehézségi szint kiválasztása
 
-Amikor letelik az idő, a játék opciói közül kell kiválasztania, melyik kép volt az eredeti. Sokszor hibázik, mert a lila és a rózsaszín tojás keveredik a memóriájában, de minden hibából tanul.
+### 1
 
-Mivel Misi hajlamos elkalandozni a gondolataiban (és a képernyőn táncoló színekben), időnként elfelejti, mi volt a sorrend, ezért a játék minden új körnél segít neki emlékezni a fontos szabályokra. Az alkalmazás barátságosan emlékezteti: jegyezd meg a színeket, és ne hagyd, hogy a nyuszik vagy a tojások kicselezzenek!
+Szituáció: A felhasználó kiválasztja a nehézségi szintet
+
+* Amennyiben a felhasználó a játékválasztó felületen tartózkodik
+* Amikor a felhasználó meglátja a nehézségi szinteket
+* Akkor megjelenik számára a három választható opció: Könnyű, Közepes, Nehéz
+
+#### Könnyű mód
+### 2
+
+Szituáció: Könnyű mód beállításai a Színvadász játékban
+
+* Amennyiben a felhasználó a Könnyű nehézségi szintet választotta
+* Amikor a Színvadász játék elindul
+* Akkor a felhasználó 10 másodpercet kap a színek áttekintésére
+
+### 3
+
+Szituáció: Könnyű mód beállításai a Kártyapárosító és Fraktálpárosító játékban
+
+* Amennyiben a felhasználó a Könnyű nehézségi szintet választotta
+* Amikor a kártyapárosító vagy fraktálpárosító játék betöltődik
+* Akkor a játéktábla 2x3 képet tartalmaz, azaz összesen 3 párt
+
+#### Közepes mód
+### 4
+
+Szituáció: Közepes mód beállításai a Színvadász játékban
+
+* Amennyiben a felhasználó a Közepes nehézségi szintet választotta
+* Amikor a Színvadász játék elindul
+* Akkor a felhasználó 5 másodpercet kap a színek áttekintésére
+
+### 5
+
+Szituáció: Közepes mód beállításai a Kártyapárosító és Fraktálpárosító játékban
+
+* Amennyiben a felhasználó a Közepes nehézségi szintet választotta
+* Amikor a kártyapárosító vagy fraktálpárosító játék betöltődik
+* Akkor a játéktábla 2x4 képet tartalmaz, azaz összesen 4 párt
+
+#### Nehéz mód
+### 6
+
+Szituáció: Nehéz mód beállításai a Színvadász játékban
+
+* Amennyiben a felhasználó a Nehéz nehézségi szintet választotta
+* Amikor a Színvadász játék elindul
+* Akkor a felhasználó 3 másodpercet kap a színek áttekintésére
+
+### 7
+
+Szituáció: Nehéz mód beállításai a Kártyapárosító és Fraktálpárosító játékban
+
+* Amennyiben a felhasználó a Nehéz nehézségi szintet választotta
+* Amikor a kártyapárosító vagy fraktálpárosító játék betöltődik
+* Akkor a játéktábla 3x4 képet tartalmaz, azaz összesen 6 párt

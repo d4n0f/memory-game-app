@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Elért eredmények</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main/scoreboard/styles/scoreboard.css') }}">
+</head>
+<body>
+    <main class="scoreboard-wrap">
+        <div class="scoreboard-card">
+            <h1 class="scoreboard-title">Elért eredmények</h1>
+
+            <div class="tabs">
+                <button class="tab-btn" data-scope="me" id="tab-me">Saját</button>
+                <button class="tab-btn active" data-scope="global" id="tab-global">Globális</button>
+            </div>
+
+            <div id="list-container" class="list-container">
+                <ul id="scores-list" class="scores-list"></ul>
+            </div>
+            <div class="actions">
+                <a href="/menu" class="back-btn">Vissza a menübe</a>
+            </div>
+        </div>
+        
+    </main>
+
+    <script src="{{ url_for('static', filename='main/menu/scripts/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/scoreboard/scripts/scoreboard.js') }}"></script>
+</body>
+</html>

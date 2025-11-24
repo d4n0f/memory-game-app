@@ -1,0 +1,155 @@
+body {
+    background: #FFC9E6;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Josefin Slab', serif;
+}
+.gamemode-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2.5rem;
+    margin-top: 1.2rem;
+    margin-right: 2.5rem;
+    font-size: 1.1rem;
+    color: #A21C64;
+}
+.gamemode-header .profile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    font-family: 'Josefin Slab', serif;
+}
+.gamemode-header .results-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    font-family: 'Josefin Slab', serif;
+}
+.gamemode-header svg {
+    width: 22px;
+    height: 22px;
+    fill: #A21C64;
+}
+.gamemode-title {
+    font-size: 2.6rem;
+    color: #A21C64;
+    font-family: 'Josefin Slab', serif;
+    text-align: center;
+    margin-top: 2.5rem;
+    margin-bottom: 2.2rem;
+    padding-top: 7rem;
+}
+.difficulty-row {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 2.2rem;
+}
+.difficulty-btn {
+    background: #f96eb867;
+    color: #A21C64;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.6rem;
+    font-family: 'Josefin Sans', serif;
+    font-weight: normal;
+    box-shadow: 2px 2px 6px #e1b6d6;
+    padding: 0.7rem 2.5rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+.difficulty-btn.selected {
+    background: #c5488a67;
+    color: #A21C64;
+    box-shadow: 1px 1px 2px #c97bb7;
+    border: solid medium #A21C64;
+}
+.gamemode-title2 {
+    font-size: 2.2rem;
+    color: #A21C64;
+    font-family: 'Josefin Slab', serif;
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+.mode-row {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-bottom: 1.2rem;
+}
+.mode-btn {
+    background: transparent;
+    border: none;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    position: relative;
+    padding: 0.2rem 0.2rem;
+    overflow: hidden;
+}
+.mode-btn.selected img {
+    transform: scale(1.05);
+    border: solid medium #A21C64;
+    box-shadow: 1px 1px 2px #c97bb7;
+    filter: brightness(0.9);
+    transition: all 0.1s ease;
+}
+.mode-btn img {
+    max-width: 100px;
+    height: auto;
+    margin: 0.3rem 0;
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+    transform-origin: center center;
+}
+.mode-label {
+    font-size: 1.2rem;
+    font-family: 'Josefin Slab', serif;
+    color: #A21C64;
+    font-weight: normal;
+    text-align: center;
+    margin-top: 0.2rem;
+}
+.mode-desc {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #A21C64;
+    font-family: 'Josefin Slab', serif;
+    margin-bottom: 2.2rem;
+    margin-top: 0.7rem;
+}
+.start-game-btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2.2rem;
+}
+.start-game-btn {
+    background: #f96eb87f;
+    color: #A21C64;
+    font-size: 1.6rem;
+    border-radius: 16px;
+    border: none;
+    box-shadow: 2px 2px 6px #c97bb7;
+    padding: 0.7rem 3.5rem;
+    font-family: 'Josefin Sans', serif;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+.start-game-btn:active, .start-game-btn.selected {
+    background: #c5488a67;
+    color: #A21C64;
+    box-shadow: 1px 1px 2px #c97bb7;
+}
