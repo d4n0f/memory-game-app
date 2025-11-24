@@ -2,8 +2,12 @@
 
 1. ## A rendszer célja:
 
-   A webalkalmazás célja hogy a felhasználó egy memóriajátékot játszon és fejlessze a memóriáját. Felhasználó képes 3 nehézségi szint közül választani 3 játékmód közül. Felhasználónak van lehetősége nevet választani és később az elért pontokat is láthatja a játék után. Fontos, hogy a felhasználó könnyen el tudjon igazodni a felületeken ezért minimalista felhasználói felületet kap a program.
-   Minden elért eredményt adatbázisban tárol a program így visszatudja keresni az előző eredményeket. A rendszer kizárólag webes környezetben lesz használható. Top listán fog megjeleni a felhasználók eremédnye. A webalkalmazás belépési pontja egy belépési felületre mutat így belépés után fog tudni játszani a felhasználó a játékkal. Van arra is lehetősége a felhasználók hogy vendégként lépjen be viszont abban az esetben ideglenesen tárolódnak az adatok. A fő felhasználó bázis célunk igazából a teljes korosztály viszont szeretnénk szakembereknek is segítséget nyújtani a gyermekek fejlesztésében.
+   - A webalkalmazás célja hogy a felhasználó egy memóriajátékot játszon és fejlessze a memóriáját. Felhasználó képes 3 nehézségi szint közül választani 4 játékmód közül (Card Match, Color Hunter, Fraktál mód, és Color Hunter Multiplayer). Felhasználónak van lehetősége nevet választani és később az elért pontokat is láthatja a játék után. Fontos, hogy a felhasználó könnyen el tudjon igazodni a felületeken ezért minimalista felhasználói felületet kap a program.
+   Minden elért eredményt adatbázisban tárol a program így visszatudja keresni az előző eredményeket. A rendszer kizárólag webes környezetben lesz használható. Top listán fog megjeleni a felhasználók eredménye. A webalkalmazás belépési pontja egy belépési felületre mutat így belépés után fog tudni játszani a felhasználó a játékkal. Van arra is lehetősége a felhasználók hogy vendégként lépjen be viszont abban az esetben ideiglenesen tárolódnak az adatok. 
+   
+   - A rendszer támogatja a valós idejű multiplayer játékmenetet is, ahol akár 6 játékos is egyidejűleg versenyezhet egymás ellen. A multiplayer módban a játékosok szobákba csatlakozhatnak egyedi kóddal, és versenyezhetnek last man standing mechanikával. Ez a funkció tovább erősíti a verseny szellemét és lehetővé teszi, hogy a játékosok közvetlenül összemérjék képességeiket másokkal.
+   
+   - A fő felhasználó bázis célunk igazából a teljes korosztály viszont szeretnénk szakembereknek is segítséget nyújtani a gyermekek fejlesztésében.
 
 2. ## Projekterv
 
@@ -50,6 +54,8 @@
    ||  Játék design megvalósítása figma alapján| 2 | 4 | 3 | 2 | 1|
    ||  Logout megvalósítása| 3 | 3 | 4 | 4 | 0|
    ||  Avatar oldal megvalósítása | 2 | 4 | 1 | 1 | 3|
+   || Multiplayer UI | 3 | 6 | 8 | 7 | 1|
+   || WebSocket kliens integráció | 3 | 4 | 5 | 5 | 0|
    Design | Design megtervezése | 2 | 5 | 10 | 9 | 1|
    || Design implementálás Figmában | 2 | 3 | 15 | 13 | 2|
    || Login/register UI | 2 | 2 | 3 | 3 | 0|
@@ -69,11 +75,15 @@
    ||   Regisztráció és login endpoint a login funkcióhoz | 3 | 6 | 7 | 7 | 0|
    ||   Scoreboard kiszolgálása | 3 | 5 | 6 | 6 | 0|
    ||   Kód refaktorálás | 2 | 10 | 8 | 6 | 2|
+   || Multiplayer API végpontok | 3 | 6 | 8 | 7 | 1|
+   || SocketIO implementáció | 3 | 8 | 10 | 9 | 1|
+   || Multiplayer játék logika | 3 | 10 | 12 | 11 | 1|
    Teszt | Teszt megtervezése | 2 | 15 | 12 | 12 | 3|
    ||   Backend unit tesztek | 3 | 10 | 8 | 6 | 2|
    ||   Backend integration tesztek | 3 | 8 | 6 | 6 | 0|
    ||   E2E tesztek | 3 | 4 | 3 | 3 | 1|
    ||   Cypress tesztek | 2 | 3 | 2 | 2 | 1|
+   || Multiplayer tesztek | 3 | 6 | 5 | 4 | 1|
 
    **Mérföldkövek:**
 
@@ -89,11 +99,15 @@
    - ✅  Teljes UI design kialaktása
    - ✅ Alap két játék mód átadva, müködik.
    - ✅ Fraktál játékmód alapfunkciói elkészültek (score mentés, UI integráció)
-   - ⏳  Kártyák elkészítése új játékmódokhoz
-   - ⏳  Avatar választó felület és funkció teljes megvalósítása (backend támogatás kész, frontend hiányzik).
+   - ✅  Kártyák elkészítése új játékmódokhoz
+   - ✅  Avatar választó felület és funkció teljes megvalósítása.
    - ✅  Profil szerkesztés oldal frontend megvalósítása (backend API kész: /api/user/update).
    - ✅  Eredmények/scores oldal frontend megvalósítása (backend API kész: /api/scores, route: /scores).
-   - 🔄  Tesztek elkészítése (Cypress E2E tesztek elkészültek, unit/integration tesztek ellenőrzésre várnak).
+   - ✅  Tesztek elkészítése (Cypress E2E tesztek elkészültek, unit/integration tesztek ellenőrzésre várnak).
+   - ✅ Multiplayer API végpontok elkészültek
+   - ✅ SocketIO integráció elkészült
+   - ✅ Multiplayer játék logika implementálva
+   - ✅ Multiplayer UI finomhangolása
    - 🔄  Játék teljes bemutatása (fő funkciók működnek, finomhangolás folyamatban).
 
 3. ## Üzleti folyamatok modellje:
@@ -171,25 +185,30 @@
        - Jelszó védelme csak te férhetsz hozzá a fiókodhoz
        - Jogod van a törléshez - bármikor kérheted adataid törlését
 
-   - **Menü-hierarchiák:**
-    - BEJELENTKEZÉS
-      - Bejelentkezés
-      - REGISZTRÁCIÓ
-        - Regisztráció
-    - MAIN MENÜ
-      - PROFIL SZERKESZTÉS
-        - Profil szerkesztés
-      - EREDMÉNY MEGTEKINTÉSE
-        - Saját scoreboard
-        - Globális scoreboard
-      - Nehézség kiválasztása
-      - Játékmód kiválasztása
-    - SZÍNVADÁSZ 
-      - Játék játszása
-    - KÁRTYAPÁROSÍTÓ
-      - Játék játszása
-    - FRAKTÁL
-      - Játék játszása
+       - **Menü-hierarchiák:**
+        - BEJELENTKEZÉS
+          - Bejelentkezés
+        - REGISZTRÁCIÓ
+          - Regisztráció
+        - MAIN MENÜ
+        - PROFIL SZERKESZTÉS
+          - Profil szerkesztés
+          - Avatar választó
+        - EREDMÉNY MEGTEKINTÉSE
+          - Saját scoreboard
+          - Globális scoreboard
+          - Nehézség kiválasztása
+          - Játékmód kiválasztása
+        - SZÍNVADÁSZ (Color Hunter)
+          - Játék játszása
+        - KÁRTYAPÁROSÍTÓ (Card Match)
+          - Játék játszása
+        - FRAKTÁL
+          - Játék játszása
+        - MULTIPLAYER
+          - Szoba létrehozása
+          - Szobához csatlakozás
+          - Valós idejű játékmenet
 6. ## Fizikai környezet
   - Az alkalmazás csak webes platformra készül.
   - Backend valósítja meg a frontend és adatbázis kapcsolatot.
@@ -202,9 +221,10 @@
     - Cypress (E2E tesztekhez)
     - MySQL Workbench (adatbázis tervezés és kezelés)
     - Figma (design)
-  - **Backend technológiák:**
+   - **Backend technológiák:**
     - Python 3.x
     - Flask keretrendszer
+    - Flask-SocketIO (valós idejű kommunikáció multiplayer játékokhoz)
     - MySQL Connector (Python MySQL library)
     - Werkzeug Security (jelszó hashing)
     - python-dotenv (környezeti változók kezelése)
@@ -226,9 +246,9 @@
     - Git verziókövetés
 7. ## Architekturális terv
 
-   - Backend: A backend rendszer egy Python alapú RESTful API, amely a Flask keretrendszerre épül. Az API teljes körű felhasználókezelést, játékmenet-vezérlést és adatkezelést biztosít. A szerver MySQL adatbázissal kommunikál, amely a felhasználói adatokat, játékeredményeket és statisztikákat tárolja.
+   - Backend: A backend rendszer egy Python alapú RESTful API, amely a Flask keretrendszerre épül. Az API teljes körű felhasználókezelést, játékmenet-vezérlést és adatkezelést biztosít. A szerver MySQL adatbázissal kommunikál, amely a felhasználói adatokat, játékeredményeket és statisztikákat tárolja. A rendszer továbbá tartalmaz Flask-SocketIO integrációt a valós idejű multiplayer játékmenet támogatásához. A SocketIO lehetővé teszi a kétirányú, valós idejű kommunikációt a szerver és a kliensek között, amely elengedhetetlen a multiplayer játékokhoz.
 
-   - Web kliens: A webes kliensoldali alkalmazás HTML5, CSS3 és JavaScript technológiákkal készült, biztosítva a modern böngészőkompatibilitást és reszponzív viselkedést. A rendszer komplex biztonsági architektúrával rendelkezik, amely megvédi az adatokat és biztosítja a rendszer integritását.Login megadása után rest api, api-keyek segítségével ad hozzáférést a játékhoz és adatokhoz.
+   - Web kliens: A webes kliensoldali alkalmazás HTML5, CSS3 és JavaScript technológiákkal készült, biztosítva a modern böngészőkompatibilitást és reszponzív viselkedést. A rendszer komplex biztonsági architektúrával rendelkezik, amely megvédi az adatokat és biztosítja a rendszer integritását. Login megadása után REST API, API-kulcsok segítségével ad hozzáférést a játékhoz és adatokhoz. A multiplayer játékokhoz a kliens SocketIO kliens könyvtárat használ a valós idejű kommunikációhoz.
 
 8. ## Adatbázis terv:
 
@@ -258,11 +278,29 @@
 
    Végül a scores tábla tárolja a játékosok pontszámait és teljesítményét, kapcsolódva mind a game_sessions, mind a players táblákhoz. Itt található az elért pontszám, a játszott körök száma, és különösen fontos a game_time mező, amely a játék idejét tárolja másodpercekben. Kiemelendő, hogy ezt az időt a kliens oldal számolja ki és küldi a szervernek, ezzel biztosítva, hogy ne legyenek eltérések az időmérésben a különböző rendszerek között. Az eredmény rögzítésének időpontját a created_at mező tárolja. A kapcsolódások ON DELETE CASCADE szabályt használnak az adatintegritás biztosításához. A táblán indexek találhatók a game_session_id, player_id, score, és created_at mezőkön. Minden tábla InnoDB engine-t használ, utf8mb4 charset-tel és utf8mb4_hungarian_ci collation-nal.
 
+   A multiplayer játékok támogatásához további három tábla szükséges:
+   
+   A multiplayer_rooms tábla tárolja a multiplayer szobák információit, beleértve az egyedi 6 karakteres szoba kódot, a host játékos azonosítóját, a játékmód típusát ('color-hunter-multiplayer'), a szoba státuszát ('waiting', 'playing', 'finished'), a maximum játékosok számát (alapértelmezetten 6), az aktuális kör számát, valamint a szoba létrehozásának, indításának és befejezésének időpontjait. A táblán indexek találhatók a room_code és status mezőkön.
+   
+   A room_players tábla kezeli a szobákban lévő játékosokat, kapcsolódva a multiplayer_rooms és players táblákhoz. Itt található a játékos egyedi azonosítója, a szobához való csatlakozás időpontja, az aktív státusz (is_active), a játékos összpontszáma (total_score), valamint a végső helyezés (position). A táblán egyedi kulcs biztosítja, hogy egy játékos csak egyszer legyen egy szobában.
+   
+   A round_results tábla rögzíti a multiplayer játékok körönkénti eredményeit, kapcsolódva a multiplayer_rooms és players táblákhoz. Itt található a kör száma, a játékos azonosítója, a válasz helyessége (is_correct), a válaszidő milliszekundumban (response_time_ms), az elért pontok (points_earned), valamint a körön belüli helyezés (position_in_round). A táblán indexek találhatók a room_id és round_number kombinációján, valamint a player_id mezőn.
+
    A frontend architektúra a következő struktúrát használja: a főoldal, bejelentkezési, regisztrációs, és játékmód választó oldalak, valamint a hozzájuk tartozó scriptek és stílusok. A játékoldalak közé tartozik a színvadász játék oldala scripttel és stílusokkal, valamint a kártyapárosító játék oldala scripttel és stílusokkal. A képek mappájában találhatók a játék képei: 14 kép fájl a színvadász játékhoz, 8 elülső kép és 1 hátlap a kártyapárosító játékhoz, valamint az ikon képek.
 
    Az API kommunikáció helper függvényekkel történik, amelyek a Fetch API-t használják same-origin credentials beállítással a Flask session cookie-k támogatásához. A kérések JSON formátumban történnek, a POST kéréseknél Content-Type: application/json headerrel. A hibakezelés try-catch blokkokkal történik, felhasználóbarát hibaüzenetekkel. Az adattárolás LocalStorage-ban történik a játékos név, player_id, és nehézség tárolásához, valamint Flask session-ben az autentikáció és felhasználói adatok tárolásához.
 
    A játék logika három játékmódot tartalmaz: a színvadász időzítő alapú memória játék, ahol a célkép megjelenik időzítővel (nehézségtől függően: easy 10 másodperc, medium 5 másodperc, hard 3 másodperc), majd választási lehetőségek jelennek meg (4 kép közül választás), és helyes válasz esetén +1 pont jár. A kártyapárosító memória játék kártyapárosítással, ahol kártyák fordíthatók animációval, párosítási logika működik (2 kártya egyidejűleg nyitva), lépésszám számolás történik, és pontszámítás a párok száma alapján (nehézségtől függően: easy 3 pár, medium 4 pár, hard 6 pár). A fraktál játékmód a kártyapárosító játék egy speciális változata, ahol a kártyák előlapján dinamikusan generált fraktál képek jelennek meg. Minden pár két, egymáshoz nagyon hasonló fraktálvariánsból áll, a kártyák forgathatók animációval, a párosítási logika (egyszerre legfeljebb 2 nyitott kártya) ugyanúgy működik, a rendszer lépésszámot számol, és a pontszámítás a megtalált párok száma alapján történik (nehézségtől függően: easy 3 pár, medium 4 pár, hard 6 pár). Mindhárom játékmódban az eredmény mentése backend-re történik játék végén.
+
+  A multiplayer játékmenet kezelése a következő komponensekből áll:
+   
+   A multiplayer rendszer Flask-SocketIO-t használ a valós idejű kommunikációhoz. A SocketIO inicializálása az alkalmazás Factory Pattern inicializálásakor történik, és event handler-eket regisztrál a következő eseményekhez: connect (kapcsolat létrejött), disconnect (kapcsolat megszakadt), join_room (szobához csatlakozás), start_game (játék indítása, csak host), player_answer (játékos válasza).
+   
+   A multiplayer API végpontok közé tartozik: szoba létrehozása (POST /api/multiplayer/create-room), amely egyedi 6 karakteres kódot generál és létrehozza a szobát az adatbázisban; szobához csatlakozás (POST /api/multiplayer/join-room/<room_code>), amely ellenőrzi a szoba létezését és kapacitását; szoba információk lekérése (GET /api/multiplayer/room-info/<room_code>), amely visszaadja a szoba állapotát.
+   
+   A multiplayer játékmenet last man standing mechanikával működik. Minden körben egy célkép jelenik meg 5 másodpercig, majd 4 választási lehetőség közül kell választani. A hibás válasz vagy a leglassabb válaszadás esetén a játékos kiesik. A helyes válaszok esetén pontokat osztanak a leggyorsabb játékosoknak (1. hely = 3 pont, 2. hely = 2 pont, 3. hely = 1 pont). Ha 4 vagy több játékos helyesen válaszol, a leglassabb kiesik. A játék addig tart, amíg csak 1 játékos marad aktív.
+   
+   A multiplayer szoba állapot kezelése in-memory történik egy RoomState osztály segítségével, amely tárolja a játékosokat, a játék állapotát, az aktuális kört, a válaszokat és a pontszámokat. Az adatbázisban a szobák automatikusan törlődnek 1 óra inaktivitás után, míg az in-memory állapot 30 másodperc után törlődik a játék vége után.
 
    A reszponzív design CSS Media queries használatával valósul meg különböző képernyőméretekhez, Flexbox és Grid layout technikákkal, mobil-barát felülettel (touch-friendly gombok, megfelelő méretezés). A statikus fájlok szolgáltatása a Flask template rendszeren keresztül történik, valamint route-okon keresztül. A tesztelési stratégia Cypress end-to-end teszteket tartalmaz, valamint Python unit teszteket és integration teszteket pytest keretrendszerrel. A tesztelendő funkciók közé tartozik a játék logika, scoreboard, kártya fordítás, validáció, autentikáció, és adatbázis műveletek.
 
@@ -340,3 +378,34 @@
 
   **Kommunikáció tesztelése:**
   API kommunikáció tesztelése: REST API kérések helyes formátuma (POST, GET, PATCH metódusok, Content-Type header, JSON body), API válaszok helyes formátuma (JSON formátum, success flag, error üzenetek), session kezelés ellenőrzése (cookie-k, session adatok), credentials kezelés (same-origin policy).
+
+  **Multiplayer funkciók tesztelése:**
+  Szoba létrehozása tesztelése: `/api/multiplayer/create-room` (POST) endpoint tesztelése (player_id megadása, egyedi room_code generálása, adatbázisba mentés, host_player_id beállítása). Szobához csatlakozás tesztelése: `/api/multiplayer/join-room/<room_code>` (POST) endpoint tesztelése (room_code megadása, szoba létezés ellenőrzése, kapacitás ellenőrzése, játékos hozzáadása). Szoba információk lekérése tesztelése: `/api/multiplayer/room-info/<room_code>` (GET) endpoint tesztelése (szoba állapot visszaadása, játékosok száma).
+  
+  **WebSocket kommunikáció tesztelése:**
+  SocketIO kapcsolat tesztelése: WebSocket kapcsolat létrejöttének ellenőrzése, disconnect esemény kezelése. Szobához csatlakozás WebSocket-en keresztül tesztelése: join_room esemény küldése, room_joined válasz ellenőrzése, player_joined esemény fogadása más játékosok számára. Játék indítása tesztelése: start_game esemény küldése (csak host), round_start esemény fogadása, show_choices esemény fogadása. Játékos válasz tesztelése: player_answer esemény küldése, round_end esemény fogadása, game_end esemény fogadása játék végekor.
+  
+  **Multiplayer játékmenet tesztelése:**
+  Last man standing mechanika tesztelése: hibás válasz esetén kiesés ellenőrzése, leglassabb válasz esetén kiesés ellenőrzése (4+ helyes válasz esetén), pontszámítás ellenőrzése (1-3. helyezett pontjai). Körönkénti játékmenet tesztelése: több kör lejátszása, válaszidő mérése, pontszámok frissítése körönként. Végső ranglista tesztelése: játék vége esemény, végső pontszámok és helyezések ellenőrzése.
+ 11. ## Tesztriport:
+ ![Frontend-teszt](Frontend-teszt-1.png)
+ ![Frontend-teszt](Frontend-teszt-2.png)
+ ![Frontend-teszt](Frontend-teszt-4.png)
+ ![Frontend-teszt](Frontend-teszt-5.png)
+ ![Frontend-teszt](Frontend-teszt-6.png)
+ ![Frontend-teszt](Frontend-teszt-7.png)
+ ![Frontend-teszt](Frontend-teszt-8.png)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-1.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-2.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-3.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-4.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-5.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-6.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-7.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-8.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-9.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-10.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-11.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-12.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-13.PNG)
+ ![Backend-integrációs-teszt](Backend-integrációs-teszt-14.PNG)

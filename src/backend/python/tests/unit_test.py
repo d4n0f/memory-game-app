@@ -21,6 +21,7 @@ from ..app.models.user import (
     create_guest_player, get_player_by_user_id, update_player_stats
 )
 from ..app.config import Config
+from datetime import datetime
 
 
 class TestValidatorFunctions(unittest.TestCase):
@@ -270,6 +271,34 @@ class TestValidatorFunctions(unittest.TestCase):
                 self.assertFalse(is_valid)
                 self.assertIsNotNone(error)
 
+    def test_validate_score_data_fractal_mode(self):
+        #Fraktál mód validáció tesztje
+        valid_data = {
+            'player_id': 1,
+            'score': 100,
+            'game_mode': 'fractal',
+            'game_time': 60,
+            'rounds_played': 5,
+            'difficulty': 'medium'
+        }
+        is_valid, error = validate_score_data(valid_data)
+        self.assertTrue(is_valid)
+        self.assertIsNone(error)
+
+    def test_validate_score_data_multiplayer_mode(self):
+        #Multiplayer mód validáció tesztje
+        valid_data = {
+            'player_id': 1,
+            'score': 150,
+            'game_mode': 'color-hunter-multiplayer',
+            'game_time': 0,
+            'rounds_played': 10,
+            'difficulty': 'multiplayer'
+        }
+        is_valid, error = validate_score_data(valid_data)
+        self.assertTrue(is_valid)
+        self.assertIsNone(error)
+
 
 class TestHelperFunctions(unittest.TestCase):
     #Segédfüggvények unit tesztjei
@@ -296,6 +325,7 @@ class TestHelperFunctions(unittest.TestCase):
         self.assertTrue(is_valid_difficulty('easy'))
         self.assertTrue(is_valid_difficulty('medium'))
         self.assertTrue(is_valid_difficulty('hard'))
+        self.assertTrue(is_valid_difficulty('multiplayer'))
         self.assertFalse(is_valid_difficulty('invalid'))
         self.assertFalse(is_valid_difficulty(''))
         self.assertFalse(is_valid_difficulty(None))
@@ -304,6 +334,8 @@ class TestHelperFunctions(unittest.TestCase):
         #Játékmód validáció tesztje
         self.assertTrue(is_valid_game_mode('color-hunter'))
         self.assertTrue(is_valid_game_mode('card-match'))
+        self.assertTrue(is_valid_game_mode('fractal'))
+        self.assertTrue(is_valid_game_mode('color-hunter-multiplayer'))
         self.assertFalse(is_valid_game_mode('invalid-mode'))
         self.assertFalse(is_valid_game_mode(''))
         self.assertFalse(is_valid_game_mode(None))
@@ -542,6 +574,80 @@ class TestDatabaseFunctions(unittest.TestCase):
         self.assertIsNone(result)
 
 
+class TestGameSessionFunctions(unittest.TestCase):
+    #Game session függvények unit tesztjei
+
+    @patch('app.routes.game.get_db_connect')
+    def test_create_game_session_success(self, mock_db_connect):
+        #Sikeres game session létrehozás
+        from ..app.routes.game import create_game_session
+        mock_conn = Mock()
+        mock_cursor = Mock()
+        mock_db_connect.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.is_connected.return_value = True
+        mock_cursor.lastrowid = 123
+
+        session_id = create_game_session(1, 'color-hunter', 'easy')
+        self.assertEqual(session_id, 123)
+        mock_cursor.execute.assert_called_once()
+        mock_conn.commit.assert_called_once()
+
+    @patch('app.routes.game.get_db_connect')
+    def test_create_game_session_failure(self, mock_db_connect):
+        #Sikertelen game session létrehozás
+        from ..app.routes.game import create_game_session
+        mock_db_connect.return_value = None
+
+        session_id = create_game_session(1, 'color-hunter', 'easy')
+        self.assertIsNone(session_id)
+
+    @patch('app.routes.game.get_db_connect')
+    def test_update_game_session_success(self, mock_db_connect):
+        #Sikeres game session frissítés
+        from ..app.routes.game import update_game_session
+        mock_conn = Mock()
+        mock_cursor = Mock()
+        mock_db_connect.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.is_connected.return_value = True
+
+        result = update_game_session(1, 'card-match', 'hard')
+        self.assertTrue(result)
+        mock_cursor.execute.assert_called_once()
+        mock_conn.commit.assert_called_once()
+
+    @patch('app.routes.game.get_db_connect')
+    def test_close_game_session_success(self, mock_db_connect):
+        #Sikeres game session lezárás
+        from ..app.routes.game import close_game_session
+        mock_conn = Mock()
+        mock_cursor = Mock()
+        mock_db_connect.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.is_connected.return_value = True
+
+        result = close_game_session(1, 120)
+        self.assertTrue(result)
+        mock_cursor.execute.assert_called_once()
+        mock_conn.commit.assert_called_once()
+
+    @patch('app.routes.game.get_db_connect')
+    def test_close_game_session_failure(self, mock_db_connect):
+        #Sikertelen game session lezárás
+        from ..app.routes.game import close_game_session
+        from mysql.connector import Error
+        mock_conn = Mock()
+        mock_cursor = Mock()
+        mock_db_connect.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.is_connected.return_value = True
+        mock_cursor.execute.side_effect = Error("Database error")
+
+        result = close_game_session(1, 120)
+        self.assertFalse(result)
+
+
 class TestEdgeCases(unittest.TestCase):
     #Speciális esetek és edge case-ek tesztjei
 
@@ -595,6 +701,27 @@ class TestEdgeCases(unittest.TestCase):
                 self.assertEqual(is_valid, should_be_valid,
                                  f"{description}: valid={is_valid}, error={error}")
 
+    @patch('app.utils.validators.validate_username')
+    @patch('app.utils.validators.validate_email')
+    @patch('app.utils.validators.validate_password')
+    def test_validate_registration_data_with_profile_picture(self, mock_pass, mock_email, mock_user):
+        #Regisztráció profilképpel tesztje
+        from ..app.utils.validators import validate_registration_data
+        mock_user.return_value = (True, None)
+        mock_email.return_value = (True, None)
+        mock_pass.return_value = (True, None)
+
+        valid_data = {
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password': 'TestPassword123!',
+            'profile_picture': '/assets/images/avatars/avatar1.jpg'
+        }
+
+        is_valid, error = validate_registration_data(valid_data)
+        self.assertTrue(is_valid)
+        self.assertIsNone(error)
+
 
 def run_unit_tests():
     #Unit tesztek futtatása részletes eredményekkel
@@ -610,6 +737,7 @@ def run_unit_tests():
         loader.loadTestsFromTestCase(TestHelperFunctions),
         loader.loadTestsFromTestCase(TestUserModelFunctions),
         loader.loadTestsFromTestCase(TestDatabaseFunctions),
+        loader.loadTestsFromTestCase(TestGameSessionFunctions),
         loader.loadTestsFromTestCase(TestEdgeCases)
     ]
 

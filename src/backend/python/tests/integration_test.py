@@ -440,6 +440,312 @@ def test_update_user_validation_errors():
         return False
 
 
+def test_game_session_endpoints():
+    # Game session API végpontok tesztelése
+    print("\nGame session API végpontok teszt...")
+    try:
+        s = requests.Session()
+        ts = int(time.time())
+        
+        # 1) Regisztráció és bejelentkezés
+        reg_payload = {
+            "username": f"session_user_{ts}",
+            "email": f"session_{ts}@example.com",
+            "password": "Session1!Pass"
+        }
+        r = s.post(f"{BASE_URL}/api/register", json=reg_payload, timeout=TEST_TIMEOUT)
+        if r.status_code not in [200, 201]:
+            return False
+        
+        # 2) Új játék indítása (létrehoz egy game session-t)
+        game_data = {
+            "name": f"SessionPlayer_{ts}",
+            "game_mode": "color-hunter",
+            "difficulty": "easy"
+        }
+        r = s.post(f"{BASE_URL}/api/game", json=game_data, timeout=TEST_TIMEOUT)
+        print("New game:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        game_json = r.json()
+        game_session_id = game_json.get('game_session_id')
+        if not game_session_id:
+            return False
+        
+        # 3) Game session lekérése
+        r = s.get(f"{BASE_URL}/api/game/session", timeout=TEST_TIMEOUT)
+        print("Get session:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        session_json = r.json()
+        if not session_json.get('success') or not session_json.get('game_session'):
+            return False
+        
+        # 4) Game session lezárása
+        end_data = {
+            "game_session_id": game_session_id,
+            "game_time": 120
+        }
+        r = s.post(f"{BASE_URL}/api/game/session/end", json=end_data, timeout=TEST_TIMEOUT)
+        print("End session:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        return True
+    except Exception as e:
+        print(f"Game session endpoints teszt hiba: {e}")
+        return False
+
+
+def test_current_user_endpoint():
+    # Current user endpoint tesztelése
+    print("\nCurrent user endpoint teszt...")
+    try:
+        s = requests.Session()
+        ts = int(time.time())
+        
+        # 1) Regisztráció
+        reg_payload = {
+            "username": f"current_user_{ts}",
+            "email": f"current_{ts}@example.com",
+            "password": "Current1!Pass"
+        }
+        r = s.post(f"{BASE_URL}/api/register", json=reg_payload, timeout=TEST_TIMEOUT)
+        if r.status_code not in [200, 201]:
+            return False
+        
+        # 2) Current user lekérése bejelentkezés után
+        r = s.get(f"{BASE_URL}/api/current-user", timeout=TEST_TIMEOUT)
+        print("Current user:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        user_json = r.json()
+        if not user_json.get('success') or not user_json.get('user'):
+            return False
+        
+        user = user_json['user']
+        if 'user_id' not in user or 'username' not in user:
+            return False
+        
+        # 3) Current user lekérése bejelentkezés nélkül
+        s2 = requests.Session()
+        r = s2.get(f"{BASE_URL}/api/current-user", timeout=TEST_TIMEOUT)
+        print("Current user without login:", r.status_code)
+        if r.status_code != 401:
+            return False
+        
+        return True
+    except Exception as e:
+        print(f"Current user endpoint teszt hiba: {e}")
+        return False
+
+
+def test_logout_endpoint():
+    # Logout endpoint tesztelése
+    print("\nLogout endpoint teszt...")
+    try:
+        s = requests.Session()
+        ts = int(time.time())
+        
+        # 1) Regisztráció és bejelentkezés
+        reg_payload = {
+            "username": f"logout_user_{ts}",
+            "email": f"logout_{ts}@example.com",
+            "password": "Logout1!Pass"
+        }
+        r = s.post(f"{BASE_URL}/api/register", json=reg_payload, timeout=TEST_TIMEOUT)
+        if r.status_code not in [200, 201]:
+            return False
+        
+        # 2) Ellenőrizzük, hogy be vagyunk jelentkezve
+        r = s.get(f"{BASE_URL}/api/current-user", timeout=TEST_TIMEOUT)
+        if r.status_code != 200:
+            return False
+        
+        # 3) Kijelentkezés
+        r = s.post(f"{BASE_URL}/api/logout", timeout=TEST_TIMEOUT)
+        print("Logout:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        logout_json = r.json()
+        if not logout_json.get('success'):
+            return False
+        
+        # 4) Ellenőrizzük, hogy kijelentkeztünk
+        r = s.get(f"{BASE_URL}/api/current-user", timeout=TEST_TIMEOUT)
+        print("Current user after logout:", r.status_code)
+        if r.status_code != 401:
+            return False
+        
+        return True
+    except Exception as e:
+        print(f"Logout endpoint teszt hiba: {e}")
+        return False
+
+
+def test_profile_picture_update():
+    # Profilkép frissítés tesztelése
+    print("\nProfilkép frissítés teszt...")
+    try:
+        s = requests.Session()
+        ts = int(time.time())
+        
+        # 1) Regisztráció
+        reg_payload = {
+            "username": f"avatar_user_{ts}",
+            "email": f"avatar_{ts}@example.com",
+            "password": "Avatar1!Pass"
+        }
+        r = s.post(f"{BASE_URL}/api/register", json=reg_payload, timeout=TEST_TIMEOUT)
+        if r.status_code not in [200, 201]:
+            return False
+        
+        # 2) Profilkép frissítése
+        new_avatar = "/assets/images/avatars/avatar2.jpg"
+        r = s.patch(
+            f"{BASE_URL}/api/user/update",
+            json={"profile_picture": new_avatar},
+            timeout=TEST_TIMEOUT
+        )
+        print("Update profile picture:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        update_json = r.json()
+        if not update_json.get('success'):
+            return False
+        
+        # 3) Ellenőrizzük, hogy a profilkép frissült
+        r = s.get(f"{BASE_URL}/api/current-user", timeout=TEST_TIMEOUT)
+        if r.status_code != 200:
+            return False
+        
+        user_json = r.json()
+        if user_json.get('user', {}).get('profile_picture') != new_avatar:
+            return False
+        
+        return True
+    except Exception as e:
+        print(f"Profilkép frissítés teszt hiba: {e}")
+        return False
+
+
+def test_fractal_mode():
+    # Fraktál mód tesztelése
+    print("\nFraktál mód teszt...")
+    try:
+        s = requests.Session()
+        ts = int(time.time())
+        
+        # 1) Új játék fraktál módban
+        game_data = {
+            "name": f"FractalPlayer_{ts}",
+            "game_mode": "fractal",
+            "difficulty": "medium"
+        }
+        r = s.post(f"{BASE_URL}/api/game", json=game_data, timeout=TEST_TIMEOUT)
+        print("Fractal game:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        game_json = r.json()
+        player_id = game_json.get('player_id')
+        game_session_id = game_json.get('game_session_id')
+        
+        if not player_id or not game_session_id:
+            return False
+        
+        # 2) Eredmény mentése fraktál módban
+        score_data = {
+            "player_id": player_id,
+            "score": 200,
+            "game_mode": "fractal",
+            "difficulty": "medium",
+            "game_time": 180,
+            "rounds_played": 6,
+            "game_session_id": game_session_id
+        }
+        r = s.post(f"{BASE_URL}/api/save", json=score_data, timeout=TEST_TIMEOUT)
+        print("Save fractal score:", r.status_code, r.text[:200])
+        if r.status_code not in [200, 201]:
+            return False
+        
+        # 3) Fraktál mód eredmények lekérése
+        r = s.get(f"{BASE_URL}/api/scores?game_mode=fractal&limit=5", timeout=TEST_TIMEOUT)
+        print("Get fractal scores:", r.status_code)
+        if r.status_code != 200:
+            return False
+        
+        scores_json = r.json()
+        if not scores_json.get('success'):
+            return False
+        
+        return True
+    except Exception as e:
+        print(f"Fraktál mód teszt hiba: {e}")
+        return False
+
+
+def test_card_match_mode():
+    # Card Match mód tesztelése
+    print("\nCard Match mód teszt...")
+    try:
+        s = requests.Session()
+        ts = int(time.time())
+        
+        # 1) Új játék card-match módban
+        game_data = {
+            "name": f"CardMatchPlayer_{ts}",
+            "game_mode": "card-match",
+            "difficulty": "hard"
+        }
+        r = s.post(f"{BASE_URL}/api/game", json=game_data, timeout=TEST_TIMEOUT)
+        print("Card match game:", r.status_code, r.text[:200])
+        if r.status_code != 200:
+            return False
+        
+        game_json = r.json()
+        player_id = game_json.get('player_id')
+        game_session_id = game_json.get('game_session_id')
+        
+        if not player_id or not game_session_id:
+            return False
+        
+        # 2) Eredmény mentése card-match módban
+        score_data = {
+            "player_id": player_id,
+            "score": 300,
+            "game_mode": "card-match",
+            "difficulty": "hard",
+            "game_time": 240,
+            "rounds_played": 1,
+            "game_session_id": game_session_id
+        }
+        r = s.post(f"{BASE_URL}/api/save", json=score_data, timeout=TEST_TIMEOUT)
+        print("Save card-match score:", r.status_code, r.text[:200])
+        if r.status_code not in [200, 201]:
+            return False
+        
+        # 3) Card-match mód eredmények lekérése
+        r = s.get(f"{BASE_URL}/api/scores?game_mode=card-match&difficulty=hard&limit=5", timeout=TEST_TIMEOUT)
+        print("Get card-match scores:", r.status_code)
+        if r.status_code != 200:
+            return False
+        
+        scores_json = r.json()
+        if not scores_json.get('success'):
+            return False
+        
+        return True
+    except Exception as e:
+        print(f"Card Match mód teszt hiba: {e}")
+        return False
+
+
 def run_all_tests():
     #Összes teszt futtatása
     print("Backend integrációs tesztek indítása...")
@@ -459,6 +765,12 @@ def run_all_tests():
         test_scores_filters_sort_pagination,
         test_scores_me_requires_login,
         test_update_user_validation_errors,
+        test_game_session_endpoints,
+        test_current_user_endpoint,
+        test_logout_endpoint,
+        test_profile_picture_update,
+        test_fractal_mode,
+        test_card_match_mode,
         test_performance
     ]
 
@@ -476,6 +788,12 @@ def run_all_tests():
         "Scores szűrők/rendezés/lapozás",
         "scope=me auth requirement",
         "update_user validációk",
+        "Game session API végpontok",
+        "Current user endpoint",
+        "Logout endpoint",
+        "Profilkép frissítés",
+        "Fraktál mód",
+        "Card Match mód",
         "Teljesítmény teszt"
     ]
 
