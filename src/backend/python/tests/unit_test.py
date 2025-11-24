@@ -4,23 +4,35 @@ import sys
 import os
 
 # Import path beállítása a megfelelő modulok eléréséhez
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+# Add the backend/python directory to sys.path so we can use absolute imports
+# This ensures that 'app' module can be imported correctly
+# The trial runner runs from 'src' directory, so we need to handle that properly
+backend_python_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if backend_python_dir not in sys.path:
+    sys.path.insert(0, backend_python_dir)
 
-from ..app.utils.validators import (
+# Remove 'src' from sys.path if it's there to avoid import conflicts
+# The trial runner adds 'src' to the path, which causes "No module named 'src'" errors
+src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+if src_dir in sys.path:
+    sys.path.remove(src_dir)
+
+# Use absolute imports instead of relative imports
+from app.utils.validators import (
     validate_score_data, validate_email, validate_username,
     validate_password, validate_registration_data, validate_login_data,
     validate_user_exists, validate_player_exists
 )
-from ..app.utils.helpers import (
+from app.utils.helpers import (
     get_difficulty_settings, is_valid_difficulty,
     is_valid_game_mode, validate_entity_exists
 )
-from ..app.models.database import get_db_connect, init_db
-from ..app.models.user import (
+from app.models.database import get_db_connect, init_db
+from app.models.user import (
     get_or_create_player, create_player_for_user,
     create_guest_player, get_player_by_user_id, update_player_stats
 )
-from ..app.config import Config
+from app.config import Config
 from datetime import datetime
 
 
@@ -156,7 +168,7 @@ class TestValidatorFunctions(unittest.TestCase):
 
     def test_validate_password_strength_helper(self):
         # Jelszó erősség visszajelzés (gyenge/közepes/erős)
-        from ..app.utils.validators import validate_password_strength
+        from app.utils.validators import validate_password_strength
         self.assertEqual(validate_password_strength('short'), 'gyenge')
         self.assertIn(validate_password_strength('abcdEF12'), ['közepes','erős'])
         self.assertEqual(validate_password_strength('Abcdef12!'), 'erős')
@@ -580,7 +592,7 @@ class TestGameSessionFunctions(unittest.TestCase):
     @patch('app.routes.game.get_db_connect')
     def test_create_game_session_success(self, mock_db_connect):
         #Sikeres game session létrehozás
-        from ..app.routes.game import create_game_session
+        from app.routes.game import create_game_session
         mock_conn = Mock()
         mock_cursor = Mock()
         mock_db_connect.return_value = mock_conn
@@ -596,7 +608,7 @@ class TestGameSessionFunctions(unittest.TestCase):
     @patch('app.routes.game.get_db_connect')
     def test_create_game_session_failure(self, mock_db_connect):
         #Sikertelen game session létrehozás
-        from ..app.routes.game import create_game_session
+        from app.routes.game import create_game_session
         mock_db_connect.return_value = None
 
         session_id = create_game_session(1, 'color-hunter', 'easy')
@@ -605,7 +617,7 @@ class TestGameSessionFunctions(unittest.TestCase):
     @patch('app.routes.game.get_db_connect')
     def test_update_game_session_success(self, mock_db_connect):
         #Sikeres game session frissítés
-        from ..app.routes.game import update_game_session
+        from app.routes.game import update_game_session
         mock_conn = Mock()
         mock_cursor = Mock()
         mock_db_connect.return_value = mock_conn
@@ -620,7 +632,7 @@ class TestGameSessionFunctions(unittest.TestCase):
     @patch('app.routes.game.get_db_connect')
     def test_close_game_session_success(self, mock_db_connect):
         #Sikeres game session lezárás
-        from ..app.routes.game import close_game_session
+        from app.routes.game import close_game_session
         mock_conn = Mock()
         mock_cursor = Mock()
         mock_db_connect.return_value = mock_conn
@@ -635,7 +647,7 @@ class TestGameSessionFunctions(unittest.TestCase):
     @patch('app.routes.game.get_db_connect')
     def test_close_game_session_failure(self, mock_db_connect):
         #Sikertelen game session lezárás
-        from ..app.routes.game import close_game_session
+        from app.routes.game import close_game_session
         from mysql.connector import Error
         mock_conn = Mock()
         mock_cursor = Mock()
@@ -691,7 +703,8 @@ class TestEdgeCases(unittest.TestCase):
         #Jelszó edge case tesztjei
         edge_cases = [
             ("A" * 7 + "1!", False, "Exactly 7 chars (too short)"),
-            ("A" * 8 + "1!", True, "Exactly 8 chars (minimum)"),
+            ("Aa1!Bc", False, "7 chars with all required types (too short)"),
+            ("Aa1!Bc2@", True, "Exactly 8 chars (minimum) with all required types"),
             ("a" * 8 + "A1!", True, "Mixed case, numbers, special"),
         ]
 
@@ -706,7 +719,7 @@ class TestEdgeCases(unittest.TestCase):
     @patch('app.utils.validators.validate_password')
     def test_validate_registration_data_with_profile_picture(self, mock_pass, mock_email, mock_user):
         #Regisztráció profilképpel tesztje
-        from ..app.utils.validators import validate_registration_data
+        from app.utils.validators import validate_registration_data
         mock_user.return_value = (True, None)
         mock_email.return_value = (True, None)
         mock_pass.return_value = (True, None)

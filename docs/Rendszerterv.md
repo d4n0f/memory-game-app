@@ -409,3 +409,5 @@
  ![Backend-integrációs-teszt](Backend-integrációs-teszt-12.PNG)
  ![Backend-integrációs-teszt](Backend-integrációs-teszt-13.PNG)
  ![Backend-integrációs-teszt](Backend-integrációs-teszt-14.PNG)
+ ![Backend-unit-teszt](Backend-unit-teszt-1.PNG)
+ ![Backend-unit-teszt](Backend-unit-teszt-2.PNG)
