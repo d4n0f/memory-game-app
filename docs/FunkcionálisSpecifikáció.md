@@ -2,155 +2,146 @@
 
 ## 1. Áttekintés:
 
-- Egy olyan játékot fejleszt a csapatunk aminek célja a fiatalok vagy akár az idősek kognitív képességeit fejleszteni. Játék több játékmódot fed le ami lehetőséget ad a játékos memória fejlesztésre. A játékos regisztrálhat egy felületen keresztül és utána bejelentkezhet hogy megméresse magát a többi játékossal. A játékot több játékos módon tudják futtatni a weben hogy a verseny szellem kialakuljon a játékosok között. Ez a játék teljesen ingyenes lesz, ezért bárki hozzá tud férni majd és egyszerű regisztráció után már játszhat is. Minden ilyen játék után az adott személy láthatja, hogy mennyi pontot szerzett,illetve a többi játékosnak mennyi pontja van és mint ez egy vissza igazolást ad a számára, hogy mennyire sikerült fejleszteni a logikai, kognitív képességeit. A rendszer egy harmadik játékmódot, a fraktál módot is tartalmazza. Ebben a módban a játékosnak egymáshoz nagyon hasonló, dinamikusan generált fraktál képek közül kell kiválasztania a párt. A fraktál mód célzottan fejleszti a vizuális megkülönböztető képességet, mintafelismerést és a koncentrációt, mivel a képek nem ismert, előre betanult motívumok (állatok, tárgyak), hanem folyamatosan változó, absztrakt minták.
+- Egy olyan játékot fejleszt a csapatunk aminek célja a fiatalok vagy akár az idősek kognitív képességeit fejleszteni. Játék több játékmódot fed le ami lehetőséget ad a játékos memória fejlesztésre. A játékos regisztrálhat egy felületen keresztül és utána bejelentkezhet hogy megméresse magát a többi játékossal. A játékot több játékos módon tudják futtatni a weben hogy a verseny szellem kialakuljon a játékosok között. A rendszer támogatja a valós idejű multiplayer játékmenetet, ahol akár 6 játékos is egyidejűleg játszhat egymás ellen. A multiplayer módban a játékosok szobákba csatlakozhatnak egyedi kóddal, és versenyezhetnek egymással last man standing mechanikával, ahol a hibás válaszok vagy a leglassabb válaszadás miatt kiesnek a játékosok. Ez a játék teljesen ingyenes lesz, ezért bárki hozzá tud férni majd és egyszerű regisztráció után már játszhat is. Minden ilyen játék után az adott személy láthatja, hogy mennyi pontot szerzett, illetve a többi játékosnak mennyi pontja van és mint ez egy vissza igazolást ad a számára, hogy mennyire sikerült fejleszteni a logikai, kognitív képességeit. A rendszer egy harmadik játékmódot, a fraktál módot is tartalmazza. Ebben a módban a játékosnak egymáshoz nagyon hasonló, dinamikusan generált fraktál képek közül kell kiválasztania a párt. A fraktál mód célzottan fejleszti a vizuális megkülönböztető képességet, mintafelismerést és a koncentrációt, mivel a képek nem ismert, előre betanult motívumok (állatok, tárgyak), hanem folyamatosan változó, absztrakt minták.
 
 ## 2. Jelenlegi helyzet:
 
-- A jelenlegi rendszert szeretnénk kibőviteni egy regisztrációs és bejelentkezési felülettel.Több játékmódot is szeretnénk belevinni hogy élvezetesebb és sokszínűbb legyen a felhasználók számára. Egyenlőre a játékosok még csak nevet tudnak maguknak választani és utánna játékmódot. Ezt szeretnénk kicsit interaktívabbá tenni illetve szerethetőbbé. Ami azt jelenti hogy 21. századnak megfelelően a weben mindenki számára elérhető játékot szeretnénk nyújtan kicsiknek nagyoknak egyaránt.Maga a pont kiírása csak jelenlegi játék inditás utáni pontot mutat de később elérhető lesz egy scoreboard ami segíti felhasználók verseny szellemét felébreszteni. Kedves játékosnak lehetősége lesz avatárt választani magának illetve, profiladatai módosíthatja igényeinek megfelelően.
+- A jelenlegi rendszert szeretnénk kibőviteni egy regisztrációs és bejelentkezési felülettel. Több játékmódot is szeretnénk belevinni hogy élvezetesebb és sokszínűbb legyen a felhasználók számára. Egyenlőre a játékosok még csak nevet tudnak maguknak választani és utánna játékmódot. Ezt szeretnénk kicsit interaktívabbá tenni illetve szerethetőbbé. Ami azt jelenti hogy 21. századnak megfelelően a weben mindenki számára elérhető játékot szeretnénk nyújtan kicsiknek nagyoknak egyaránt. Maga a pont kiírása csak jelenlegi játék inditás utáni pontot mutat de később elérhető lesz egy scoreboard ami segíti felhasználók verseny szellemét felébreszteni. Kedves játékosnak lehetősége lesz avatárt választani magának illetve, profiladatai módosíthatja igényeinek megfelelően. 
 
-## 3. Követelménylista:
+- A rendszer továbbá tartalmaz egy fraktál játékmódot, amelyben a játékosok dinamikusan generált, egymáshoz nagyon hasonló fraktál képek közül kell párokat találjanak. Ez a mód különösen a vizuális megkülönböztető képesség és a mintafelismerés fejlesztésére szolgál, mivel nem előre megtanulható, ismert képekre épül, hanem folyamatosan változó, absztrakt mintákat használ.
 
-| Modul   | ID  | Név                          | Verzió | Kifejtés                                                                 |
-| ------- | --- | ---------------------------- | ------ | ------------------------------------------------------------------------ |
-| Backend | K1  | Flask alapú szerver          | 1.0    | Python Flask keretrendszer használata a backend kiszolgálásához          |
-| Backend | K2  | REST API végpontok           | 1.0    | 3 REST végpont implementálása (pl. /api/scores, /api/newgame, /api/save) |
-| Backend | K3  | Adatvalidáció                | 1.0    | Bejövő adatok validálása a szerver oldalon                               |
-| Backend | K4  | Egyszerű routing             | 1.0    | 2 különböző útvonal kezelése (pl. /, /game, /scores)                     |
-| Backend | K5  | Statikus fájlok kiszolgálása | 1.0    | CSS, JS és képfájlok kiszolgálása a Flask segítségével                   |
-| Backend | K6  | Dokumentáció                 | 1.0    | A kód megfelelő kommentelése és dokumentálása                           |
-| Backend | K7  | Verziókövetés                | 1.0    | Git használata a verziókövetéshez                                       |
-| Backend | K8  | Hibakezelés                  | 1.0    | Alapvető hibakezelés implementálása                                     |
-| Backend | K9  | Böngésző kompatibilitás      | 1.0    | Támogatás a legfrissebb böngészőkben                                    |
-| Backend | K10 | Teljesítmény                 | 1.0    | Optimális teljesítmény és gyors betöltési idők                          |
-| HTML    | K11 | HTML5 szerkezet              | 1.0    | Modern HTML5 szerkezet használata semantic elemekkel                     |
-| HTML    | K12 | Reszponzív design            | 1.0    | Oldal reszponzív legyen különböző képernyőméretekre                      |
-| HTML    | K13 | Accessibility                | 1.0    | Alapvető accessibility követelmények betartása (ARIA attribútumok)       |
-| HTML    | K14 | Meta tag-ek                  | 1.0    | Megfelelő meta tag-ek használata (viewport, charset, description)        |
-| HTML    | K15 | Form elemek                  | 1.0    | Legalább 1 form elem használata (pl. név megadása játék elején)          |
-| CSS     | K16 | Grid vagy Flexbox            | 1.0    | Modern elrendezési technológiák használata a kártyák elrendezéséhez      |
-| CSS     | K17 | Animációk                    | 1.0    | CSS animációk implementálása a kártyafordításhoz                         |
-| CSS     | K18 | Reszponzív design (CSS)      | 1.0    | Media query-k használata különböző képernyőméretekhez                    |
-| CSS     | K19 | Átlátható kódstruktúra       | 1.0    | Jól szervezett CSS, következetes naming convention                       |
-| CSS     | K20 | Kártya design                | 1.0    | Esztétikus kártya design előoldallal és hátoldallal                      |
-| CSS     | K21 | Egységes design              | 1.0    | Következetes színskála és design a teljes alkalmazásban                 |
-| CSS     | K22 | Kártya design                | 1.0    | Esztétikus és felhasználóbarát kártya design                            |
-| CSS     | K23 | Typography                   | 1.0    | Olvasható és megfelelő méretű betűtípusok használata                    |
-| CSS     | K24 | Reszponzív design            | 1.0    | Design, amely minden eszközön jól működik                               |
-| CSS     | K25 | Interakció visszajelzés      | 1.0    | Vizualizáció a felhasználói interakciókról (hover, click stb.)          |
-| CSS     | K26 | CSS 3D transzformációk       | 1.0    | Kártya forgatás animáció 3D transzformációval                            |
-| CSS     | K27 | CSS transition animációk     | 1.0    | Hover, click, flip animációk transition-ökkel                            |
-| JavaScript | K28 | DOM manipuláció              | 1.0    | JavaScript alapú DOM manipuláció a kártyák kezeléséhez                   |
-| JavaScript | K29 | Eseménykezelés               | 1.0    | Egérkattintás és eseménykezelés a kártyákhoz                             |
-| JavaScript | K30 | Időzítők                     | 1.0    | setTimeout/setInterval használata a játéklogikához                       |
-| JavaScript | K31 | Fetch API                    | 1.0    | Fetch használata a backend kommunikációhoz                               |
-| JavaScript | K32 | Játékállapot kezelés         | 1.0    | Játékállapot nyomon követése JavaScript                                  |
-| JavaScript | K33 | Error handling frontend      | 1.0    | Try-catch blokkok és felhasználóbarát hibaüzenetek kezelése              |
-| JavaScript | K34 | State management             | 1.0    | Játékállapot kezelése (score, moves, timer, selected cards)              |
-| JavaScript | K35 | Test data attributes         | 1.0    | data-cy attribútumok tesztelhetőséghez                                  |
-| JavaScript | K36 | Képkezelés                   | 1.0    | Dinamikus képbetöltés és megjelenítés játékban                           |
-| JavaScript | K37 | Shuffle algoritmus           | 1.0    | Véletlenszerű keverés kártyák és képek esetén                            |
-| JavaScript | K38 | Körönkénti játékmenet        | 1.0    | Round-based gameplay több körös játékhoz                                 |
-| JavaScript | K39 | Lépésszámolás                | 1.0    | Moves counter játékban                                                   |
-| JavaScript | K40 | Nehézség alapú játékparaméterek | 1.0 | Dinamikus játékparaméterek nehézség szerint (idő, párok száma)          |
-| JavaScript | K41 | Kártya lock mechanizmus      | 1.0    | Kártya flip lock animáció alatt párosításkor                             |
-| JavaScript | K42 | Kártya match animáció        | 1.0    | Vizualizáció párosított kártyáknál                                       |
-| JavaScript | K43 | Kép választási UI            | 1.0    | Interaktív képválasztó felület Color Hunter játékban                     |
-| JavaScript | K44 | Játékmód választó UI         | 1.0    | Interaktív játékmód és nehézség választó felület                         |
-| Adatbázis | K45 | Táblatervezés                | 1.0    | Legalább 2 tábla létrehozása (pl. players, scores)                      |
-| Adatbázis | K46 | Adatintegritás               | 1.0    | Megfelelő mezőtípusok és kulcsok használata                             |
-| Adatbázis | K47 | CRUD műveletek               | 1.0    | Create, Read, Update, Delete műveletek implementálása                   |
-| Adatbázis | K48 | Kapcsolatok                  | 1.0    | Táblák közötti kapcsolatok kialakítása                                  |
-| Adatbázis | K49 | Adatbiztonság                | 1.0    | Alapvető adatbiztonsági intézkedések (SQL injection védelem)            |
-| Auth    | K50 | Felhasználó regisztráció     | 1.1    | Regisztrációs rendszer email és felhasználónév ellenőrzéssel            |
-| Auth    | K51 | Bejelentkezési rendszer      | 1.1    | Biztonságos bejelentkezés session kezeléssel                            |
-| Auth    | K52 | Jelszó titkosítás            | 1.1    | Werkzeug Security használata jelszavak hash-elésére                     |
-| Auth    | K53 | Session kezelés              | 1.1    | Flask session management a felhasználói állapot követésére              |
-| Auth    | K54 | Kijelentkezés                | 1.1    | Session törlés és biztonságos kijelentkezés                             |
-| Game    | K55 | Több játékmód                | 1.1    | Color Hunter és Card Match játékmódok implementálása                    |
-| Game    | K56 | Nehézségi szintek            | 1.1    | Easy, Medium, Hard nehézségi szintek különböző paraméterekkel           |
-| Game    | K57 | Game Session kezelés         | 1.1    | Játék session-ök nyomon követése start/end időpontokkal                 |
-| Game    | K58 | Valós idejű játékállapot     | 1.1    | Játékállapot frissítése minden körben                                   |
-| Game    | K59 | Időmérés                     | 1.1    | Játékidő mérése és rögzítése                                            |
-| Scores  | K60 | Részletes statisztikák       | 1.1    | Játékidő, körök száma, pontszám részletes rögzítése                     |
-| Scores  | K61 | Szűrhető ranglista           | 1.1    | Eredmények szűrése játékmód és nehézség szerint                         |
-| Scores  | K62 | Játékos profilok             | 1.1    | Játékos statisztikák (legtöbb játék, legjobb pontszám)                  |
-| Scores  | K63 | Valós idejű eredményfrissítés | 1.1   | Eredmények azonnali megjelenítése mentés után                           |
-| Scores  | K64 | Toplisták                    | 1.1    | Legjobb játékosok listázása különböző kategóriákban                     |
-| Testing | K65 | Unit tesztek                 | 1.1    | Backend funkciók unit tesztelése Python unittest modullal               |
-| Testing | K66 | Integrációs tesztek          | 1.1    | API végpontok integrációs tesztelése                                    |
-| Testing | K67 | Mock adatbázis kapcsolat     | 1.1    | Tesztkörnyezet mock objektumokkal                                       |
-| Testing | K68 | Teszt konfiguráció           | 1.1    | Külön teszt konfiguráció és adatbázis                                   |
-| Testing | K69 | Automatikus tesztfuttatás    | 1.1    | Tesztcsomagok automatikus futtatása és jelentés generálás               |
-| Backend | K70 | RESTful API design           | 1.1    | Megfelelő HTTP státuszkódok és REST konvenciók használata               |
-| Backend | K71 | Komplex adatvalidáció        | 1.1    | Email, jelszó erősség, felhasználónév validáció                         |
-| Backend | K72 | Környezeti konfiguráció      | 1.1    | .env fájl alapú konfiguráció kezelés                                    |
-| Backend | K73 | Adatbázis migráció           | 1.1    | Automatikus adatbázis inicializálás és séma frissítés                   |
-| Backend | K74 | Hibakezelés és logging       | 1.1    | Részletes hibanaplózás és felhasználóbarát hibaüzenetek                 |
-| Tech    | K75 | Moduláris kódstruktúra       | 1.1    | Szeparált router, model, utility modulok                                |
-| Tech    | K76 | Biztonsági intézkedések      | 1.1    | SQL injection védelem, XSS prevention                                   |
-| Tech    | K77 | Teljesítmény optimalizálás   | 1.1    | Adatbázis kapcsolat pooling, query optimalizálás                        |
-| Tech    | K78 | Skálázhatóság                | 1.1    | Tervezési minták alkalmazása bővítéshez                                 |
-| Tech    | K79 | Kódminőség                   | 1.1    | Clean code, következetes naming convention, code documentation          |
-| Frontend | K80 | LocalStorage használat       | 1.1    | Játékos adatok (név, player_id, difficulty) tárolása böngészőben        |
-| Frontend | K81 | Dinamikus DOM generálás      | 1.1    | JavaScript által generált HTML elemek (játékmód gombok)                 |
-| Frontend | K82 | Async/await használat        | 1.1    | Modern aszinkron JavaScript műveletek kezelése                          |
-| Frontend | K83 | Fetch API credentials        | 1.1    | Session cookie kezelés credentials: 'same-origin' beállítással          |
-| Frontend | K84 | ARIA attribútumok            | 1.1    | Accessibility attribútumok (aria-live, aria-label, aria-modal, role)    |
-| Frontend | K85 | Dinamikus CSS Grid           | 1.1    | JavaScript által beállított grid layout nehézség alapján                |
-| Frontend | K86 | Külső font integráció        | 1.1    | Google Fonts használata (Josefin Sans, Josefin Slab)                    |
-| Frontend | K87 | Időzítő funkcionalitás       | 1.1    | Countdown timer implementálása játékban                                 |
-| Frontend | K88 | Játékállapot átmenetek       | 1.1    | State transitions (target -> choices -> result)                         |
-| Frontend | K89 | Valós idejű pontszám követés | 1.1    | Score tracking real-time frissítéssel                                   |
-| Frontend | K90 | Modal/Overlay dialógusok     | 1.1    | Eredmény képernyő overlay-ként                                          |
-| Frontend | K91 | Oldal navigáció              | 1.1    | Oldalak közötti navigáció és routing                                    |
-| Frontend | K92 | Játékos név megjelenítés     | 1.1    | Játékos nevének megjelenítése játékban                                  |
-| Frontend | K93 | Ranglista megjelenítés       | 1.1    | Top 5 eredmények megjelenítése főoldalon                                |
-| Frontend | K94 | Reszponzív grid layout       | 1.1    | Dinamikus grid nehézség alapján (2x3, 2x4, 3x4)                        |
-| Backend | K95 | Health check endpoint        | 1.2    | /api/health végpont backend állapot ellenőrzéséhez                      |
-| Backend | K96 | Context manager adatbázis kapcsolat | 1.2 | Biztonságos adatbázis kapcsolatkezelés context managerrel               |
-| Backend | K97 | HTTP error handlers          | 1.2    | 404, 500, 405 HTTP hibák kezelése JSON válasszal                        |
-| Backend | K98 | Blueprint moduláris struktúra | 1.2   | Flask Blueprint használata moduláris routinghoz                         |
-| Backend | K99 | Transaction management       | 1.2    | Adatbázis tranzakciók kezelése rollback mechanizmussal                  |
-| Backend | K100 | Adatbázis kapcsolat timeout  | 1.2    | Connect timeout beállítás adatbázis kapcsolathoz                        |
-| Backend | K101 | Dátum/idő formázás           | 1.2    | ISO formátumú dátumok API válaszokban                                   |
-| Backend | K102 | Játékmód validáció helper    | 1.2    | is_valid_game_mode és is_valid_difficulty helper függvények             |
-| Backend | K103 | Entity validáció helper      | 1.2    | validate_entity_exists helper entitások létezésének ellenőrzéséhez      |
-| Backend | K104 | Jelszó erősség értékelés     | 1.2    | validate_password_strength függvény jelszó erősség visszajelzéshez      |
-| Backend | K105 | Adatbázis autocommit beállítás | 1.2  | Konfigurálható autocommit mód adatbázis műveletekhez                    |
-| Auth    | K106 | Felhasználó profil frissítése | 1.2   | Felhasználónév és jelszó módosítás API végponttal                       |
-| Auth    | K107 | Aktuális felhasználó lekérése | 1.2   | /api/current-user végpont session alapú felhasználó adatok lekéréséhez  |
-| Auth    | K108 | Profilkép támogatás          | 1.2    | Felhasználói profilképek kezelése és tárolása                           |
-| Auth    | K109 | Felhasználó aktivitás tracking | 1.2  | Last login és is_active mezők követése                                  |
-| Game    | K110 | Vendég játékos támogatás     | 1.2    | Guest players létrehozása regisztráció nélkül                           |
-| Game    | K111 | Játék session lekérése       | 1.2    | /api/game/session végpont aktív session információkhoz                  |
-| Game    | K112 | Játék session befejezése     | 1.2    | /api/game/session/end végpont session lezárásához idővel                |
-| Game    | K113 | Nehézségi beállítások helper | 1.2    | get_difficulty_settings helper függvény idő és párok számához           |
-| Scores  | K114 | Komplex eredménylekérés      | 1.2    | Scope (global/me), szűrés, rendezés, lapozás támogatás                  |
-| Scores  | K115 | Saját eredmények lekérése    | 1.2    | scope=me paraméter bejelentkezett felhasználó eredményeihez             |
-| Scores  | K116 | Eredmények rendezése         | 1.2    | Több rendezési lehetőség (score, time, date) asc/desc                   |
-| Scores  | K117 | Eredmények lapozása          | 1.2    | Pagination támogatás limit, page, offset paraméterekkel                 |
-| Scores  | K118 | Játékosok listázása          | 1.2    | /api/players végpont játékosok statisztikákkal                          |
-| Scores  | K119 | Játékos statisztikák automatikus frissítés | 1.2 | total_games_played, best_score automatikus frissítése                  |
-| Adatbázis | K120 | Adatbázis indexek            | 1.2    | Teljesítmény optimalizálás indexekkel (username, email, score stb.)     |
-| Adatbázis | K121 | Foreign key constraint-ek    | 1.2    | Adatintegritás biztosítása foreign key constraint-ekkel                 |
-| Adatbázis | K122 | Adatbázis charset/collation  | 1.2    | UTF8MB4 charset és Hungarian collation támogatás                        |
-| Adatbázis | K123 | Adatbázis séma verziókezelés | 1.2    | CREATE TABLE IF NOT EXISTS használata séma migrációhoz                  |
-| Frontend | K124 | Client-side validáció        | 1.2    | Form validáció JavaScript-ben regisztráció és bejelentkezésnél          |
-| Frontend | K125 | E2E tesztelés                | 1.2    | Cypress end-to-end tesztek frontend funkciókhoz                         |
-| Frontend | K126 | Validációs visszajelzések    | 1.2    | Form validáció visszajelzések felhasználónak                            |
-| Frontend | K127 | Loading state kezelés        | 1.2    | Betöltési állapotok kezelése API hívásoknál                             |
-| Frontend | K128 | Navigációs linkek            | 1.2    | Profil szerkesztés és eredmények megtekintése linkek                    |
-| Frontend | K129 | Jelszó megerősítés           | 1.2    | Jelszó megerősítő mező regisztrációnál                                  |
-| Frontend | K130 | Autocomplete attribútumok    | 1.2    | Autocomplete támogatás bejelentkezési formoknál                         |
-| Game    | K131 | Fraktál játékmód támogatása   | 1.3    | Új game_mode ('fractal') bevezetése, score mentéssel és játékmód validációval   |
-| Frontend | K132 | Fraktál játékmód UI és logika | 1.3    | Fraktál mód megjelenítése a játékmódválasztóban, fraktál képpárok generálása és score küldése 'fractal' game_mode-dal |
+- Emellett a rendszer támogatja a valós idejű multiplayer játékmenetet is, ahol több játékos (akár 6 fő) egyidejűleg játszhat egymás ellen. A multiplayer módban a játékosok szobákba csatlakozhatnak egyedi kóddal, és versenyezhetnek last man standing mechanikával. Ez a funkció tovább erősíti a verseny szellemét és lehetővé teszi, hogy a játékosok közvetlenül összemérjék képességeiket másokkal, növelve ezzel a motivációt és a játékélményt.
+
+## 3. Funkcionális követelmények:
+
+### 3.1 Felhasználókezelés és autentikáció
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F1  | Felhasználó regisztráció | 1.0 | Felhasználók regisztrálhatnak email címmel és felhasználónévvel |
+| F2  | Bejelentkezés | 1.0 | Regisztrált felhasználók bejelentkezhetnek felhasználónév és jelszó megadásával |
+| F3  | Kijelentkezés | 1.0 | Bejelentkezett felhasználók biztonságosan kijelentkezhetnek |
+| F4  | Profil szerkesztése | 1.0 | Felhasználók módosíthatják felhasználónevüket és jelszavukat |
+| F5  | Profilkép választása | 1.0 | Felhasználók választhatnak profilképet 9 előre feltöltött avatar közül |
+| F6  | Profilkép módosítása | 1.0 | Felhasználók bármikor megváltoztathatják profilképüket |
+| F7  | Vendég játékos mód | 1.0 | Felhasználók regisztráció nélkül is játszhatnak vendégként |
+
+### 3.2 Játékmódok
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F8  | Card Match játék | 1.0 | Memóriakártya játék, ahol a játékosnak párokat kell találnia |
+| F9  | Color Hunter játék | 1.0 | Kép alapján választás játék, ahol egy célképet kell megtalálni több lehetőség közül |
+| F10 | Fraktál mód | 1.0 | Dinamikusan generált fraktál képek párosítása memóriakártya stílusban |
+| F11 | Nehézségi szintek | 1.0 | Minden játékmódban 3 nehézségi szint: Easy, Medium, Hard |
+| F12 | Játékmód választás | 1.0 | Játékosok választhatnak játékmódot és nehézségi szintet a játék indítása előtt |
+
+### 3.3 Multiplayer rendszer
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F13 | Szoba létrehozása | 1.0 | Játékosok létrehozhatnak multiplayer szobát 6 karakteres kóddal |
+| F14 | Szobához csatlakozás | 1.0 | Játékosok csatlakozhatnak mások szobájához kód megadásával |
+| F15 | Valós idejű multiplayer játék | 1.0 | Több játékos (max 6) egyidejűleg játszhat Color Hunter módban |
+| F16 | Last man standing mechanika | 1.0 | Hibás válasz vagy leglassabb válasz esetén a játékos kiesik |
+| F17 | Körönkénti játékmenet | 1.0 | A multiplayer játék több körből áll, minden körben új feladat |
+| F18 | Valós idejű ranglista | 1.0 | A ranglista frissül minden kör után, mutatva az aktuális pontszámokat |
+| F19 | Host jogosultság | 1.0 | Csak a szoba létrehozója (host) indíthatja el a játékot |
+| F20 | Szoba információk lekérése | 1.0 | Játékosok lekérhetik a szoba állapotát (játékosok száma, státusz) |
+
+### 3.4 Pontszámok és statisztikák
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F21 | Pontszám mentése | 1.0 | Minden befejezett játék után a pontszám automatikusan mentésre kerül |
+| F22 | Globális ranglista | 1.0 | Játékosok megtekinthetik az összes játékos legjobb eredményeit |
+| F23 | Saját eredmények megtekintése | 1.0 | Bejelentkezett felhasználók megtekinthetik saját eredményeiket |
+| F24 | Ranglista szűrése | 1.0 | Eredmények szűrhetők játékmód és nehézségi szint szerint |
+| F25 | Ranglista rendezése | 1.0 | Eredmények rendezhetők pontszám, idő vagy dátum szerint |
+| F26 | Ranglista lapozása | 1.0 | Nagy eredménylisták esetén lapozás támogatott |
+| F27 | Játékos statisztikák | 1.0 | Minden játékosnak van statisztikája: játszott játékok száma, legjobb pontszám |
+| F28 | Játékosok listázása | 1.0 | Megtekinthető az összes játékos listája statisztikákkal |
+
+### 3.5 Játékmenet funkciók
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F29 | Játékidő mérése | 1.0 | A rendszer méri és rögzíti, mennyi ideig tart egy játék |
+| F30 | Lépésszámolás | 1.0 | Card Match játékban számolja a fordított kártyák számát |
+| F31 | Körök számlálása | 1.0 | Color Hunter játékban számolja a játszott körök számát |
+| F32 | Játék session követés | 1.0 | Minden játék session-nek van kezdő és befejező időpontja |
+| F33 | Játékállapot mentése | 1.0 | A játék állapota mentésre kerül session formájában |
+
+### 3.6 Felhasználói felület
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F34 | Főoldal | 1.0 | Bejelentkezési és regisztrációs lehetőség |
+| F35 | Játékmód választó oldal | 1.0 | Játékmód és nehézségi szint kiválasztása |
+| F36 | Profil oldal | 1.0 | Felhasználói adatok megtekintése és szerkesztése |
+| F37 | Avatar választó oldal | 1.0 | Profilkép kiválasztása 9 avatar közül |
+| F38 | Ranglista oldal | 1.0 | Eredmények megtekintése szűréssel és rendezéssel |
+| F39 | Játék oldalak | 1.0 | Külön oldal minden játékmódhoz (Card Match, Color Hunter, Multiplayer) |
+| F40 | Reszponzív design | 1.0 | Az alkalmazás működik asztali, tablet és mobil eszközökön |
+
+### 3.7 Biztonsági funkciók
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F41 | Jelszó titkosítás | 1.0 | Jelszavak hash-elve tárolódnak az adatbázisban |
+| F42 | Session kezelés | 1.0 | Biztonságos session kezelés bejelentkezett felhasználókhoz |
+| F43 | Adatvalidáció | 1.0 | Bejövő adatok validálása szerver oldalon |
+| F44 | SQL injection védelem | 1.0 | Paraméterezett lekérdezések használata |
+| F45 | XSS védelem | 1.0 | XSS támadások elleni védelem |
+
+### 3.8 Rendszer funkciók
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F46 | Adatbázis automatikus inicializálás | 1.0 | Az adatbázis és táblák automatikusan létrejönnek az első indításkor |
+| F47 | Hibakezelés | 1.0 | Felhasználóbarát hibaüzenetek megjelenítése |
+| F48 | Logolás | 1.0 | Rendszeresemények és hibák naplózása fájlokba |
+| F49 | Health check | 1.0 | Backend állapot ellenőrzése API végponton keresztül |
+| F50 | Automatikus adatbázis karbantartás | 1.0 | Multiplayer szobák automatikus törlése inaktivitás után |
+
+### 3.9 Tesztelés
+
+| ID  | Funkció neve | Verzió | Leírás |
+| --- | ------------ | ------ | ------ |
+| F51 | Unit tesztek | 1.0 | Backend funkciók automatikus tesztelése |
+| F52 | Integrációs tesztek | 1.0 | API végpontok tesztelése |
+| F53 | E2E tesztek | 1.0 | Teljes felhasználói folyamatok tesztelése Cypress-szel |
 
 ## 4. Jelenlegi üzleti folyamatok modellje:
  - A mai modern világban kevésbé fontos a kongnitív memória illetve fejlesztő szakemberek nem annyira használják ki a technológia adott lehetőségeket. A mai fiatalság és az új generáció egyre fogékonyabb a technológia adott lehetőség kihasználásra és egyre nagyobb webalkalmazás felhasználás jellemezőbb rájuk az elmúlt évtizedben. A szakemberek sok kártya alapú illetve lap alapú kongnitív fejlesztő eszközöket használnak így ez rengeteg nyomdai és egyéb költséget jelent számukra. Ez a memória játékot nem csak számukra ajánljuk de nekik is kiváló lehetőség a memória fejlesztésre bizonyos segítségre szoruló gyerekek számára.
 
  
  ## 5. Igényelt üzleti folyamatok modellje:
- - Mind a gyermekek mind a felnőttek számára szeretnénk egy lehetőséget, játékot biztosítani a kongntiv területek fejlesztésére. Memória fejlesztése nagyon fontos terület kiskorban ezért ez szertnénk minél színesebben és érdekesebben megfogni a felhasználók számára. Ezekhez állatos memóriakártyák és színes felhaszálói felület nyújt segíteséget. Kis gyermekek figyelmét és finom motorikáját tudja fejleszteni ez a játék illetve nyelvtanulásra is lehetőséget ad. Rendelkezik egy regisztrációs és egy avatar választós felülettel ami verseny szellemt építhet fel a felhasználóban. A rendszer lehetőséget ad ha később úgy dönt a felhasználó hogy megunta profilképét vagy a felhasználónevét akkor meg is változtathatja. Ez a funkció elég nagy testreszabást enged meg a felhasználóknak ami nagyon kevés játék esetén áll fent.A rendszer a klasszikus memória- és színfelismerő játékmódok mellett egy fraktál alapú játékmódot is biztosít. A fraktál mód lényege, hogy a játékosnak egymáshoz nagyon hasonló, dinamikusan generált fraktál mintákat kell párokba rendeznie. Ennek gyakorlati haszna, hogy nem előre megtanulható, ismert képekre épít, hanem folyamatosan változó, absztrakt vizuális ingerekre, így célzottan fejleszti a vizuális megkülönböztető képességet, a mintafelismerést és a koncentrációt. Ez különösen hasznos lehet olyan fejlesztési helyzetekben, ahol a finom vizuális különbségek észlelése, a figyelmi terhelés és a tartós fókusz gyakorlása a cél.
+
+ - Mind a gyermekek mind a felnőttek számára szeretnénk egy lehetőséget, játékot biztosítani a kognitív területek fejlesztésére. Memória fejlesztése nagyon fontos terület kiskorban ezért ez szeretnénk minél színesebben és érdekesebben megfogni a felhasználók számára. Ezekhez állatos memóriakártyák és színes felhasználói felület nyújt segítséget. Kis gyermekek figyelmét és finom motorikáját tudja fejleszteni ez a játék illetve nyelvtanulásra is lehetőséget ad. Rendelkezik egy regisztrációs és egy avatar választós felülettel ami verseny szellemet építhet fel a felhasználóban. A rendszer lehetőséget ad ha később úgy dönt a felhasználó hogy megunta profilképét vagy a felhasználónevét akkor meg is változtathatja. Ez a funkció elég nagy testreszabást enged meg a felhasználóknak ami nagyon kevés játék esetén áll fent.
+
+ - A rendszer a klasszikus memória- és színfelismerő játékmódok mellett egy fraktál alapú játékmódot is biztosít. A fraktál mód lényege, hogy a játékosnak egymáshoz nagyon hasonló, dinamikusan generált fraktál mintákat kell párokba rendeznie. Ennek gyakorlati haszna, hogy nem előre megtanulható, ismert képekre épít, hanem folyamatosan változó, absztrakt vizuális ingerekre, így célzottan fejleszti a vizuális megkülönböztető képességet, a mintafelismerést és a koncentrációt. Ez különösen hasznos lehet olyan fejlesztési helyzetekben, ahol a finom vizuális különbségek észlelése, a figyelmi terhelés és a tartós fókusz gyakorlása a cél.
+
+ - A rendszer továbbá támogatja a valós idejű multiplayer játékmenetet is, amely lehetővé teszi, hogy több játékos (akár 6 fő) egyidejűleg versenyezzen egymás ellen. A multiplayer módban a játékosok egyedi kóddal csatlakozhatnak szobákhoz, ahol valós idejű kommunikációval játszhatnak. Ez a funkció tovább erősíti a verseny szellemét, mivel a játékosok közvetlenül összemérhetik képességeiket másokkal. A multiplayer játékmenet last man standing mechanikával működik, ahol a hibás válaszok vagy a leglassabb válaszadás miatt kiesnek a játékosok, míg a leggyorsabb és legpontosabb játékosok pontokat szereznek. Ez a versenyhelyzet növeli a motivációt, fejleszti a reakcióidőt és a koncentrációt, miközben szociális interakciót is biztosít a játékosok között. A multiplayer mód különösen hasznos lehet csoportos fejlesztési helyzetekben, ahol a verseny és a közös élmény motiváló tényezőként szolgál.
+ ### 5.1 Üzleti megszorítások:
+
+ - **Ingyenes hozzáférés**: A játék teljesen ingyenes, bárki hozzáférhet és játszhat regisztráció után, illetve vendég módban is.
+
+ - **Egyszerű regisztráció**: A felhasználók egyszerű és gyors regisztrációs folyamattal hozzáférhetnek a teljes funkcionalitáshoz.
+
+ - **Univerzális elérhetőség**: A játék weben elérhető, bármilyen eszközről (asztali számítógép, tablet, mobil) böngészőn keresztül játszható, reszponzív designnal.
+
+ - **Kognitív fejlesztés célja**: A rendszer elsődleges célja a kognitív képességek (memória, figyelem, koncentráció, mintafelismerés) fejlesztése, nem pusztán szórakoztatás.
+
+ - **Verseny szellem kialakítása**: A ranglisták, statisztikák és multiplayer mód révén a verseny szellem kialakítása, amely motiválja a felhasználókat a folyamatos fejlődésre.
+
+ - **Testreszabhatóság**: A felhasználók széles körű testreszabási lehetőségeket kapnak (profilkép, felhasználónév módosítása), ami növeli a személyes kapcsolatot a játékkal.
+
+ - **Vendég mód támogatás**: A regisztráció nélküli játék lehetősége, amely lehetővé teszi, hogy a felhasználók először kipróbálják a játékot, mielőtt regisztrálnának.
+
+ - **Többjátékos korlát**: A multiplayer módban maximum 6 játékos játszhat egyidejűleg egy szobában.
+
+ - **Platformfüggetlenség**: A játék bármilyen modern webböngészőben működik, nincs szükség külön szoftver telepítésére vagy specifikus platformra.
 
 
  ## 6. Használati esetek:
@@ -159,26 +150,161 @@
  - **Játékos:**  
        - Játékos szerepkörben alapvető játékos funkcióval is rendelkezik mint például: név megadása, játékmód kiválasztása, nehézségi szint beállítása és azonnali start. Magával a játékkal képes játszani majd az elért pontjait láthatja egy ranglistán. Statisztikai elemzést képes elérni a pontszámai alapján mint: legjobb pontszám megtekintése, játszott játékok száma vagy éppen utolsó belépés ideje.Képes létrehozni játékos profilt illetve így el tudja menteni a statisztikáit egyéb esetben csak vendég játékosként képes játszani.Ebben az esetben csak ideiglenesen képes menteni a statisztikáit. Van lehetősége a játékos profilját testreszabni.Választhat avatart magának vagy módosíthatja a játékos a nevét. Adatvédelem szempontjából csak jelszóval képes az adott felhasználó hozzáférni az adataihoz.
 
+ - **Multiplayer Játékos:**
+       - Létrehozhat szobát 6 karakteres kóddal
+       - Csatlakozhat más játékosok szobájához kód alapján
+       - Valós idejű játékmenet WebSocket kapcsolaton keresztül
+       - Látja a többi játékos válaszait és pontszámait
+       - Kieshet hibás válasz vagy lassú válaszadás miatt
+       - Látja a körönkénti eredményeket és a végső ranglistát
 
  ## 7. Képernyőtervek:
-![Regisztrációs_felület](registration.PNG)
+ [Figma oldal](https://www.figma.com/files/team/1554470758186909611/project/461227808/Team-project?fuid=1554469800840362164)
 ![Kezdőoldal](index.PNG)
+![Regisztrációs_felület](registration.PNG)
 ![Játék_választó](game_mode.PNG)
+![Card-Match](card-match.PNG)
+![Color-hunter](color-hunter-1.PNG)
+![Color-hunter](color-hunter-multi-lobby.PNG)
+![Color-hunter](color-hunter-multi-1.PNG)
+![Color-hunter](color-hunter-multi-2.PNG)
+![Color-hunter](color-hunter-multi-3.PNG)
+![Color-hunter](color-hunter-multi-4.PNG)
+![Color-hunter](color-hunter-multi-5.PNG)
 ![Toplista](scoreboard.PNG)
-![Beállítás](settings.PNG)
+![Beállítás](profile_settings.PNG)
 
 ## 8. Forgatókönyv:
- - Futási időben 3 szerelő figyelhető meg:
-   -  Webalkalmazás
-   - Játékos
-   - Web service
- - Első szereplő a webalkalmazás ahol be tud jelentkezni a játékos és játszani tud játékkal ezzel lép ő interrakcióba. Bejelentkezve ki lehet választani a kívánt játékmódot és nehézséget majd a webalkalmazás a játék után megjelenti a felhasználó számára a ranglistát ahol láthatja a statisztikájá. Harmadik szereplő a web service aki kiszolgálja adattal a webalkalmazást illetve validációs és regisztrációs műveltekkel. A webservice felelős az adatbázisba való tarolásért és lekérésért ami a felhasználó adatait és elért pontjait jelenti.
+- Futási időben 3 fő szereplő figyelhető meg:
+  - **Webalkalmazás** (Frontend) - Felhasználói felület
+  - **Játékos** (Felhasználó) - A rendszer használója
+  - **Web service** (Backend) - Adatkezelés és logika
+
+### Alapvető folyamat:
+
+1. **Regisztráció és bejelentkezés**: A játékos a webalkalmazáson keresztül regisztrálhat vagy bejelentkezhet, illetve vendégként is játszhat. A web service validálja és tárolja a felhasználói adatokat.
+
+2. **Játékmód választás**: Bejelentkezés után a játékos kiválaszthatja a kívánt játékmódot (Card Match, Color Hunter, Fraktál mód) és nehézségi szintet (Easy, Medium, Hard).
+
+3. **Játékmenet**: A webalkalmazás biztosítja a játék felületét, ahol a játékos interakcióba léphet. A web service kezeli a játék logikát, pontszámokat és session-öket.
+
+4. **Eredmények és ranglista**: A játék után a webalkalmazás megjeleníti a ranglistát, ahol a játékos láthatja statisztikáját. A web service tárolja és lekéri az eredményeket az adatbázisból.
+
+### Multiplayer folyamat:
+
+1. **Szoba létrehozás/csatlakozás**: A játékos létrehozhat szobát vagy csatlakozhat meglévőhöz 6 karakteres kóddal.
+
+2. **Valós idejű játék**: A web service WebSocket kapcsolaton keresztül biztosítja a valós idejű kommunikációt. A webalkalmazás valós időben frissíti a játék állapotát és ranglistát.
+
+3. **Játék vége**: A web service kezeli a pontszámokat, kieséseket és a végső ranglistát, amelyet a webalkalmazás megjelenít.
+
+### Profilkezelés:
+
+- A játékos a webalkalmazáson keresztül szerkesztheti profilját (felhasználónév, jelszó, profilkép). A web service validálja és tárolja a változtatásokat.
 
 ## 9. Fogalomszótár:
- - Web-service: Különböző programnyelveken írt és különböző platformokon futó szoftveralkalmazások interneten keresztül történő adatcseréjére használt vebszolgáltatások.
- - Adatbázis: Az adatbázis egy szervezett és strukturált módon tárolt adatgyűjtemény, amely lehetővé teszi az adatok hatékony kezelését, módosítását és lekérdezését. Az adatokat általában táblákba rendezve tárolják, ahol a mezők meghatározzák az adatok típusát és szerkezetét. Az adatbázis-kezelő rendszerek biztosítják az adatok biztonságos tárolását, integritásának megőrzését, valamint a gyors és egyidejű hozzáférést több felhasználó számára.
- - Webalkalmazás: Egy olyan szoftver, amelyet webböngészőn keresztül érünk el, és amely szerverekkel kommunikálva teljesít komplex feladatokat. A hagyományos weboldaktól eltérően interaktív funkciókat kínál – például adatokat dolgoz fel, tárol és jelenít meg – anélkül, hogy a felhasználónak telepítenie kellene. A legtöbb modern webalkalmazás háromrétegű architektúrán alapul: felhasználói felület (böngésző), backend logika (szerver) és adatbázis.
- - Reszponzív design: Olyan weboldal-tervezési módszer, amely automatikusan alkalmazkodik a különböző méretű kijelzőkhöz (asztali monitor, tablet, mobil), hogy optimális megjelenést és használhatóságot biztosíson minden eszközön.
- - Adatintegritás: Az adatok pontosságát, hiánytalanságát és konzisztenciáját biztosítja tárolás és feldolgozás során.
- - Unit teszt: A programkód legkisebb, önálló egységeinek (pl. függvények, metódusok) automatizált tesztelésére szolgálnak, hogy ellenőrizzük a megfelelő működésüket.
- - Integrációs tesztek: Azt ellenőrzik, hogy a rendszer különböző moduljai vagy komponensei helyesen együttműködnek-e. A unit tesztekkel ellentétben nem az egyes részek önálló működését, hanem azok közötti kapcsolatokat és adatcserét tesztelik.
+
+| Fogalom | Leírás |
+| ------- | ------ |
+| **Web-service** | Különböző programnyelveken írt és különböző platformokon futó szoftveralkalmazások interneten keresztül történő adatcseréjére használt vebszolgáltatások. |
+| **Adatbázis** | Az adatbázis egy szervezett és strukturált módon tárolt adatgyűjtemény, amely lehetővé teszi az adatok hatékony kezelését, módosítását és lekérdezését. Az adatokat általában táblákba rendezve tárolják, ahol a mezők meghatározzák az adatok típusát és szerkezetét. Az adatbázis-kezelő rendszerek biztosítják az adatok biztonságos tárolását, integritásának megőrzését, valamint a gyors és egyidejű hozzáférést több felhasználó számára. |
+| **Webalkalmazás** | Egy olyan szoftver, amelyet webböngészőn keresztül érünk el, és amely szerverekkel kommunikálva teljesít komplex feladatokat. A hagyományos weboldaktól eltérően interaktív funkciókat kínál – például adatokat dolgoz fel, tárol és jelenít meg – anélkül, hogy a felhasználónak telepítenie kellene. A legtöbb modern webalkalmazás háromrétegű architektúrán alapul: felhasználói felület (böngésző), backend logika (szerver) és adatbázis. |
+| **Reszponzív design** | Olyan weboldal-tervezési módszer, amely automatikusan alkalmazkodik a különböző méretű kijelzőkhöz (asztali monitor, tablet, mobil), hogy optimális megjelenést és használhatóságot biztosíson minden eszközön. |
+| **Adatintegritás** | Az adatok pontosságát, hiánytalanságát és konzisztenciáját biztosítja tárolás és feldolgozás során. |
+| **Unit teszt** | A programkód legkisebb, önálló egységeinek (pl. függvények, metódusok) automatizált tesztelésére szolgálnak, hogy ellenőrizzük a megfelelő működésüket. |
+| **Integrációs tesztek** | Azt ellenőrzik, hogy a rendszer különböző moduljai vagy komponensei helyesen együttműködnek-e. A unit tesztekkel ellentétben nem az egyes részek önálló működését, hanem azok közötti kapcsolatokat és adatcserét tesztelik. |
+| **Multiplayer** | Többjátékos játékmenet, ahol több felhasználó egyidejűleg játszik egymás ellen vagy együtt ugyanabban a játékban. A rendszerben akár 6 játékos is részt vehet egy multiplayer szobában. |
+| **WebSocket** | Valós idejű, kétirányú kommunikációs protokoll, amely lehetővé teszi a szerver és a kliens közötti folyamatos adatcserét. A multiplayer játékokban használjuk a valós idejű játékmenet biztosításához. |
+| **Session** | Munkamenet, amely a felhasználó bejelentkezésétől a kijelentkezéséig tart. A session tárolja a felhasználó azonosításához szükséges információkat, és lehetővé teszi, hogy a rendszer nyomon kövesse a bejelentkezett felhasználó állapotát. |
+| **Avatar/Profilkép** | A felhasználót reprezentáló grafikus kép vagy ikon, amely a profilján és a játékban jelenik meg. A rendszerben 9 előre feltöltött avatar közül választhatnak a felhasználók. |
+| **Fraktál** | Önhasonló geometriai minta, amely részleteiben ismétlődik végtelenül. A rendszerben dinamikusan generált fraktál képeket használunk a vizuális megkülönböztető képesség fejlesztésére. |
+| **Last man standing** | Játékmód mechanika, ahol a játékosok folyamatosan kiesnek, és az utolsó maradó játékos nyer. A multiplayer módban hibás válasz vagy leglassabb válaszadás esetén kiesnek a játékosok. |
+| **Host** | A multiplayer szoba létrehozója, aki jogosult a játék indítására és a szoba kezelésére. Csak a host indíthatja el a multiplayer játékot. |
+| **Scoreboard/Ranglista** | Eredménytáblázat, amely a játékosok pontszámait, statisztikáit és helyezéseit mutatja. A rendszerben globális és személyes ranglisták is elérhetők. |
+| **Card Match** | Memóriakártya játék, ahol a játékosnak párokat kell találnia fordított kártyák közül. A rendszer egyik fő játékmódja. |
+| **Color Hunter** | Kép alapján választás játék, ahol egy célképet kell megtalálni több lehetőség közül. A rendszer egyik fő játékmódja, amely multiplayer módban is játszható. |
+| **Vendég játékos** | Regisztráció nélkül játszó felhasználó, aki ideiglenesen játszhat és statisztikákat gyűjthet, de nincs saját fiókja. |
+| **API (Application Programming Interface)** | Alkalmazásprogramozási interfész, amely meghatározza, hogyan kommunikálhatnak egymással a különböző szoftverkomponensek. A rendszerben REST API-t használunk a frontend és backend közötti kommunikációhoz. |
+| **REST API** | Representational State Transfer alapú API, amely HTTP protokollt használ a kérések és válaszok továbbításához. A rendszerben JSON formátumban cserél adatokat. |
+| **Frontend** | A webalkalmazás felhasználói felületi rétege, amely a böngészőben fut, és biztosítja a felhasználóval való interakciót. HTML, CSS és JavaScript technológiákkal készül. |
+| **Backend** | A webalkalmazás szerver oldali logikai rétege, amely feldolgozza a kéréseket, kezeli az üzleti logikát és az adatbázissal kommunikál. A rendszerben Python Flask keretrendszert használunk. |
+| **E2E tesztek (End-to-End tesztek)** | Teljes felhasználói folyamatok automatizált tesztelése, amely a rendszer minden rétegét lefedi a felhasználói interakciótól az adatbázisig. A rendszerben Cypress keretrendszert használunk. |
+| **Cypress** | Modern end-to-end tesztelési keretrendszer, amely lehetővé teszi a webalkalmazások automatikus tesztelését valós böngészőkben. |
+| **SQL injection** | Biztonsági sebezhetőség, amikor rosszindulatú SQL kódot injektálnak be a lekérdezésekbe. A rendszerben paraméterezett lekérdezésekkel védjük ellene. |
+| **XSS (Cross-Site Scripting)** | Biztonsági sebezhetőség, amikor rosszindulatú JavaScript kódot injektálnak be a weboldalba. A rendszerben különböző védekezési mechanizmusokkal védjük ellene. |
+| **Hash** | Kriptográfiai hash függvény, amely egy adatot rögzített hosszúságú karakterlánccá alakít. A rendszerben a jelszavakat hash-elve tároljuk az adatbázisban biztonsági okokból. |
+| **Health check** | Backend állapot ellenőrző végpont, amely információt ad a rendszer működési állapotáról, például az adatbázis kapcsolatról. |
+| **Logolás** | Rendszeresemények, hibák és műveletek naplózása fájlokba, amely segít a hibakeresésben és a rendszer működésének nyomon követésében. |
+| **Validáció** | Bejövő adatok ellenőrzése, hogy megfelelnek-e a várt formátumnak, típusnak és szabályoknak. A rendszerben mind a frontend, mind a backend oldalon validálunk. |
+| **Kognitív képességek** | A megismerési folyamatokhoz kapcsolódó mentális képességek, mint a memória, a figyelem, a logikus gondolkodás és a problémamegoldás. |
+| **Memória fejlesztés** | A rövid- és hosszú távú memória képességeinek fejlesztése különböző gyakorlatokkal és játékokkal. |
+| **Mintafelismerés** | A képesség, hogy azonosítsuk és felismerjük a mintákat, mintákat és struktúrákat a vizuális információban. |
+| **Vizuális megkülönböztető képesség** | A képesség, hogy finom vizuális különbségeket észleljünk és megkülönböztessünk egymástól hasonló objektumokat vagy mintákat. |
+| **Koncentráció** | A figyelem összpontosítása egy adott feladatra vagy ingerre hosszabb ideig. |
+| **Reakcióidő** | Az idő, amely eltelik egy inger észlelése és a rá adott válasz között. |
+| **Finom motorika** | A kis izmok finom, precíz mozgásainak koordinálása, például az ujjak mozgatása. |
+| **Szociális interakció** | Az emberek közötti kommunikáció és együttműködés, amely a multiplayer játékokban fontos szerepet játszik. |
+| **Verseny szellem** | A versenyzés és a teljesítmény javítására való motiváció, amely a ranglisták és multiplayer játékok révén alakul ki. |
+| **Pontszám** | A játékban elért eredmény, amely a játékos teljesítményét méri. A rendszerben minden játék után pontszámot rögzítünk. |
+| **Statisztika** | A játékosok teljesítményére vonatkozó adatok gyűjtése és elemzése, mint a játszott játékok száma, legjobb pontszám, átlagos játékidő. |
+| **Szoba (multiplayer)** | Virtuális tér a multiplayer játékokhoz, ahol a játékosok összegyűlnek és játszanak. Minden szobának van egy egyedi 6 karakteres kódja. |
+| **Szoba kód** | Egyedi azonosító, amely lehetővé teszi, hogy a játékosok csatlakozzanak egy meghatározott multiplayer szobához. |
+| **Körönkénti játékmenet** | Olyan játékmenet, amely több körből áll, ahol minden körben új feladatot kell megoldani. A multiplayer módban körönként pontokat osztanak. |
+| **Valós idejű kommunikáció** | Azonnali adatcsere a szerver és a kliens között, amely lehetővé teszi, hogy a változások azonnal láthatóak legyenek minden résztvevő számára. |
+| **Játékmenet** | A játék folyamata, amely magában foglalja a játékos interakcióit, a játék logikáját és az eredmények kiszámítását. |
+| **Játékállapot** | A játék pillanatnyi állapota, amely tartalmazza a játékos pozícióját, pontszámát, a játék fázisát és egyéb releváns információkat. |
+| **Lépésszámolás** | A játékban tett lépések vagy akciók számának nyomon követése. A Card Match játékban a fordított kártyák számát számoljuk. |
+| **Játékidő mérés** | A játék kezdete és vége közötti idő mérése, amely a teljesítmény értékelésének része. |
+| **Körök számlálása** | A játszott körök számának nyomon követése, különösen a Color Hunter játékban. |
+| **Lapozás (Pagination)** | Nagy adathalmazok esetén az adatok oldalakra bontása, hogy könnyebben böngészhetők legyenek. A ranglistáknál használjuk. |
+| **Szűrés** | Adatok kiválasztása meghatározott feltételek alapján. A ranglistáknál játékmód és nehézségi szint szerint szűrhetünk. |
+| **Rendezés** | Adatok sorrendbe állítása meghatározott kritérium szerint (pl. pontszám, idő, dátum). A ranglistáknál több rendezési lehetőség is elérhető. |
+| **Globális ranglista** | Az összes játékos legjobb eredményeit tartalmazó ranglista, amely lehetővé teszi a játékosok összehasonlítását. |
+| **Saját eredmények** | A bejelentkezett felhasználó saját játékeredményeinek listája, amely személyes statisztikákat tartalmaz. |
+| **Játékos statisztikák** | Egy játékos teljesítményére vonatkozó összesített adatok, mint a játszott játékok száma, legjobb pontszám, utolsó játék időpontja. |
+| **Automatikus inicializálás** | Az adatbázis és táblák automatikus létrehozása az első indításkor, ha még nem léteznek. |
+| **Adatbázis karbantartás** | Az adatbázis rendszeres karbantartása, mint a régi adatok törlése, optimalizálás. A multiplayer szobák automatikusan törlődnek inaktivitás után. |
+| **Felhasználókezelés** | A felhasználói fiókok létrehozása, módosítása, törlése és kezelése. |
+| **Autentikáció** | A felhasználó azonosítása és hitelesítése, általában felhasználónév és jelszó megadásával. |
+| **Jelszó titkosítás** | A jelszavak biztonságos tárolása hash algoritmusokkal, hogy ne lehessen visszafejteni az eredeti jelszót. |
+| **Profil szerkesztés** | A felhasználói profil adatainak (felhasználónév, jelszó, profilkép) módosítása. |
+| **Profilkép választás** | A felhasználó által választott avatar vagy kép, amely a profilján jelenik meg. |
+| **Vendég mód** | Regisztráció nélküli játéklehetőség, ahol a felhasználó ideiglenesen játszhat, de nincs saját fiókja. |
+| **Játékmód választás** | A játékos által választott játék típusa (Card Match, Color Hunter, Fraktál mód). |
+| **Nehézségi szintek** | A játék nehézségi fokozatai (Easy, Medium, Hard), amelyek különböző paramétereket határoznak meg, mint a párok száma vagy az időkorlát. |
+| **Memóriakártya** | Párosító kártyajáték, ahol a játékosnak fordított kártyák közül párokat kell találnia. |
+| **Kép alapján választás** | Olyan játékmechanika, ahol egy célképet kell megtalálni több lehetőség közül. |
+| **Dinamikus generálás** | Folyamatosan változó, előre nem meghatározott tartalom létrehozása. A fraktál módban dinamikusan generált képeket használunk. |
+| **Absztrakt minták** | Nem konkrét, ismert objektumokat ábrázoló, hanem geometriai vagy formai mintákat tartalmazó képek. |
+| **Vizuális ingerek** | Látási érzékelésen alapuló információ, amely a játékban fontos szerepet játszik. |
+| **Figyelmi terhelés** | A koncentráció és figyelem összpontosításához szükséges mentális erőfeszítés. |
+| **Tartós fókusz** | Hosszabb ideig tartó, folyamatos figyelem összpontosítása egy feladatra. |
+| **Csoportos fejlesztés** | Több személy együttes részvételével történő fejlesztési folyamat, ahol a közös élmény és verseny motiváló tényező. |
+| **Motiváció** | A belső vagy külső hajtóerő, amely mozgásba hozza a játékost a játékban való részvételre. |
+| **Játékélmény** | A játékos által tapasztalt összesség, amely magában foglalja a szórakozást, kihívást és elégedettséget. |
+| **Admin szerepkör** | Rendszergazdai jogosultságokkal rendelkező felhasználói szerepkör, amely lehetővé teszi a rendszer teljes kezelését. |
+| **Játékos szerepkör** | Alapvető felhasználói szerepkör, amely lehetővé teszi a játékok játszását és a profil kezelését. |
+| **Multiplayer játékos szerepkör** | Többjátékos módban játszó felhasználó szerepköre, amely lehetővé teszi a szobák létrehozását és csatlakozását. |
+| **Adminisztrációs jogosultság** | Rendszergazdai hozzáférési jogok, amelyek lehetővé teszik a felhasználók, játékok és rendszerbeállítások kezelését. |
+| **Rendszerstatisztika** | A rendszer működésére vonatkozó adatok, mint az aktív felhasználók száma, legnépszerűbb játékmódok, átlagos játékidők. |
+| **Teljesítmény monitorizálás** | A rendszer teljesítményének folyamatos nyomon követése, hogy azonosítsuk a problémás területeket. |
+| **Rendszer napló** | A rendszer működésére, hibáira és eseményeire vonatkozó rögzített információk, amelyek segítik a hibakeresést és a rendszer karbantartását. |
+| **Háromrétegű architektúra** | Szoftverarchitektúra, amely három rétegre oszlik: felhasználói felület (presentation layer), üzleti logika (business logic layer) és adatbázis (data layer). |
+| **Böngésző** | Webböngésző, amely lehetővé teszi a webalkalmazások elérését és megjelenítését. |
+| **Szerver** | Olyan számítógép vagy szoftver, amely szolgáltatásokat nyújt más számítógépeknek vagy alkalmazásoknak a hálózaton keresztül. |
+| **Felhasználói felület (UI)** | A rendszer azon része, amely a felhasználóval közvetlenül interakcióba lép, és lehetővé teszi a rendszer használatát. |
+| **Adatkezelés** | Az adatok feldolgozása, tárolása, lekérése és módosítása. |
+| **Logika** | Az üzleti szabályok és algoritmusok, amelyek meghatározzák, hogyan működik a rendszer. |
+| **Regisztráció** | Új felhasználói fiók létrehozása a rendszerben, amelyhez általában email cím, felhasználónév és jelszó szükséges. |
+| **Bejelentkezés** | A felhasználó azonosítása a rendszerben felhasználónév és jelszó megadásával. |
+| **Kijelentkezés** | A bejelentkezett felhasználó munkamenetének befejezése és a rendszerből való kilépés. |
+| **Szoba létrehozás** | Új multiplayer szoba létrehozása, amelyhez egyedi kódot generál a rendszer. |
+| **Szobához csatlakozás** | Meglévő multiplayer szobához való csatlakozás egyedi kód megadásával. |
+| **Valós idejű játék** | Olyan játékmenet, ahol a játékosok egyidejűleg játszanak, és a változások azonnal láthatóak minden résztvevő számára. |
+| **WebSocket kapcsolat** | Valós idejű, kétirányú kommunikációs csatorna a szerver és a kliens között, amely lehetővé teszi az azonnali adatcserét. |
+| **Játék vége** | A játék befejezése, amikor minden kör lejátszódott vagy a játékosok kiestek. |
+| **Pontszámok** | A játékban elért eredmények, amelyek a játékos teljesítményét méri. |
+| **Kiesések** | A játékosok kizárása a játékból, amely a multiplayer módban hibás válasz vagy leglassabb válaszadás esetén történik. |
+| **Végső ranglista** | A játék végén megjelenő ranglista, amely a végső pontszámokat és helyezéseket mutatja. |
+| **Validálás** | Bejövő adatok ellenőrzése, hogy megfelelnek-e a várt formátumnak és szabályoknak. |
+| **Tárolás** | Az adatok mentése az adatbázisba vagy más tárolórendszerbe. |
