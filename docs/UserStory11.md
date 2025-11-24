@@ -1,73 +1,104 @@
-## Funkció: Többjátékos lobby a Színvadász módban
+## Funkció: Színvadász játékmód (Singleplayer + Párbaj mód)
 
 ### 1
+Szituáció: A felhasználó beállítja a nehézségi szintet
 
-Szituáció: A felhasználó új lobbyt hoz létre
+* Amennyiben a felhasználó bejelentkezik és a menü kezdőfelületén tartózkodik
 
-* Amennyiben a felhasználó a Színvadász mód kezdőfelületén tartózkodik
-* Amikor rákattint az „Új lobby létrehozása” lehetőségre
-* Akkor a rendszer létrehoz egy üres lobbyt, amelyhez más játékosok csatlakozhatnak
+* Amikor betöltődnek a nehézségi beállítások
+
+* Akkor a rendszer megjeleníti a Könnyű, Közepes és Nehéz nehézségi opciókat
 
 ### 2
+Szituáció: A felhasználó kiválaszt egy nehézségi szintet
 
-Szituáció: A játékos csatlakozik egy meglévő lobbyhoz
+* Amennyiben a nehézségi opciók láthatók
 
-* Amennyiben a felhasználó a Színvadász lobbylista oldalán tartózkodik
-* Amikor kiválaszt egy elérhető lobbyt és rákattint a „Csatlakozás” gombra
-* Akkor a felhasználó belép a lobbyba, ahol látja a többi résztvevőt
+* Amikor a felhasználó rákattint a Könnyű, Közepes vagy Nehéz nehézségre
 
+* Akkor a rendszer eltárolja a kiválasztott nehézségi szintet, amely a következő játékban érvényes lesz
+
+## Singleplayer (Gyakorló mód)
 ### 3
+Szituáció: A felhasználó a Singleplayer módot választja
 
-Szituáció: A lobby megtelik
+* Amennyiben a felhasználó már beállította a nehézségi szintet és kiválasztotta a játékmódot
 
-* Amennyiben a lobbyhoz játékosok csatlakoznak
-* Amikor a lobbyban összesen négy játékos tartózkodik
-* Akkor a lobby eléri a maximális létszámot, és több játékos nem csatlakozhat
+* Amikor rákattint az indítás gombra
+
+* Akkor a rendszer a singleplayer/multiplayer kezdőfelületére irányítja
 
 ### 4
+Szituáció: A felhasználó elindítja a gyakorlást
 
-Szituáció: A Színvadász játék elindul a lobbyban
+* Amennyiben a felhasználó a Singleplayer kezdőfelületén tartózkodik
 
-* Amennyiben legalább két játékos tartózkodik a lobbyban
-* Amikor a lobby tulajdonosa elindítja a játékot
-* Akkor a rendszer minden játékos számára egyszerre elindítja a Színvadászt
+* Amikor rákattint a játék indítás gombra
+
+* Akkor a rendszer elindítja a Színvadász fordulót a korábban kiválasztott nehézségi beállítások szerint (megtekintési idő: Könnyű=10 mp, Közepes=5 mp, Nehéz=3 mp)
 
 ### 5
+Szituáció: A játékos korlátlanul gyakorolhat
 
-Szituáció: A játékosok megkapják a színek megtekintésére szánt időt
+* Amennyiben egy forduló véget ért
 
-* Amennyiben a játék elindult
-* Amikor a rendszer megjeleníti a felvillanó színeket
-* Akkor minden játékos a választott nehézségi szintnek megfelelő időt kap az áttekintésre
+* Amikor a felhasználó újabb fordulót szeretne játszani
 
+* Akkor a rendszer új fordulót indít, ugyanazzal a nehézségi szinttel
+
+## Párbaj mód (Multiplayer – több játékos)
 ### 6
+Szituáció: A felhasználó Párbaj módot választ
 
-Szituáció: A játékosok megadják a válaszaikat
+* Amennyiben a Párbaj módot választja
 
-* Amennyiben a színek megtekintésének ideje lejárt
-* Amikor minden játékos kiválasztja a szerinte helyes színt
-* Akkor a rendszer rögzíti és időbélyeggel ellátva elmenti a válaszaikat
+* Amikor rákattint a „Párbaj mód” gombra
+
+* Akkor a rendszer a Párbaj lobby felületére irányítja, amely többjátékos csatlakozásra alkalmas
 
 ### 7
+Szituáció: A Párbaj lobby előkészül a játékra
 
-Szituáció: A leggyorsabb helyes válasz több pontot ér
+* Amennyiben játékosok csatlakoznak a lobbyhoz
 
-* Amennyiben a játékosok válaszai elérhetőek
-* Amikor a rendszer kiértékeli, ki válaszolt helyesen
-* Akkor a leggyorsabban helyes választ adó játékos kapja a legtöbb pontot
+* Amikor legalább két játékos van jelen
+
+* Akkor a rendszer lehetővé teszi a párbaj elindítását
 
 ### 8
+Szituáció: A Párbaj menet elindul minden játékos számára
 
-Szituáció: A lassabb helyes válaszok kevesebb pontot érnek
+* Amennyiben 2 vagy több játékos készen áll
 
-* Amennyiben több játékos is helyes választ adott
-* Amikor a rendszer időrendbe állítja a helyes válaszokat
-* Akkor a második, harmadik és negyedik helyezett csökkenő mennyiségű pontot kap
+* Amikor a host elindítja a párbajt
+
+* Akkor a Színvadász játék minden játékos számára egyszerre indul el
+
+* Akkor a megtekintési idő minden játékosnál fixen 5 másodperc
 
 ### 9
+Szituáció: A játékosok megadják a válaszaikat
 
-Szituáció: Az eredménytábla megjelenik a forduló végén
+* Amennyiben a megtekintési idő lejárt
 
-* Amennyiben a rendszer kiszámolta a pontokat
-* Amikor a fordulónak vége
-* Akkor a játék egy eredménylistát jelenít meg a lobby minden játékosa számára a helyezésekkel és pontszámokkal
+* Amikor a játékosok kiválasztják a szerintük helyes színt
+
+* Akkor a rendszer rögzíti a válaszaikat és elmenti
+
+### 10
+Szituáció: A rendszer megállapítja a helyezéseket
+
+* Amennyiben a játékosok válaszai rögzítve lettek
+
+* Amikor a rendszer ellenőrzi őket
+
+* Akkor a leggyorsabban helyes választ adó játékos kapja a legtöbb pontot és a sorra következők a beküldési idejükhöz igazítottan csökkentett pontszámot kapnak.
+
+### 11
+Szituáció: A párbaj eredménye megjelenik
+
+* Amennyiben a pontok kiszámításra kerültek
+
+* Amikor a menet véget ér
+
+* Akkor a rendszer megjeleníti a rangsort, minden játékos helyezésével és pontjaikkal
